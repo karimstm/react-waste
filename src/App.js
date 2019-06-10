@@ -5,10 +5,22 @@ import './App.css';
 import Header from './components/shared/Header';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import * as actions from './actions'
 
 const store = require('./reducers').init();
 
 function App() {
+
+  function componentWillMount() {
+    checkAuthState();
+  }
+
+  function checkAuthState() {
+    debugger ;
+      store.dispatch(actions.checkAuthState());
+  }
+
+  componentWillMount();
   return (
     <Provider store={store}>
       <Router>

@@ -35,10 +35,10 @@ const RegisterForm = props => {
                         className="form-control"
                         component={renderField}
                         placeholder="Numéro de téléphone" />
-                    <Field name="type" className="form-control" component="select">
-                        <option value="ff0000">Collecteur</option>
-                        <option value="00ff00">Acheteur</option>
-                        <option value="0000ff">Revendeur</option>
+                    <Field name="types" className="form-control" component="select">
+                        <option value="collecteur">Collecteur</option>
+                        <option value="acheteur">Acheteur</option>
+                        <option value="revendeur">Revendeur</option>
                     </Field>
                 </div>
                 <div className="col-md-6">
@@ -86,14 +86,27 @@ const validate = values => {
     const errors = {}
 
     if (!values.email) {
-        errors.email = "S'il vous plaît entrer un email valide"
+        errors.email = "S'il vous plaît entrer un email valide";
     }
     if (!values.passwordConfirmation) {
         errors.passwordConfirmation = "S'il vous plait confirmer votre mote de pass";
     }
     if (values.password !== values.passwordConfirmation) {
-        errors.password = "Le mot de passe ne correspond pas."
+        errors.password = "Le mot de passe ne correspond pas.";
     }
+    if (!values.firstName)
+        errors.firstName = "Entrez un nom";
+    if (!values.lastName)
+        errors.lastName = "Entrez un prenom";
+    if (!values.phone || (values.phone && values.phone.length < 10))
+        errors.phone = "Votre numéro de téléphone est invalide";
+    if (!values.address)
+        errors.address = "Entrez une address valid";
+    if (!values.country)
+        errors.country = "S'il vous plaît entrer un pays valide";
+    if (!values.city)
+        errors.city = "S'il vous plaît entrer une ville valide";
+        
     return errors
 }
 
