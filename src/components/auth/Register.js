@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import RegisterForms from '../Forms/RegisterForms';
 import * as actions from '../../actions'
-import Errors from '../shared/Errors';
 import { Redirect } from 'react-router-dom'
+import Alert from '../shared/Alert';
 
 class Register extends Component {
 
@@ -11,7 +11,7 @@ class Register extends Component {
 
         this.state = {
             isError: false,
-            errors: '',
+            errors: [],
             redirect: false
         }
         this.registerUser = this.registerUser.bind(this);
@@ -20,18 +20,18 @@ class Register extends Component {
     registerUser(userData) {
         actions.register(userData).then(
             (registered) => {this.setState({redirect : true})},
-            (message) => { this.setState({ isError: true, errors: message })}
+            (errors) => { this.setState({ isError: true, errors: Object.value(errors) })}
         )
     }
     render() {
         const { isError, errors, redirect } = this.state;
         if (redirect)
         {
-            return <Redirect to={{ pathname: '/login', state: { className: true } }} />
+            return <Redirect to={{ pathname: '/login', state: { successRegister: true } }} />
         }
         return (
             <section className="login-container mx-auto p-5">
-                {isError ? <Errors errorClass="danger" errors={errors} /> : ''}
+                {isError ? <Alert className="danger" errors={errors} /> : ''}
                 <RegisterForms submitCb={this.registerUser} />
             </section>
         );

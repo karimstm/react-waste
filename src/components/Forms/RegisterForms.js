@@ -36,9 +36,10 @@ const RegisterForm = props => {
                         component={renderField}
                         placeholder="Numéro de téléphone" />
                     <Field name="types" className="form-control" component="select">
-                        <option value="collecteur">Collecteur</option>
-                        <option value="acheteur">Acheteur</option>
-                        <option value="revendeur">Revendeur</option>
+                        <option></option>
+                        <option value="picker">Collecteur</option>
+                        <option value="buyer">Acheteur</option>
+                        <option value="reseller">Revendeur</option>
                     </Field>
                 </div>
                 <div className="col-md-6">
@@ -76,7 +77,7 @@ const RegisterForm = props => {
                         component="textarea"
                         placeholder="Adresse" />
                 </div>
-                <button type="submit" disabled={!valid || pristine || submitting} className="btn btn-info btn-block rounded-0 my-3">Inscrire</button>
+                <button type="submit" disabled={!valid || pristine || submitting} className="btn btn-warning btn-block text-white rounded-0 my-3">Inscrire</button>
             </div>
         </form>
     )

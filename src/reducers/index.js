@@ -1,11 +1,13 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { authReducer } from './auth-reducer'
+import { categoryReducer } from './offer-reducer'
 import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk'
 
 export const init = () => {
 
     const reducer = combineReducers({
+        categories: categoryReducer,
         auth: authReducer,
         form: formReducer
     });

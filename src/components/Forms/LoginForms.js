@@ -30,7 +30,7 @@ const LoginForm = props => {
                 <Field name="rememberMe" component="input" type="checkbox" className="form-check-input" id="remember" />
                 <label className="form-check-label" htmlFor="remember">Se souvenir de moi</label>
             </div>
-            <button type="submit" disabled={!valid || pristine || submitting} className="btn btn-info btn-block rounded-0 my-3">Inscrire</button>
+            <button type="submit" disabled={!valid || pristine || submitting} className="btn btn-warning text-white btn-block rounded-0 my-3">Connecter</button>
         </form>
     );
 }
