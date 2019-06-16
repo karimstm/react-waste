@@ -10,6 +10,7 @@ body
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     background: #FFF;
     max-width: 1230px;
+    box-sizing: border-box;
     height: 100vh;
     padding: 0;
 }
@@ -100,3 +101,63 @@ body
 .post-form select:focus {
     border: 1px solid #FBBC34;
 }
+
+
+.card-mine {
+    text-decoration: none;
+    box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+    padding: 0;
+    background: none;
+    border: none !important;
+    box-sizing: border-box;
+    transition: all .3s;
+}
+
+
+
+.card-mine:link {
+    text-decoration: none;
+}
+  
+.card-mine:visited {
+    text-decoration: none;
+}
+  
+.card-mine:hover {
+    text-decoration: none;
+    box-shadow: 0 15px 20px rgba(0,0,0,0.1);
+    transform: translate(0, -4px);
+}
+  
+.card-mine:active {
+    text-decoration: none;
+}
+
+.card-body-mine {
+    padding: .5rem;
+}
+.feedback {
+    display: block;
+}
+
+.feedback img {
+    margin: 0;
+    width: 13px
+}
+
+.feedback-number {
+    margin-left: 5px;
+    position: relative;
+    top: 1px;
+}
+
+.card-title-mine {
+    margin-top: .5rem !important;
+    margin-bottom: .5rem !important;
+}
+
+.big-title {
+    color: rgb(72, 72, 72);
+    padding-left: .5rem;
+}
+

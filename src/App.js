@@ -9,6 +9,8 @@ import * as actions from './actions'
 import ProtectedRoute from './components/shared/auth/ProtectedRoute'
 import LogedInRoute from './components/shared/auth/LogedInRoute'
 import PostOffer from './components/offres/PostOffer';
+import OfferList from './components/offres/offersListing/OfferList';
+import offersDetails from './components/offres/offersDetails/offersDetails';
 
 const store = require('./reducers').init();
 
@@ -33,7 +35,9 @@ function App() {
           <div className="wrapper">
             <Header logout={logout} />
             <Route exact path="/"></Route>
-            <ProtectedRoute exact path="/offre/new" component={ PostOffer } />
+            <Route exact path="/offers" component={ OfferList }></Route>
+            <ProtectedRoute exact path="/offers/new" component={ PostOffer } />
+            <Route exact path="/offers/:id" component={ offersDetails } />
             <Route exact path="/login" component={Login}></Route>
             <LogedInRoute exact path="/register" component={Register}></LogedInRoute>
           </div>

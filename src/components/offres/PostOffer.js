@@ -3,9 +3,7 @@ import OfferForm from './OfferForm';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
-
 import * as actions from '../../actions';
-import Alert from '../shared/Alert';
 
 class PostOffer extends Component {
 
@@ -27,7 +25,7 @@ class PostOffer extends Component {
         actions.post_sale_offer(saleData).then(
             (registered) => {this.setState({redirect : true})},
             (errors) => { 
-                this.setState({ isError: true, errors: Object.values(errors)});
+                this.setState({ isError: true, errors: errors});
             }
         )
     }
@@ -36,12 +34,11 @@ class PostOffer extends Component {
         const { redirect, isError, errors } = this.state;
         if (redirect)
         {
-            return <Redirect to={{ pathname: '/', state: { successRegister: true } }} />
+            return <Redirect to={{ pathname: '/offers', state: { successRegister: true } }} />
         }    
         return (
             <section className="post-form col-8 mx-auto my-5 p-5">
-                {isError ? <Alert className="danger" errors={errors} /> : ''}
-                <OfferForm submitCb={this.submitOffre} categories={this.props.categories} />
+                <OfferForm errors={errors} submitCb={this.submitOffre} categories={this.props.categories} />
             </section>
         );
     }

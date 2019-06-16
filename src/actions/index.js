@@ -1,7 +1,7 @@
 import axios from 'axios'
 import authService from '../services/auth-service'
 import axiosService from '../services/axios-service'
-import { 
+import {
     DEFALUT_URL,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
@@ -9,8 +9,10 @@ import {
     FETCH_CATEGORIES_FAIL,
     FETCH_CATEGORIES_SUCCESS,
     SALE_FAILURE,
-    SALE_SUCCESS
-                    } from './types'
+    SALE_SUCCESS,
+    FETCH_SALES_FAILURE,
+    FETCH_SALES_SUCCESS
+} from './types'
 
 // Auth Actions ------------------
 
@@ -21,23 +23,23 @@ export const register = (userData) => {
         'Content-Type': 'application/json',
     }
     return axios.post(`${DEFALUT_URL}/api/register`,
-    {
-        email: userData.email,
-        password: userData.password,
-        firstName: userData.firstName,
-        lastName: userData.lastName,
-        city: userData.city,
-        address: userData.address,
-        country: userData.country,
-        phone: userData.phone,
-        type:userData.types
+        {
+            email: userData.email,
+            password: userData.password,
+            firstName: userData.firstName,
+            lastName: userData.lastName,
+            city: userData.city,
+            address: userData.address,
+            country: userData.country,
+            phone: userData.phone,
+            type: userData.types
 
-    }, {headers: headers}).then(
-       (res) => res.data,
-       (err) => {
-           console.log(err.response.data.errors);
-           return Promise.reject(err.response.data.errors)
-       });
+        }, { headers: headers }).then(
+            (res) => res.data,
+            (err) => {
+                console.log(err.response.data.errors);
+                return Promise.reject(err.response.data.errors)
+            });
 }
 
 const loginSuccess = () => {
@@ -67,15 +69,15 @@ export const login = (userData) => {
     }
     return dispatch => {
         return axios.post(`${DEFALUT_URL}/api/auth`,
-        userData, {headers: headers})
-        .then(res => res.data)
-        .then(token => {
-            authService.saveToken(token.token);
-            dispatch(loginSuccess());
-        })
-        .catch(err => {
-            dispatch(loginFailure(err.response.data.message));
-        })
+            userData, { headers: headers })
+            .then(res => res.data)
+            .then(token => {
+                authService.saveToken(token.token);
+                dispatch(loginSuccess());
+            })
+            .catch(err => {
+                dispatch(loginFailure(err.response.data.message));
+            })
     }
 }
 
@@ -108,10 +110,10 @@ export const get_categories = () => {
     }
     return dispatch => {
         return axios.get(`${DEFALUT_URL}/api/public/categories`,
-         {headers: headers})
-         .then(res => { return res.data})
-         .then(categories => dispatch(fetchCategoriesSucces(categories)))
-         .catch(({response}) => dispatch(fetchCategoriesFail(response.data.errors)))
+            { headers: headers })
+            .then(res => { return res.data })
+            .then(categories => dispatch(fetchCategoriesSucces(categories)))
+            .catch(({ response }) => dispatch(fetchCategoriesFail(response.data.errors)))
     }
 }
 
@@ -132,22 +134,51 @@ const postSaleSuccess = (saleData) => {
     }
 }
 
-
 export const post_sale_offer = (saleData) => {
 
     return axiosInstance.post(`${DEFALUT_URL}/api/offer/sale`,
-    {
-        title: saleData.title,
-        description: saleData.description,
-        price: saleData.price,
-        category: {"id": saleData.category},
-        withTransport: saleData.withTransport,
-        weight: saleData.weight,
-        locations: saleData.locations.split('\n'),
-        keywords: saleData.keywords.split(',')
+        {
+            title: saleData.title,
+            description: saleData.description,
+            price: saleData.price,
+            category: { "id": saleData.category },
+            withTransport: saleData.withTransport,
+            weight: saleData.weight,
+            locations: saleData.locations.split('\n'),
+            keywords: saleData.keywords.split(',')
 
-    }).then(
-       (res) => res.data,
-       (err) => Promise.reject(err.response.data.errors)
-    );
+        }).then(
+            (res) => res.data,
+            (err) => Promise.reject(err.response.data.errors)
+        );
+}
+
+
+// Fetch all Offers
+
+
+const fetchSaleFailure = (errors) => {
+    return {
+        type: FETCH_SALES_FAILURE,
+        errors
+    }
+}
+
+const fetchSaleSuccess = (salesoffer) => {
+    return {
+        type: FETCH_SALES_SUCCESS,
+        salesoffer
+    }
+}
+
+
+export const fetchOffers = () => {
+    const headers = { 'Content-Type': 'application/json' }
+    return dispatch => {
+        return axios.get(`${DEFALUT_URL}/api/public/offers/sale`,
+            { headers: headers })
+            .then(res => { return res.data })
+            .then(salesoffer => dispatch(fetchSaleSuccess(salesoffer)))
+            .catch(({ response }) => dispatch(fetchSaleFailure(response.data.errors)))
+    }
 }
