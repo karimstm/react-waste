@@ -1,16 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form';
+import DropzoneField from '../dropzone/DropzoneField';
 
 
-const createRenderer = render => ({ input, meta, label, placeholder, message, errors, ...rest }) =>
-{
+const createRenderer = render => ({ input, meta, label, placeholder, message, errors, ...rest }) => {
     console.log(input);
     var err;
     return (<div className="form-group">
         <label className="text-muted">{label}</label>
         {render(input, placeholder, rest)}
         <small className="form-text text-muted">{message}</small>
-        {((meta.touched &&(err = meta.error)) || (errors && (err = eval(`errors.${input.name}`)))) && <small className="form-text text-danger">{err}</small>}
+        {((meta.touched && (err = meta.error)) || (errors && (err = eval(`errors.${input.name}`)))) && <small className="form-text text-danger">{err}</small>}
     </div>)
 }
 
@@ -31,8 +31,12 @@ const RenderTextArea = createRenderer((textarea, placeholder) =>
 
 
 const OfferForm = props => {
-    const {  errors, handleSubmit, pristine, submitting, submitCb, valid, categories } = props
-    console.log(errors);
+
+    const { errors, handleSubmit, pristine, submitting, submitCb, valid, categories } = props
+    const [imageFile, setImageFile] = useState([]);
+    
+    const handleOnDrop = newImageFile => setImageFile(newImageFile);
+
     return (
         <form onSubmit={handleSubmit(submitCb)}>
             <Field component={RenderInput} name="title" type="text" id="title" placeholder="Titre"
@@ -60,7 +64,15 @@ const OfferForm = props => {
             <Field errors={errors} component={RenderInput} name="keywords" type="text" id="title" placeholder="Mot clé séparé par une virgule ,"
                 label="Mot cle"
                 message="Assurez-vous que le titre est descriptif" />
-            
+            <div>
+                <Field
+                    name="imageToUpload"
+                    component={DropzoneField}
+                    imagefile={imageFile}
+                    handleOnDrop={handleOnDrop}
+                    type="file"
+                />
+            </div>
             <div className="form-group form-check">
                 <Field name="isAccepted" component="input" className="text-muted font-weight-light" type="checkbox" className="form-check-input" id="idAcceptTerm" />
                 <label className="form-check-label text-muted" htmlFor="idAcceptTerm">J'accepte les termes et conditions</label>

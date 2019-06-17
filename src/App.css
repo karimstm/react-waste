@@ -11,7 +11,7 @@ body
     background: #FFF;
     max-width: 1230px;
     box-sizing: border-box;
-    height: 100vh;
+    min-height: 100vh;
     padding: 0;
 }
 
@@ -161,3 +161,7 @@ body
     padding-left: .5rem;
 }
 
+
+.dropzone {
+    border: 2px dashed #eee;
+}

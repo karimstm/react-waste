@@ -12,7 +12,17 @@
 /* ====================================================================================================================
  * FONT-FACE
  * ====================================================================================================================*/
-/* ====================================================================================================================
+ @font-face {
+  font-family: 'flexslider-icon';
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/fonts/flexslider-icon.eot');
+  src: url('https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/fonts/flexslider-icon.eot?#iefix') format('embedded-opentype'),
+   url('https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/fonts/flexslider-icon.woff') format('woff'),
+    url('https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/fonts/flexslider-icon.ttf') format('truetype'),
+     url('https://cdnjs.cloudflare.com/ajax/libs/flexslider/2.7.2/fonts/flexslider-icon.svg#flexslider-icon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+ /* ====================================================================================================================
  * RESETS
  * ====================================================================================================================*/
 .flex-container a:hover,
@@ -109,6 +119,7 @@ html[xmlns] .flexslider .slides {
   *height: 0;
 }
 .flex-direction-nav a {
+  line-height: 40px;
   text-decoration: none;
   display: block;
   width: 40px;

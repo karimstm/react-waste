@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { SubmissionError } from 'redux-form';
 import * as actions from '../../actions';
+import base64Service from '../../services/base64-service';
 
 class PostOffer extends Component {
 
@@ -22,12 +23,19 @@ class PostOffer extends Component {
     }
 
     submitOffre = (saleData) => {
-        actions.post_sale_offer(saleData).then(
-            (registered) => {this.setState({redirect : true})},
-            (errors) => { 
-                this.setState({ isError: true, errors: errors});
-            }
-        )
+        var result = base64Service.displayBase64String(saleData).then(result => console.log("blabla", result))
+        console.log("========", result);
+        result.forEach(function(element) {
+            debugger ;
+            console.log('ahemd', element);
+          });
+
+        // actions.post_sale_offer(saleData).then(
+        //     (registered) => {this.setState({redirect : true})},
+        //     (errors) => { 
+        //         this.setState({ isError: true, errors: errors});
+        //     }
+        // )
     }
 
     render() {
