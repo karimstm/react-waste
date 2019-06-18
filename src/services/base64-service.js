@@ -1,9 +1,10 @@
+import { IMGE_SIZE } from '../actions/types'
+
 class Base64Service {
 
     blobToBase64 = (blob, callback) => {
         var reader = new FileReader();
-        var data = '';
-        reader.onload = function() {
+        reader.onload = function () {
             var dataUrl = reader.result;
             var base64 = dataUrl.split(',')[1];
             callback(base64);
@@ -11,19 +12,27 @@ class Base64Service {
         reader.readAsDataURL(blob);
     }
 
-    displayBase64String (formProps) {
-        const fd = new FormData();
-        const result = [];
-        fd.append("imageFile", formProps.imageToUpload[0]);
-        console.log(Object.keys(formProps.imageToUpload));
-        const outbut = Object.entries(formProps.imageToUpload).map(([key, value]) => {
-            return this.blobToBase64(value, (data) => {
-              result.push({"file": `data:${value.type};base64,${data}`})  
-            })
+    displayBase64String = (formProps) => {
+        return new Promise((resolve, reject) => {
+            var result = [];
+            var output = Object.entries(formProps.photos).map(([key, value]) => value);
+            console.log(output.length);
+            output.map(value => {
+                if (value.size / (1024 * 1024)  > IMGE_SIZE)
+                    reject({"photos": 'La taille de l\'image doit être inférieure à 2 Mo'});
+                this.blobToBase64(value, (data) => {
+                    result.push({ "file": `data:${value.type};base64,${data}` });
+                    if (result.length === output.length)
+                        resolve(result);
+                });
+            });
+            
+            // this.blobToBase64(value, (data) => {
+            //     result.push({ "file": `data:${value.type};base64,${data}` })
+            // });
+            // return result;
         });
-        return result;
-    };
-
+    }
 }
 
 export default new Base64Service();

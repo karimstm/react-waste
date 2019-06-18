@@ -135,7 +135,6 @@ const postSaleSuccess = (saleData) => {
 }
 
 export const post_sale_offer = (saleData) => {
-
     return axiosInstance.post(`${DEFALUT_URL}/api/offer/sale`,
         {
             title: saleData.title,
@@ -145,11 +144,18 @@ export const post_sale_offer = (saleData) => {
             withTransport: saleData.withTransport,
             weight: saleData.weight,
             locations: saleData.locations.split('\n'),
-            keywords: saleData.keywords.split(',')
+            keywords: saleData.keywords.split(','),
+            photos: saleData.photos
 
         }).then(
-            (res) => res.data,
-            (err) => Promise.reject(err.response.data.errors)
+            (res) => {
+                console.log("Done...");
+                return res.data;
+            },
+            (err) => {
+                console.log(err);
+                Promise.reject(err.response.data.errors);
+            }
         );
 }
 

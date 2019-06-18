@@ -23,13 +23,25 @@ class PostOffer extends Component {
     }
 
     submitOffre = (saleData) => {
-        var result = base64Service.displayBase64String(saleData).then(result => console.log("blabla", result))
-        console.log("========", result);
-        result.forEach(function(element) {
-            debugger ;
-            console.log('ahemd', element);
-          });
-
+        base64Service.displayBase64String(saleData).then(
+            (res) => {
+                actions.post_sale_offer({...saleData, "photos": res}).then(
+                    (registered) => { this.setState({ redirect: true }) },
+                    (errors) => {
+                        this.setState({ isError: true, errors: errors });
+                    }
+                )
+            },
+            (err) => {
+                this.setState({ isError: true, errors: err });
+            }
+        )
+            // console.log("hahaha", result);
+            // debugger;
+            // console.log("====gggg====", result);
+            //result.forEach(function(element) {
+            //    console.log('ahemd', element);
+            //});
         // actions.post_sale_offer(saleData).then(
         //     (registered) => {this.setState({redirect : true})},
         //     (errors) => { 

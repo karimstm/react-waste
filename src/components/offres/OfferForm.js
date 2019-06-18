@@ -64,15 +64,14 @@ const OfferForm = props => {
             <Field errors={errors} component={RenderInput} name="keywords" type="text" id="title" placeholder="Mot clé séparé par une virgule ,"
                 label="Mot cle"
                 message="Assurez-vous que le titre est descriptif" />
-            <div>
                 <Field
-                    name="imageToUpload"
+                    name="photos"
                     component={DropzoneField}
+                    errors={errors}
                     imagefile={imageFile}
                     handleOnDrop={handleOnDrop}
                     type="file"
                 />
-            </div>
             <div className="form-group form-check">
                 <Field name="isAccepted" component="input" className="text-muted font-weight-light" type="checkbox" className="form-check-input" id="idAcceptTerm" />
                 <label className="form-check-label text-muted" htmlFor="idAcceptTerm">J'accepte les termes et conditions</label>
@@ -85,22 +84,22 @@ const OfferForm = props => {
 const validate = values => {
     const errorMsg = 'Ce champ ne doit pas être vide';
     const errors = {}
-    if (!values.title)
-        errors.title = errorMsg;
-    if (!values.category)
-        errors.category = errorMsg;
-    if (!values.description)
-        errors.description = errorMsg;
-    if (!values.price)
-        errors.price = errorMsg;
-    if (!values.weight)
-        errors.weight = errorMsg;
-    if (!values.locations)
-        errors.locations = errorMsg;
-    if (!values.keywords)
-        errors.keywords = errorMsg;
-    if (!values.isAccepted)
-        errors.keywords = 'Vous devez accepter les termes et conditions avant de poster';
+    // if (!values.title)
+    //     errors.title = errorMsg;
+    // if (!values.category)
+    //     errors.category = errorMsg;
+    // if (!values.description)
+    //     errors.description = errorMsg;
+    // if (!values.price)
+    //     errors.price = errorMsg;
+    // if (!values.weight)
+    //     errors.weight = errorMsg;
+    // if (!values.locations)
+    //     errors.locations = errorMsg;
+    // if (!values.keywords)
+    //     errors.keywords = errorMsg;
+    // if (!values.isAccepted)
+    //     errors.keywords = 'Vous devez accepter les termes et conditions avant de poster';
 
     return errors;
 }

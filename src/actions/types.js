@@ -18,3 +18,7 @@ export const SALE_FAILURE = 'SALE_FAILURE';
 
 export const FETCH_SALES_SUCCESS = 'FETCH_SALES_SUCCESS';
 export const FETCH_SALES_FAILURE = 'FETCH_SALES_FAILURE';
+
+// IMAGE SIZE
+
+export const IMGE_SIZE = 6

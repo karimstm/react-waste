@@ -11,7 +11,7 @@ class AxiosService {
     initInstance() {
         this.axiosInstance = axios.create({
             baseURL: `${DEFALUT_URL}/api`,
-            timeout: 1000
+            timeout: 50000
         });
 
         this.axiosInstance.interceptors.request.use(

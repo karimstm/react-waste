@@ -38,6 +38,7 @@ const DropzoneField = ({
     handleOnDrop,
     input,
     imagefile,
+    errors,
     meta: { error, touched }}, {...rest}) => {
   const [files, setFiles] = useState([]);
   const {getRootProps, getInputProps} = useDropzone({
@@ -72,6 +73,7 @@ const DropzoneField = ({
         <input name={input.name} {...getInputProps()} />
         <p>Drag 'n' drop some files here, or click to select files</p>
       </div>
+      <small className="text-danger">{errors.photos}</small>
       <aside style={thumbsContainer}>
         {thumbs}
       </aside>
