@@ -14,7 +14,7 @@ class Header extends Component {
         const { isAuth } = this.props.auth;
 
         if (isAuth) {
-            return (<a className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>);
+            return (<a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>);
         }
         return (
             <React.Fragment>
@@ -41,7 +41,7 @@ class Header extends Component {
                     </ul>
                     <ul className="navbar-nav  wast-link ml-auto">
                         <li className="nav-item dropdown mx-2">
-                            <a className="nav-link dropdown-toggle p-0 top" href="#" id="navbarDropdown" role="button"
+                            <a className="nav-link dropdown-toggle p-0 top" href="/" id="navbarDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i className="fas fa-user mr-2"></i>Accounte
                         </a>
@@ -51,13 +51,13 @@ class Header extends Component {
                             </div>
                         </li>
                         <li className="nav-item dropdown mx-2">
-                            <a className="nav-link dropdown-toggle p-0 top" href="#" id="navbarDropdown" role="button"
+                            <a className="nav-link dropdown-toggle p-0 top" href="/" id="navbarDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i className="fas fa-globe mr-2"></i>Francais
                         </a>
                             <div className="dropdown-menu dropdwn" aria-labelledby="navbarDropdown">
-                                <a className="dropdown-item" href="#">Arabe</a>
-                                <a className="dropdown-item" href="#">Anglais</a>
+                                <a className="dropdown-item" href="/">Arabe</a>
+                                <a className="dropdown-item" href="/">Anglais</a>
                             </div>
                         </li>
                     </ul>
@@ -70,23 +70,23 @@ class Header extends Component {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav mr-auto">
                             <li className="nav-item">
-                                <a className="nav-link wast-link" href="#">Accueil</a>
+                                <a className="nav-link wast-link" href="/">Accueil</a>
                             </li>
                             <li className="nav-item">
                                 <Link className="nav-link wast-link" to="/offers">Tout voir</Link>
                             </li>
                             <li className="nav-item dropdown">
-                                <a className="nav-link wast-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a className="nav-link wast-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Catégories
                       </a>
                                 <div className="dropdown-menu dropdwn" aria-labelledby="navbarDropdown">
-                                    <a className="dropdown-item" href="#">Category one</a>
-                                    <a className="dropdown-item" href="#">Category two</a>
-                                    <a className="dropdown-item" href="#">Category three</a>
+                                    <a className="dropdown-item" href="/">Category one</a>
+                                    <a className="dropdown-item" href="/">Category two</a>
+                                    <a className="dropdown-item" href="/">Category three</a>
                                 </div>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link wast-link" href="#">Blog</a>
+                                <a className="nav-link wast-link" href="/">Blog</a>
                             </li>
                         </ul>
                         <form className="form-inline my-2 my-lg-0">

@@ -55,6 +55,7 @@ const DropzoneField = ({
     <div style={thumb} key={file.name}>
       <div style={thumbInner}>
         <img
+          alt=""
           src={file.preview}
           style={img}
         />

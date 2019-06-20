@@ -1,10 +1,9 @@
 import React, {useState} from 'react';
-import { Field, reduxForm, SubmissionError } from 'redux-form';
+import { Field, reduxForm } from 'redux-form';
 import DropzoneField from '../dropzone/DropzoneField';
 
 
 const createRenderer = render => ({ input, meta, label, placeholder, message, errors, ...rest }) => {
-    console.log(input);
     var err;
     return (<div className="form-group">
         <label className="text-muted">{label}</label>
@@ -32,9 +31,10 @@ const RenderTextArea = createRenderer((textarea, placeholder) =>
 
 const OfferForm = props => {
 
-    const { errors, handleSubmit, pristine, submitting, submitCb, valid, categories } = props
+    const { errors, handleSubmit, pristine, submitting, submitCb, valid , categories } = props
     const [imageFile, setImageFile] = useState([]);
-    
+
+
     const handleOnDrop = newImageFile => setImageFile(newImageFile);
 
     return (
@@ -57,26 +57,35 @@ const OfferForm = props => {
                 </div>
             </div>
             <div className="form-group form-check">
-                <Field errors={errors} name="withTransport" component="input" className="text-muted font-weight-light" type="checkbox" className="form-check-input" id="withTransport" />
+                <Field errors={errors} name="withTransport" component="input"  type="checkbox" className="text-muted font-weight-light form-check-input" id="withTransport" />
                 <label className="form-check-label text-muted" htmlFor="withTransport">Avec transport</label>
             </div>
             <Field errors={errors} label="Emplacement" name="locations" component={RenderTextArea} placeholder="Emplacement séparés par une nouvelle ligne" id="idLocation" className="form-control font-weight-light" rows="2"></Field>
             <Field errors={errors} component={RenderInput} name="keywords" type="text" id="title" placeholder="Mot clé séparé par une virgule ,"
                 label="Mot cle"
                 message="Assurez-vous que le titre est descriptif" />
+            <div className="form-group">
                 <Field
-                    name="photos"
-                    component={DropzoneField}
-                    errors={errors}
-                    imagefile={imageFile}
-                    handleOnDrop={handleOnDrop}
-                    type="file"
+                        name="photos"
+                        component={DropzoneField}
+                        errors={errors}
+                        imagefile={imageFile}
+                        handleOnDrop={handleOnDrop}
+                        type="file"
                 />
+            </div>
             <div className="form-group form-check">
-                <Field name="isAccepted" component="input" className="text-muted font-weight-light" type="checkbox" className="form-check-input" id="idAcceptTerm" />
+                <Field name="isAccepted" component="input" className="text-muted font-weight-light form-check-input" type="checkbox" id="idAcceptTerm" />
                 <label className="form-check-label text-muted" htmlFor="idAcceptTerm">J'accepte les termes et conditions</label>
             </div>
-            <button disabled={!valid || pristine || submitting} className="btn text-white btn-warning rounded-0">Submit</button>
+            <button 
+            disabled={!valid || pristine || submitting}
+            className="btn btn-submit text-white btn-warning rounded-0"
+            >
+            {
+                submitting ? <React.Fragment><i className="fas fa-spin fa-spinner"></i> En progression</React.Fragment>  : "poster"
+            }
+            </button>
         </form>
     );
 }
@@ -84,22 +93,22 @@ const OfferForm = props => {
 const validate = values => {
     const errorMsg = 'Ce champ ne doit pas être vide';
     const errors = {}
-    // if (!values.title)
-    //     errors.title = errorMsg;
-    // if (!values.category)
-    //     errors.category = errorMsg;
-    // if (!values.description)
-    //     errors.description = errorMsg;
-    // if (!values.price)
-    //     errors.price = errorMsg;
-    // if (!values.weight)
-    //     errors.weight = errorMsg;
-    // if (!values.locations)
-    //     errors.locations = errorMsg;
-    // if (!values.keywords)
-    //     errors.keywords = errorMsg;
-    // if (!values.isAccepted)
-    //     errors.keywords = 'Vous devez accepter les termes et conditions avant de poster';
+    if (!values.title)
+        errors.title = errorMsg;
+    if (!values.category)
+        errors.category = errorMsg;
+    if (!values.description)
+        errors.description = errorMsg;
+    if (!values.price)
+        errors.price = errorMsg;
+    if (!values.weight)
+        errors.weight = errorMsg;
+    if (!values.locations)
+        errors.locations = errorMsg;
+    if (!values.keywords)
+        errors.keywords = errorMsg;
+    if (!values.isAccepted)
+        errors.isAccepted = 'Vous devez accepter les termes et conditions avant de poster';
 
     return errors;
 }

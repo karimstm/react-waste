@@ -141,7 +141,7 @@ html[xmlns] .flexslider .slides {
 }
 .flex-direction-nav a:before {
   font-family: "flexslider-icon";
-  font-size: 40px;
+  font-size: 20px;
   display: inline-block;
   content: '\f001';
   color: rgba(0, 0, 0, 0.8);

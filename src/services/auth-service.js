@@ -27,6 +27,37 @@ class AuthService {
         return moment.unix(exp);
     }
 
+    getRoles(token) {
+        let role = '';
+        if (token)
+        {
+            const roles = this.decode(token).roles;
+            if (roles)
+            {
+                role = roles[0];
+                console.log(role);
+            }
+                
+            return role;
+        }
+        
+    }
+
+    isPicker()
+    {
+        return 'ROLE_PICKER';
+    }
+
+    isReseller()
+    {
+        return 'ROLE_RESELLER';
+    }
+
+    isBuyer()
+    {
+        return 'ROLE_BUYER';
+    }
+
     isValid(token) {
         return moment().isBefore(this.getExpiration(token));
     }

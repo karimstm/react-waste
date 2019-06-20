@@ -15,22 +15,21 @@ class Base64Service {
     displayBase64String = (formProps) => {
         return new Promise((resolve, reject) => {
             var result = [];
+            if (formProps.photos === null || formProps.photos === undefined)
+            {
+                resolve(result);     
+            }
+                
             var output = Object.entries(formProps.photos).map(([key, value]) => value);
-            console.log(output.length);
             output.map(value => {
                 if (value.size / (1024 * 1024)  > IMGE_SIZE)
                     reject({"photos": 'La taille de l\'image doit être inférieure à 2 Mo'});
-                this.blobToBase64(value, (data) => {
+                return this.blobToBase64(value, (data) => {
                     result.push({ "file": `data:${value.type};base64,${data}` });
                     if (result.length === output.length)
                         resolve(result);
                 });
             });
-            
-            // this.blobToBase64(value, (data) => {
-            //     result.push({ "file": `data:${value.type};base64,${data}` })
-            // });
-            // return result;
         });
     }
 }

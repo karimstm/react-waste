@@ -20,7 +20,6 @@ class Login extends Component {
         const { isAuth, errors } = this.props.auth;
         const { successRegister } = this.props.location.state || false;
 
-        console.log(errors)
         if (isAuth) {
             return <Redirect to={{ pathname: '/'}} />
         }

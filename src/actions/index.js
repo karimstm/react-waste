@@ -1,6 +1,7 @@
 import axios from 'axios'
 import authService from '../services/auth-service'
 import axiosService from '../services/axios-service'
+
 import {
     DEFALUT_URL,
     LOGIN_SUCCESS,
@@ -8,8 +9,6 @@ import {
     LOGOUT,
     FETCH_CATEGORIES_FAIL,
     FETCH_CATEGORIES_SUCCESS,
-    SALE_FAILURE,
-    SALE_SUCCESS,
     FETCH_SALES_FAILURE,
     FETCH_SALES_SUCCESS
 } from './types'
@@ -36,10 +35,7 @@ export const register = (userData) => {
 
         }, { headers: headers }).then(
             (res) => res.data,
-            (err) => {
-                console.log(err.response.data.errors);
-                return Promise.reject(err.response.data.errors)
-            });
+            (err) => Promise.reject(err.response.data.extras));
 }
 
 const loginSuccess = () => {
@@ -121,21 +117,35 @@ export const get_categories = () => {
 // Post a sale offer
 
 
-const postSaleFailure = (errors) => {
-    return {
-        type: SALE_FAILURE,
-        errors
-    }
-}
+// const postSaleFailure = (errors) => {
+//     return {
+//         type: SALE_FAILURE,
+//         errors
+//     }
+// }
 
-const postSaleSuccess = (saleData) => {
-    return {
-        type: SALE_SUCCESS
-    }
-}
+// const postSaleSuccess = (saleData) => {
+//     return {
+//         type: SALE_SUCCESS
+//     }
+// }
 
 export const post_sale_offer = (saleData) => {
-    return axiosInstance.post(`${DEFALUT_URL}/api/offer/sale`,
+    let   role = authService.getRoles(authService.getToken());
+    let link = 'sale';
+    switch(role)
+    {
+        case authService.isPicker():
+            link = 'sale';
+            break;
+        case authService.isReseller():
+            link = 'purchase';
+            break;
+        case authService.isBuyer():
+            link = 'bulk_purchase';
+            break;
+    }
+    return axiosInstance.post(`${DEFALUT_URL}/api/offer/${link}`,
         {
             title: saleData.title,
             description: saleData.description,
@@ -148,13 +158,12 @@ export const post_sale_offer = (saleData) => {
             photos: saleData.photos
 
         }).then(
-            (res) => {
-                console.log("Done...");
-                return res.data;
-            },
+            (res) => res.data,
             (err) => {
-                console.log(err);
-                Promise.reject(err.response.data.errors);
+                if (err.response.data.status === 401)
+                    return Promise.reject(err.response.data.extras)
+                else
+                    return Promise.reject(err.response.data.message)
             }
         );
 }
@@ -183,8 +192,8 @@ export const fetchOffers = () => {
     return dispatch => {
         return axios.get(`${DEFALUT_URL}/api/public/offers/sale`,
             { headers: headers })
-            .then(res => { return res.data })
+            .then(res => res.data)
             .then(salesoffer => dispatch(fetchSaleSuccess(salesoffer)))
-            .catch(({ response }) => dispatch(fetchSaleFailure(response.data.errors)))
+            .catch(err => dispatch(fetchSaleFailure(err.response.data.message)))
     }
 }

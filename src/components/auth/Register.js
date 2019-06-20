@@ -20,7 +20,7 @@ class Register extends Component {
     registerUser(userData) {
         actions.register(userData).then(
             (registered) => {this.setState({redirect : true})},
-            (errors) => { this.setState({ isError: true, errors: Object.value(errors) })}
+            (errors) => this.setState({ isError: true, errors: errors})
         )
     }
     render() {
@@ -31,7 +31,7 @@ class Register extends Component {
         }
         return (
             <section className="login-container mx-auto p-5">
-                {isError ? <Alert className="danger" errors={errors} /> : ''}
+                {isError ? <Alert className="danger" errors={Object.values(errors)} /> : ''}
                 <RegisterForms submitCb={this.registerUser} />
             </section>
         );

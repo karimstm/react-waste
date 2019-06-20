@@ -21,4 +21,4 @@ export const FETCH_SALES_FAILURE = 'FETCH_SALES_FAILURE';
 
 // IMAGE SIZE
 
-export const IMGE_SIZE = 6
+export const IMGE_SIZE = 6;
