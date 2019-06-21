@@ -1,6 +1,15 @@
 import React, { Component } from 'react';
+import ReviewForm from '../../Forms/ReviewForm';
+import ReviewCard from '../../shared/Reviews/ReviewCard';
+import * as actions from '../../../actions/index';
 
 class offersDetails extends Component {
+
+
+    componentWillMount() {
+        // this.props.dispatch(actions.getoffer());
+    }
+
     render() {
         return (
             <React.Fragment>
@@ -64,7 +73,7 @@ class offersDetails extends Component {
                                 </ul>
                                 <div className="row mt-5">
                                     <div className="col col-6">
-                                        <button type="button" className="btn btn-block btn-warning text-light rounded-0">Ajouter au panier</button>
+                                        <button type="button" className="btn btn-block btn-warning text-light rounded-0">Accepter l'offer</button>
                                     </div>
                                     <div className="col col-6">
                                         <button type="button" className="btn btn-block btn-outline-danger rounded-0">Ajouter au Wishlist</button>
@@ -94,21 +103,12 @@ class offersDetails extends Component {
                                 Bacon ipsum dolor amet pork chop short ribs beef pancetta bresaola bacon. Pork corned beef rump jowl, ball tip landjaeger pancetta spare ribs sausage ground round chicken tail. Cupim shoulder meatloaf pastrami pancetta t-bone frankfurter flank. Capicola ham hock jowl, rump strip steak shankle landjaeger.
                         </div>
                             <div className="py-3 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                <div className="row">
-                                    <div className="col col-lg-6 col-md-6 col-sm-10">
-
+                                <div className="row mx-2">
+                                    <div className="col col-12 col-lg-6 col-md-10 col-sm-10">
+                                        <ReviewCard />
                                     </div>
-                                    <div className="bg-light col col-lg-6 col-md-6 col-sm-10 py-4">
-                                        <p className="text-muted">Ajouter un avis</p>
-                                        <form>
-                                            <div className="text-dark form-group">
-                                                <label htmlFor="reviewField">Votre avis</label>
-                                                <textarea className="form-control rounded-0" rows="5" id="reviewField" placeholder="Ajouter un avis">
-
-                                                </textarea>
-                                            </div>
-                                            <button type="submit" class="btn btn-warning rounded-0 text-white">Envoyer</button>
-                                        </form>
+                                    <div className="col col-12 col-lg-6 col-md-10 col-sm-10 py-4">
+                                        <ReviewForm />
                                     </div>
                                 </div>
                             </div>

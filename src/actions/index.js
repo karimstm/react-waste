@@ -12,15 +12,16 @@ import {
     FETCH_SALES_FAILURE,
     FETCH_SALES_SUCCESS
 } from './types'
+import { DEFAULT_ECDH_CURVE } from 'tls';
+
+const headers = { 'Content-Type': 'application/json' }
 
 // Auth Actions ------------------
 
 const axiosInstance = axiosService.getInstance();
 
 export const register = (userData) => {
-    let headers = {
-        'Content-Type': 'application/json',
-    }
+
     return axios.post(`${DEFALUT_URL}/api/register`,
         {
             email: userData.email,
@@ -60,9 +61,6 @@ export const checkAuthState = () => {
 }
 
 export const login = (userData) => {
-    let headers = {
-        'Content-Type': 'application/json',
-    }
     return dispatch => {
         return axios.post(`${DEFALUT_URL}/api/auth`,
             userData, { headers: headers })
@@ -101,15 +99,13 @@ const fetchCategoriesFail = (errors) => {
 }
 
 export const get_categories = () => {
-    let headers = {
-        'Content-Type': 'application/json'
-    }
+
     return dispatch => {
         return axios.get(`${DEFALUT_URL}/api/public/categories`,
             { headers: headers })
             .then(res => { return res.data })
             .then(categories => dispatch(fetchCategoriesSucces(categories)))
-            .catch(({ response }) => dispatch(fetchCategoriesFail(response.data.errors)))
+            .catch(({ response }) => dispatch(fetchCategoriesFail(response.data.extras)))
     }
 }
 
@@ -188,7 +184,7 @@ const fetchSaleSuccess = (salesoffer) => {
 
 
 export const fetchOffers = () => {
-    const headers = { 'Content-Type': 'application/json' }
+    
     return dispatch => {
         return axios.get(`${DEFALUT_URL}/api/public/offers/sale`,
             { headers: headers })
@@ -197,3 +193,18 @@ export const fetchOffers = () => {
             .catch(err => dispatch(fetchSaleFailure(err.response.data.message)))
     }
 }
+
+// Fetch a single offer by Id
+
+/*
+export const fetchOfferById = (id) => {
+    return dispatch => {
+        return axios.patch(`${DEFALUT_URL}/api/public/offers/${id}`,
+        { headers: headers }
+        ).then(res => res.data)
+        .then(offerDetail => dispatch(fetchOfferSucces(offerDetail)))
+        .catch(({ response }) => dispatch(fetchOfferFail(response.data.errors)))
+    }
+}
+
+*/
