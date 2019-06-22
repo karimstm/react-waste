@@ -3,6 +3,7 @@ import RegisterForms from '../Forms/RegisterForms';
 import * as actions from '../../actions'
 import { Redirect } from 'react-router-dom'
 import Alert from '../shared/Alert';
+import RegisterCardList from '../shared/Cards/RegisterCardList';
 
 class Register extends Component {
 
@@ -30,9 +31,10 @@ class Register extends Component {
             return <Redirect to={{ pathname: '/login', state: { successRegister: true } }} />
         }
         return (
-            <section className="login-container mx-auto p-5">
-                {isError ? <Alert className="danger" errors={Object.values(errors)} /> : ''}
-                <RegisterForms submitCb={this.registerUser} />
+            <section className="login-container container-fluid mx-auto p-5 my-auto">
+                <RegisterCardList />
+                {/* {isError ? <Alert className="danger" errors={Object.values(errors)} /> : ''}
+                <RegisterForms submitCb={this.registerUser} /> */}
             </section>
         );
     }

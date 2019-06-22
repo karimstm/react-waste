@@ -135,7 +135,10 @@ body
     box-shadow: 0 15px 20px rgba(0,0,0,0.1);
     transform: translate(0, -4px);
 }
-  
+.card-mine.active {
+    box-shadow: 0 15px 20px rgba(0,0,0,0.1);
+}
+
 .card-mine:active {
     text-decoration: none;
 }
@@ -222,3 +225,9 @@ body
     width: 0;
 }
 /* ========== End Review Card ========= */
+
+/* ========== Register Cards ========== */
+
+li.borderless { border: 0 none; }
+
+/* ======== End Register Cards ======= */
