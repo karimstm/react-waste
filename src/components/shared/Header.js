@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Link, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
+import { Link, withRouter } from 'react-router-dom';
+import { connect } from 'react-redux';
+import LogedInRoute from '../../components/shared/auth/LogedInRoute';
+import LogedInLink from './auth/LogedInLink';
 
 class Header extends Component {
 
@@ -86,7 +88,7 @@ class Header extends Component {
                                 </div>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link wast-link" href="/">Blog</a>
+                                <LogedInLink />
                             </li>
                         </ul>
                         <form className="form-inline my-2 my-lg-0">
