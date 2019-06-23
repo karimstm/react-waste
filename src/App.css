@@ -231,3 +231,12 @@ body
 li.borderless { border: 0 none; }
 
 /* ======== End Register Cards ======= */
+
+.image-gallery-image img {
+    height: 384px;
+  }
+
+.image-gallery-left-nav, 
+.image-gallery-right-nav {
+      font-size:  2em !important;
+  }

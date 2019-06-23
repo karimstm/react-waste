@@ -2,7 +2,9 @@ import {
     FETCH_CATEGORIES_FAIL,
     FETCH_CATEGORIES_SUCCESS,
     FETCH_SALES_FAILURE,
-    FETCH_SALES_SUCCESS
+    FETCH_SALES_SUCCESS,
+    FETCH_OFFER_FAILURE,
+    FETCH_OFFER_SUCCESS
 } from '../actions/types';
 
 
@@ -44,5 +46,26 @@ export const offerSalesReducer = (state = INITIAL_STATE_OFFER_SATE.salesoffer, a
             return Object.assign({}, state, {errors: action.errors, data: []});
         default: 
             return state;
+    }
+}
+
+const INITIAL_OFFER_DETAILS_SATE = {
+    offerDetails : {
+    data: [],
+    errors: []
+}
+}
+
+
+export const offerDetailsReducer = (state = INITIAL_OFFER_DETAILS_SATE, action) => {
+    switch(action.type)
+    {
+        case FETCH_OFFER_SUCCESS:
+            return {...state, data: action.offerDetails};
+        case FETCH_OFFER_FAILURE:
+            return Object.assign({}, state, {errors: action.errors, data: []});
+        default:
+            return state;
+
     }
 }

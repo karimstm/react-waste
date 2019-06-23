@@ -1,7 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
+import {Redirect} from 'react-router-dom';
 
 function RegisterCard(props) {
-    const {color, isActive, title, icon } = props;
+    const {color, isActive, title, icon, value } = props;
+    const [isRedirect, setIsRedirect] = useState(false);
+
+    function handleClick() {
+        setIsRedirect(true);
+    }
+
+    if (isRedirect)
+        return (<Redirect to={{ pathname: '/register', state: { type : value } }} />);
     return (
         <div className={`card card-mine border-0 ${isActive && 'active'}`}>
             <div className={`card-header border-top border-light ${color}`}>
@@ -19,7 +28,7 @@ function RegisterCard(props) {
                         <li className="list-group-item borderless px-0 pb-0"><i className="fas fa-times text-danger px-2"></i> lorem ipsume to so do with the</li>
                 </ul>
                 <div className="text-center py-5">
-                    <button type="button" className="btn rounded-pill btn-block py-2 btn-outline-danger">FAISONS CELA</button>
+                    <button onClick={handleClick} type="button" className="btn rounded-pill btn-block py-2 btn-outline-danger">FAISONS CELA</button>
                 </div>
             </div>
         </div>

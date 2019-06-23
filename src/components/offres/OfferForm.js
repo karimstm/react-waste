@@ -114,5 +114,6 @@ const validate = values => {
 }
 export default reduxForm({
     form: 'offerForm',
-    validate
+    validate,
+    enableReinitialize: true,
 })(OfferForm)

@@ -10,7 +10,10 @@ import {
     FETCH_CATEGORIES_FAIL,
     FETCH_CATEGORIES_SUCCESS,
     FETCH_SALES_FAILURE,
-    FETCH_SALES_SUCCESS
+    FETCH_SALES_SUCCESS,
+    FETCH_OFFER_FAILURE,
+    FETCH_OFFER_SUCCESS
+    
 } from './types'
 import { DEFAULT_ECDH_CURVE } from 'tls';
 
@@ -101,7 +104,7 @@ const fetchCategoriesFail = (errors) => {
 export const get_categories = () => {
 
     return dispatch => {
-        return axios.get(`${DEFALUT_URL}/api/public/categories`,
+        return axios.get(`${DEFALUT_URL}/api/categories`,
             { headers: headers })
             .then(res => { return res.data })
             .then(categories => dispatch(fetchCategoriesSucces(categories)))
@@ -141,7 +144,7 @@ export const post_sale_offer = (saleData) => {
             link = 'bulk_purchase';
             break;
     }
-    return axiosInstance.post(`${DEFALUT_URL}/api/offer/${link}`,
+    return axiosInstance.post(`${DEFALUT_URL}/api/offers`,
         {
             title: saleData.title,
             description: saleData.description,
@@ -151,7 +154,8 @@ export const post_sale_offer = (saleData) => {
             weight: saleData.weight,
             locations: saleData.locations.split('\n'),
             keywords: saleData.keywords.split(','),
-            photos: saleData.photos
+            photos: saleData.photos,
+            type: link
 
         }).then(
             (res) => res.data,
@@ -186,7 +190,7 @@ const fetchSaleSuccess = (salesoffer) => {
 export const fetchOffers = () => {
     
     return dispatch => {
-        return axios.get(`${DEFALUT_URL}/api/public/offers/sale`,
+        return axios.get(`${DEFALUT_URL}/api/offers/sale`,
             { headers: headers })
             .then(res => res.data)
             .then(salesoffer => dispatch(fetchSaleSuccess(salesoffer)))
@@ -196,15 +200,25 @@ export const fetchOffers = () => {
 
 // Fetch a single offer by Id
 
-/*
-export const fetchOfferById = (id) => {
-    return dispatch => {
-        return axios.patch(`${DEFALUT_URL}/api/public/offers/${id}`,
-        { headers: headers }
-        ).then(res => res.data)
-        .then(offerDetail => dispatch(fetchOfferSucces(offerDetail)))
-        .catch(({ response }) => dispatch(fetchOfferFail(response.data.errors)))
+const fetchOfferSucces = (offerDetails) => {
+    return {
+        type: FETCH_OFFER_SUCCESS,
+        offerDetails
     }
 }
 
-*/
+const fetchOfferFail = () => {
+    return {
+        type: FETCH_OFFER_FAILURE
+    }
+}
+
+export const fetchOfferById = (id) => {
+    return dispatch => {
+        return axios.get(`${DEFALUT_URL}/api/offers/${id}`,
+        { headers: headers }
+        ).then(res => res.data)
+        .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
+        .catch(({ response }) => dispatch(fetchOfferFail(response.data.errors)))
+    }
+}

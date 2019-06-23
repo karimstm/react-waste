@@ -1,10 +1,12 @@
 import React from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { renderField } from '../shared/Forms/input'
+import { connect } from 'react-redux';
+
 
 const RegisterForm = props => {
-    const { handleSubmit, pristine, submitting, submitCb, valid } = props
-
+    const { handleSubmit, pristine, submitting, submitCb, valid, initialize, data } = props
+    initialize(data);
     return (
         <form className="login-form" onSubmit={handleSubmit(submitCb)} >
             <div className="row">
@@ -111,7 +113,12 @@ const validate = values => {
     return errors
 }
 
-export default reduxForm({
+const mapStateToProps = (state) => ({
+    initialValues: state.data,
+})
+
+export default connect(mapStateToProps)(reduxForm({
     form: 'registerForm',
-    validate
-})(RegisterForm)
+    enableReinitialize: true,
+    validate,
+})(RegisterForm))

@@ -12,6 +12,7 @@ import PostOffer from './components/offres/PostOffer';
 import OfferList from './components/offres/offersListing/OfferList';
 import offersDetails from './components/offres/offersDetails/offersDetails';
 import HomeTabs from './components/shared/tabs/HomeTabs';
+import Plans from './components/auth/Plans';
 
 const store = require('./reducers').init();
 
@@ -43,6 +44,7 @@ function App() {
               <Route exact path="/offers/:id" component={offersDetails} />
             </Switch>
             <Route exact path="/login" component={Login}></Route>
+            <Route exact path="/plans" component={ Plans }></Route>
             <LogedInRoute exact path="/register" component={Register}></LogedInRoute>
           </div>
         </div>

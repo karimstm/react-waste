@@ -11,7 +11,7 @@ function ReviewForm(props) {
 
                     </textarea>
                 </div>
-                <button type="submit" class="btn btn-warning text-white">Envoyer</button>
+                <button type="submit" className="btn btn-warning text-white">Envoyer</button>
             </form>
         </React.Fragment>
     );
