@@ -1,14 +1,21 @@
-import React from 'react'
+import React, { Component } from 'react'
 import { Field, reduxForm } from 'redux-form'
 import { renderField } from '../shared/Forms/input'
 import { connect } from 'react-redux';
 
 
-const RegisterForm = props => {
-    const { handleSubmit, pristine, submitting, submitCb, valid, initialize, data } = props
-    initialize(data);
-    return (
-        <form className="login-form" onSubmit={handleSubmit(submitCb)} >
+class RegisterForm extends Component {
+
+    componentDidMount() {
+        
+        this.props.initialize(this.props.data);
+    }
+
+    render() {
+    const { handleSubmit, pristine, submitting, submitCb, valid} = this.props
+
+        return (
+            <form className="login-form" onSubmit={handleSubmit(submitCb)} >
             <div className="row">
                 <div className="col-6">
                     <Field
@@ -82,8 +89,10 @@ const RegisterForm = props => {
                 <button type="submit" disabled={!valid || pristine || submitting} className="btn btn-warning btn-block text-white rounded-0 my-3">Inscrire</button>
             </div>
         </form>
-    )
+        );
+    }
 }
+
 
 const validate = values => {
     const errors = {}

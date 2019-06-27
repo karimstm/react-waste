@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import LogedInRoute from '../../components/shared/auth/LogedInRoute';
 import LogedInLink from './auth/LogedInLink';
+import LogedInInfo from './auth/LogedInInfo';
+import * as actions from '../../actions';
+import offerService from '../../services/offer-service';
 
 class Header extends Component {
 
@@ -16,8 +18,16 @@ class Header extends Component {
         const { isAuth } = this.props.auth;
 
         if (isAuth) {
-            return (<a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>);
+            return (
+                <React.Fragment>
+                    <a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>
+                    {offerService.isAReseller() && <Link className="dropdown-item" to={{pathname: '/offers/new', state: {auction: true}}}>Publier une enchère</Link> }
+                    
+                </React.Fragment>
+            );
         }
+
+        
         return (
             <React.Fragment>
                 <Link className="dropdown-item" to="/login">Connexion</Link>
@@ -26,7 +36,17 @@ class Header extends Component {
         );
     }
 
+    componentWillMount() {
+        const { isAuth } = this.props.auth;
+
+        if (isAuth)
+        {
+            this.props.dispatch(actions.fetchCurrentUserInfo());
+        }
+    }
+
     render() {
+        const { userInfo } = this.props;
         return (
             <header>
                 <nav className="top navbar navbar-expand-lg bg-dark">
@@ -42,14 +62,19 @@ class Header extends Component {
                     </li>
                     </ul>
                     <ul className="navbar-nav  wast-link ml-auto">
+                    <li className="nav-item">
+                    {
+                        userInfo.firstName && <span>Bonjour : {userInfo.firstName.toUpperCase()} </span>
+                    }
+                        
+                    </li>
                         <li className="nav-item dropdown mx-2">
                             <a className="nav-link dropdown-toggle p-0 top" href="/" id="navbarDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i className="fas fa-user mr-2"></i>Accounte
                         </a>
                             <div className="dropdown-menu dropdwn" aria-labelledby="navbarDropdown">
-                                { this.renderAuthLinks() }
-
+                                {this.renderAuthLinks()}
                             </div>
                         </li>
                         <li className="nav-item dropdown mx-2">
@@ -91,7 +116,8 @@ class Header extends Component {
                                 <LogedInLink />
                             </li>
                         </ul>
-                        <form className="form-inline my-2 my-lg-0">
+                            <LogedInInfo userInfo={userInfo} />
+                        <form className="form-inline">
                             <input className="form-control search-bar" type="search" placeholder="Rechereche" aria-label="Search" />
                             <button className="btn btn-warning text-white my-2 button-search" type="submit"><i className="fas fa-search"></i></button>
                         </form>
@@ -104,7 +130,8 @@ class Header extends Component {
 
 function mapStateToProps(state) {
     return {
-        auth: state.auth
+        auth: state.auth,
+        userInfo: state.userInfo.data
     }
 }
 

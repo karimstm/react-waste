@@ -8,11 +8,9 @@ String.prototype.trunc = String.prototype.trunc ||
 
 function OfferCard(props) {
 
-
     const { id, title, description, price, photos, owner: { lastName } } = props.offer;
     return (
         <a href={`offers/${id}`} className="card card-mine">
-            {/* photos.length > 0 && photos[0].link ? photos[0].link: */}
             <img alt="" className="card-img-top" src={photos.length > 0 && photos[0].thumbnail ? photos[0].thumbnail : home} />
             <div className="card-body card-body-mine">
                 <div className="feedback">
@@ -28,7 +26,7 @@ function OfferCard(props) {
                 <div className="card-text py-1">
                     <div className="row">
                         <small className="col-6 text-warning">{price} MAD</small>
-                        <small className="col-6 text-muted">Posted by {lastName}</small>
+                        <small className="col-6 text-muted">Posted by {lastName.toUpperCase()}</small>
                     </div>
                 </div>
             </div>

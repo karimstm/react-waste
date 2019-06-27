@@ -32,7 +32,7 @@ function App() {
   componentWillMount();
   return (
     <Provider store={store}>
-      <Router>
+      <Router basename="/">
         <div className="App">
           <div className="wrapper">
             <Header logout={logout} />

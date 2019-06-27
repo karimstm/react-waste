@@ -1,42 +1,61 @@
-import React, {useState} from 'react';
+import React, { Component} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import DropzoneField from '../dropzone/DropzoneField';
 
 
-const createRenderer = render => ({ input, meta, label, placeholder, message, errors, ...rest }) => {
+const createRenderer = render => ({ input, meta, label, placeholder, message, readonly, errors, ...rest }) => {
     var err;
+    console.log(readonly ? true : false, label);
     return (<div className="form-group">
         <label className="text-muted">{label}</label>
-        {render(input, placeholder, rest)}
+        {render(input, placeholder,readonly, rest)}
         <small className="form-text text-muted">{message}</small>
         {((meta.touched && (err = meta.error)) || (errors && (err = eval(`errors.${input.name}`)))) && <small className="form-text text-danger">{err}</small>}
     </div>)
 }
 
-const RenderInput = createRenderer((input, placeholder) =>
-    <input className="form-control font-weight-light" {...input} placeholder={placeholder} />
+const RenderInput = createRenderer((input, placeholder, readonly, rest) =>
+{
+    console.log(readonly, 'karim');
+    return <input className="form-control font-weight-light" {...input} placeholder={placeholder} disabled={readonly ? true : false} />
+}
 )
 
-const RenderSelect = createRenderer((input, label, { children }) =>
+const RenderSelect = createRenderer((input, label, readonly, { children }) =>
     <select className="form-control font-weight-light" {...input} >
         {children}
     </select>
 )
 
-const RenderTextArea = createRenderer((textarea, placeholder) =>
-    <textarea rows="4" className="form-control font-weight-light"               {...textarea} placeholder={placeholder} >
+const RenderTextArea = createRenderer((textarea, placeholder, readonly) =>
+    <textarea rows="4" className="form-control font-weight-light" {...textarea} placeholder={placeholder} >
     </textarea>
 )
 
+class OfferForm extends Component {
 
-const OfferForm = props => {
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            imageFile: [],
+        }
+    }
 
-    const { errors, handleSubmit, pristine, submitting, submitCb, valid , categories } = props
-    const [imageFile, setImageFile] = useState([]);
-
-
-    const handleOnDrop = newImageFile => setImageFile(newImageFile);
-
+    handleOnDrop = newImageFile => {
+        this.setState({
+            imageFile: newImageFile
+        });
+    }
+    
+    componentDidMount() {
+        this.props.initialize({isAuction: this.props.auction ? true : false});
+    }
+ 
+    render() {
+        const { errors, handleSubmit, pristine, submitting, submitCb, valid , categories, auction } = this.props
+        const { imageFile } = this.state;
+        
     return (
         <form onSubmit={handleSubmit(submitCb)}>
             <Field component={RenderInput} name="title" type="text" id="title" placeholder="Titre"
@@ -56,6 +75,8 @@ const OfferForm = props => {
                     <Field errors={errors} name="weight" label="Poids en Kg" component={RenderInput} type="number" className="form-control font-weight-light" placeholder="Poids" />
                 </div>
             </div>
+            <Field label="Prix final" name="end_price" component={RenderInput} placeholder="Prix final" type="number" className="form-control font-weight-light" readonly={!auction} />
+            <Field label="isAuction" name="isAuction" component="input" placeholder="is Auction" type="hidden" className="form-control font-weight-light" value={auction ? 'auction': 'not auction'}/>
             <div className="form-group form-check">
                 <Field errors={errors} name="withTransport" component="input"  type="checkbox" className="text-muted font-weight-light form-check-input" id="withTransport" />
                 <label className="form-check-label text-muted" htmlFor="withTransport">Avec transport</label>
@@ -70,7 +91,7 @@ const OfferForm = props => {
                         component={DropzoneField}
                         errors={errors}
                         imagefile={imageFile}
-                        handleOnDrop={handleOnDrop}
+                        handleOnDrop={this.handleOnDrop}
                         type="file"
                 />
             </div>
@@ -88,6 +109,7 @@ const OfferForm = props => {
             </button>
         </form>
     );
+        }
 }
 
 const validate = values => {
@@ -115,5 +137,4 @@ const validate = values => {
 export default reduxForm({
     form: 'offerForm',
     validate,
-    enableReinitialize: true,
 })(OfferForm)

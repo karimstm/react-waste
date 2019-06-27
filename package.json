@@ -2,8 +2,12 @@
   "name": "wast-react",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://karimstm.github.io/react-waste",
   "dependencies": {
+    "@emotion/core": "^10.0.10",
     "axios": "^0.19.0",
+    "gh-pages": "^2.0.1",
+    "http-proxy-middleware": "^0.19.1",
     "jquery": "^3.4.1",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
@@ -14,14 +18,17 @@
     "react-redux": "^5.0.7",
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
+    "react-spinners": "^0.5.4",
     "redux": "^3.7.2",
     "redux-form": "^7.3.0",
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=3006 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

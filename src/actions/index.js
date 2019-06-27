@@ -3,7 +3,7 @@ import authService from '../services/auth-service'
 import axiosService from '../services/axios-service'
 
 import {
-    DEFALUT_URL,
+    //DEFALUT_URL,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
     LOGOUT,
@@ -12,10 +12,11 @@ import {
     FETCH_SALES_FAILURE,
     FETCH_SALES_SUCCESS,
     FETCH_OFFER_FAILURE,
-    FETCH_OFFER_SUCCESS
-    
+    FETCH_OFFER_SUCCESS,
+    FETCH_USER_INFO_SUCCESS,
+    FETCH_USER_INFO_FAILURE
+
 } from './types'
-import { DEFAULT_ECDH_CURVE } from 'tls';
 
 const headers = { 'Content-Type': 'application/json' }
 
@@ -25,7 +26,7 @@ const axiosInstance = axiosService.getInstance();
 
 export const register = (userData) => {
 
-    return axios.post(`${DEFALUT_URL}/api/register`,
+    return axios.post(`/api/register`,
         {
             email: userData.email,
             password: userData.password,
@@ -65,7 +66,7 @@ export const checkAuthState = () => {
 
 export const login = (userData) => {
     return dispatch => {
-        return axios.post(`${DEFALUT_URL}/api/auth`,
+        return axios.post(`/api/auth`,
             userData, { headers: headers })
             .then(res => res.data)
             .then(token => {
@@ -104,7 +105,7 @@ const fetchCategoriesFail = (errors) => {
 export const get_categories = () => {
 
     return dispatch => {
-        return axios.get(`${DEFALUT_URL}/api/categories`,
+        return axios.get(`/api/categories`,
             { headers: headers })
             .then(res => { return res.data })
             .then(categories => dispatch(fetchCategoriesSucces(categories)))
@@ -115,36 +116,27 @@ export const get_categories = () => {
 
 // Post a sale offer
 
-
-// const postSaleFailure = (errors) => {
-//     return {
-//         type: SALE_FAILURE,
-//         errors
-//     }
-// }
-
-// const postSaleSuccess = (saleData) => {
-//     return {
-//         type: SALE_SUCCESS
-//     }
-// }
-
 export const post_sale_offer = (saleData) => {
-    let   role = authService.getRoles(authService.getToken());
-    let link = 'sale';
-    switch(role)
-    {
-        case authService.isPicker():
-            link = 'sale';
-            break;
-        case authService.isReseller():
-            link = 'purchase';
-            break;
-        case authService.isBuyer():
-            link = 'bulk_purchase';
-            break;
+    let role = authService.getRoles(authService.getToken());
+    let link = 'auction';
+
+    if (saleData.isAuction === false) {
+        switch (role) {
+            case authService.isPicker():
+                link = 'sale';
+                break;
+            case authService.isReseller():
+                link = 'purchase';
+                break;
+            case authService.isBuyer():
+                link = 'bulk_purchase';
+                break;
+            default:
+                link = 'sale';
+
+        }
     }
-    return axiosInstance.post(`${DEFALUT_URL}/api/offers`,
+    return axiosInstance.post(`/api/offers`,
         {
             title: saleData.title,
             description: saleData.description,
@@ -155,7 +147,8 @@ export const post_sale_offer = (saleData) => {
             locations: saleData.locations.split('\n'),
             keywords: saleData.keywords.split(','),
             photos: saleData.photos,
-            type: link
+            type: link,
+            end_price: saleData.end_price
 
         }).then(
             (res) => res.data,
@@ -171,31 +164,16 @@ export const post_sale_offer = (saleData) => {
 
 // Fetch all Offers
 
+export const fetchOffers = (type) => {
 
-const fetchSaleFailure = (errors) => {
-    return {
-        type: FETCH_SALES_FAILURE,
-        errors
-    }
-}
-
-const fetchSaleSuccess = (salesoffer) => {
-    return {
-        type: FETCH_SALES_SUCCESS,
-        salesoffer
-    }
-}
-
-
-export const fetchOffers = () => {
-    
-    return dispatch => {
-        return axios.get(`${DEFALUT_URL}/api/offers/sale`,
-            { headers: headers })
-            .then(res => res.data)
-            .then(salesoffer => dispatch(fetchSaleSuccess(salesoffer)))
-            .catch(err => dispatch(fetchSaleFailure(err.response.data.message)))
-    }
+    return axios.get(`/api/offers/${type}`,
+        { headers: headers })
+        .then(res => res.data)
+        .catch(err => {
+            if (err.response.data.status === 401)
+                return Promise.reject(err.response.data.extras);
+            return Promise.reject('Échec de la récupération des données');
+        })
 }
 
 // Fetch a single offer by Id
@@ -207,18 +185,62 @@ const fetchOfferSucces = (offerDetails) => {
     }
 }
 
-const fetchOfferFail = () => {
+const fetchOfferFail = (errors) => {
     return {
-        type: FETCH_OFFER_FAILURE
+        type: FETCH_OFFER_FAILURE,
+        errors
     }
 }
 
 export const fetchOfferById = (id) => {
     return dispatch => {
-        return axios.get(`${DEFALUT_URL}/api/offers/${id}`,
+        return axios.get(`/api/offers/${id}`,
         { headers: headers }
         ).then(res => res.data)
         .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
-        .catch(({ response }) => dispatch(fetchOfferFail(response.data.errors)))
+        .catch(err => {
+            debugger ;
+            dispatch(fetchOfferFail('response.data.errors'))
+        })
     }
+}
+
+
+// FETCH CURRENT USER INFO
+
+const fetchUserSuccess = (userInfo) => {
+    return {
+        type: FETCH_USER_INFO_SUCCESS,
+        userInfo
+    }
+}
+
+const fetchUserFail = (errors) => {
+    return {
+        type: FETCH_USER_INFO_FAILURE,
+        errors
+    }
+}
+
+export const fetchCurrentUserInfo = () => {
+    return dispatch => {
+        return axiosInstance.get(`current/infos`,
+            { headers: headers }
+        ).then(res => res.data)
+            .then(userInfo => dispatch(fetchUserSuccess(userInfo)))
+            .catch(({ response }) => dispatch(fetchUserFail(response.data.message)))
+    }
+}
+
+// Accept an offer
+
+
+export const acceptAnOffer = (id) => {
+    return axiosInstance.patch(`/api/offers/${id}/accept`, 
+    {headers: headers})
+    .then(res => res.data)
+    .catch(err => {
+        debugger;
+        return Promise.reject(err.response.data.message);
+    });
 }

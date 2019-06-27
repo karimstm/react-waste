@@ -3,7 +3,6 @@ import RegisterForms from '../Forms/RegisterForms';
 import * as actions from '../../actions'
 import { Redirect } from 'react-router-dom'
 import Alert from '../shared/Alert';
-import { load as loadAccount } from '../../reducers/account';
 
 class Register extends Component {
 
@@ -26,8 +25,9 @@ class Register extends Component {
     }
     render() {
 
-        const { isError, errors, redirect, isClicked } = this.state;
-        const data = {types: this.props.location.state.type};
+        const { isError, errors, redirect } = this.state;
+        const type = this.props.location.state && this.props.location.state.type ? this.props.location.state.type : 'picker'
+        const data = {types: type};
         if (redirect)
         {
             return <Redirect to={{ pathname: '/login', state: { successRegister: true } }} />

@@ -39,7 +39,6 @@ class PostOffer extends Component {
                 )
             },
             (err) => {
-                debugger ;
                 this.setState({ isError: true, errors: err });
             }
         )
@@ -56,7 +55,7 @@ class PostOffer extends Component {
         return (
             <section className="post-form col-8 mx-auto my-5 p-5">
                 {isError ? <Alert className="danger" errors={Object.values(errors)} /> : ''}
-                <OfferForm errors={errors} submitCb={this.submitOffre} categories={this.props.categories} />
+                <OfferForm errors={errors} auction={(this.props.location.state && this.props.location.state.auction) ? true : false}  submitCb={this.submitOffre} categories={this.props.categories} />
             </section>
         );
     }

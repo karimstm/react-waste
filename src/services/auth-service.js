@@ -35,12 +35,10 @@ class AuthService {
             if (roles)
             {
                 role = roles[0];
-                console.log(role);
             }
-                
             return role;
         }
-        
+        return role;
     }
 
     isPicker()
