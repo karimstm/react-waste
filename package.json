@@ -2,7 +2,6 @@
   "name": "wast-react",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://karimstm.github.io/react-waste",
   "dependencies": {
     "@emotion/core": "^10.0.10",
     "axios": "^0.19.0",
@@ -12,6 +11,7 @@
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.24.0",
     "react": "^16.8.6",
+    "react-countdown-now": "^2.1.1",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.5",
     "react-image-gallery": "^0.8.17",
@@ -27,8 +27,6 @@
     "start": "PORT=3006 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

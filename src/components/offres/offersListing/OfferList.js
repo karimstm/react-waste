@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import OfferListing from './OfferListing';
 import * as actions from '../../../actions';
 import Spinner from '../../shared/Spinner';
+import Alert from '../../shared/Alert';
 
 class OfferList extends Component {
 
@@ -20,7 +21,6 @@ class OfferList extends Component {
         .then(response => this.setState({ salesoffer: response, isFetched: true}))
         .catch(errors => {
             this.setState({errors: errors, isError: true});
-            debugger;
         })
     }
 

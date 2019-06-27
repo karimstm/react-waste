@@ -6,7 +6,7 @@ class OfferListing extends Component {
     renderOffers = () => {
         return this.props.offers.map((offer, index) => {
             return (
-                <div key={index} className="col-lg-3 col-md-6 col-sm-1 mb-4">
+                <div key={index} className="col-lg-3 col-md-6 col-sm-12 text-sm-center mb-4">
                     <OfferCard offer={offer} />
                 </div>
             )

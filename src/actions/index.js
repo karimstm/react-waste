@@ -3,7 +3,7 @@ import authService from '../services/auth-service'
 import axiosService from '../services/axios-service'
 
 import {
-    //DEFALUT_URL,
+    DEFALUT_URL,
     LOGIN_SUCCESS,
     LOGIN_FAILURE,
     LOGOUT,
@@ -14,7 +14,7 @@ import {
     FETCH_OFFER_FAILURE,
     FETCH_OFFER_SUCCESS,
     FETCH_USER_INFO_SUCCESS,
-    FETCH_USER_INFO_FAILURE
+    FETCH_USER_INFO_FAILURE,
 
 } from './types'
 
@@ -26,7 +26,7 @@ const axiosInstance = axiosService.getInstance();
 
 export const register = (userData) => {
 
-    return axios.post(`/api/register`,
+    return axios.post(`${DEFALUT_URL}/api/register`,
         {
             email: userData.email,
             password: userData.password,
@@ -66,7 +66,7 @@ export const checkAuthState = () => {
 
 export const login = (userData) => {
     return dispatch => {
-        return axios.post(`/api/auth`,
+        return axios.post(`${DEFALUT_URL}/api/auth`,
             userData, { headers: headers })
             .then(res => res.data)
             .then(token => {
@@ -105,7 +105,7 @@ const fetchCategoriesFail = (errors) => {
 export const get_categories = () => {
 
     return dispatch => {
-        return axios.get(`/api/categories`,
+        return axios.get(`${DEFALUT_URL}/api/categories`,
             { headers: headers })
             .then(res => { return res.data })
             .then(categories => dispatch(fetchCategoriesSucces(categories)))
@@ -121,6 +121,7 @@ export const post_sale_offer = (saleData) => {
     let link = 'auction';
 
     if (saleData.isAuction === false) {
+        debugger ;
         switch (role) {
             case authService.isPicker():
                 link = 'sale';
@@ -136,7 +137,7 @@ export const post_sale_offer = (saleData) => {
 
         }
     }
-    return axiosInstance.post(`/api/offers`,
+    return axiosInstance.post(`/offers`,
         {
             title: saleData.title,
             description: saleData.description,
@@ -153,7 +154,8 @@ export const post_sale_offer = (saleData) => {
         }).then(
             (res) => res.data,
             (err) => {
-                if (err.response.data.status === 401)
+                debugger ;
+                if (err.response.data.status === 403)
                     return Promise.reject(err.response.data.extras)
                 else
                     return Promise.reject(err.response.data.message)
@@ -166,7 +168,7 @@ export const post_sale_offer = (saleData) => {
 
 export const fetchOffers = (type) => {
 
-    return axios.get(`/api/offers/${type}`,
+    return axios.get(`${DEFALUT_URL}/api/offers/${type}`,
         { headers: headers })
         .then(res => res.data)
         .catch(err => {
@@ -194,13 +196,12 @@ const fetchOfferFail = (errors) => {
 
 export const fetchOfferById = (id) => {
     return dispatch => {
-        return axios.get(`/api/offers/${id}`,
+        return axios.get(`${DEFALUT_URL}/api/offers/${id}`,
         { headers: headers }
         ).then(res => res.data)
         .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
-        .catch(err => {
-            debugger ;
-            dispatch(fetchOfferFail('response.data.errors'))
+        .catch(({ response }) => {
+            dispatch(fetchOfferFail(response.data.errors))
         })
     }
 }
@@ -236,11 +237,8 @@ export const fetchCurrentUserInfo = () => {
 
 
 export const acceptAnOffer = (id) => {
-    return axiosInstance.patch(`/api/offers/${id}/accept`, 
+    return axiosInstance.patch(`${DEFALUT_URL}/offers/${id}/accept`, 
     {headers: headers})
     .then(res => res.data)
-    .catch(err => {
-        debugger;
-        return Promise.reject(err.response.data.message);
-    });
+    .catch(err => Promise.reject(err.response.data.message));
 }

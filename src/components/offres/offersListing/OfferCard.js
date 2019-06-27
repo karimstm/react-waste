@@ -1,5 +1,7 @@
 import React from 'react';
 import home from '../../../images/home.jpg'
+import Timer from '../../shared/timer/Timer';
+import Countdown from 'react-countdown-now';
 
 String.prototype.trunc = String.prototype.trunc ||
     function (n) {
@@ -8,7 +10,7 @@ String.prototype.trunc = String.prototype.trunc ||
 
 function OfferCard(props) {
 
-    const { id, title, description, price, photos, owner: { lastName } } = props.offer;
+    const { id, title, description, price, photos, owner: { lastName }, end_date, type } = props.offer;
     return (
         <a href={`offers/${id}`} className="card card-mine">
             <img alt="" className="card-img-top" src={photos.length > 0 && photos[0].thumbnail ? photos[0].thumbnail : home} />
@@ -25,9 +27,17 @@ function OfferCard(props) {
                 <div className="card-text text-muted font-weight-light">{description.trunc(80)}...</div>
                 <div className="card-text py-1">
                     <div className="row">
-                        <small className="col-6 text-warning">{price} MAD</small>
-                        <small className="col-6 text-muted">Posted by {lastName.toUpperCase()}</small>
+                        <small className="col-6 text-left text-warning">{price} MAD</small>
+                        <small className="col-6 text-right text-muted">Posted by {lastName.toUpperCase()}</small>
                     </div>
+                    <div className="text-center my-0">
+                            {
+                                type === 'auction' && <Countdown
+                                date={end_date}
+                                renderer={(props) => <Timer {...props} />}
+                            />
+                            }
+                        </div>
                 </div>
             </div>
         </a>

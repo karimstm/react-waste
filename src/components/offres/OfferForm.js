@@ -5,7 +5,6 @@ import DropzoneField from '../dropzone/DropzoneField';
 
 const createRenderer = render => ({ input, meta, label, placeholder, message, readonly, errors, ...rest }) => {
     var err;
-    console.log(readonly ? true : false, label);
     return (<div className="form-group">
         <label className="text-muted">{label}</label>
         {render(input, placeholder,readonly, rest)}
@@ -16,7 +15,6 @@ const createRenderer = render => ({ input, meta, label, placeholder, message, re
 
 const RenderInput = createRenderer((input, placeholder, readonly, rest) =>
 {
-    console.log(readonly, 'karim');
     return <input className="form-control font-weight-light" {...input} placeholder={placeholder} disabled={readonly ? true : false} />
 }
 )
