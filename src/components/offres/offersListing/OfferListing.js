@@ -3,21 +3,24 @@ import OfferCard from './OfferCard';
 
 class OfferListing extends Component {
 
+    
     renderOffers = () => {
+        debugger ;
         return this.props.offers.map((offer, index) => {
             return (
-                <div key={index} className="col-lg-3 col-md-6 col-sm-12 text-sm-center mb-4">
+                <div key={index} className="col-lg-3 col-md-6 col-sm-12 mb-4">
                     <OfferCard offer={offer} />
                 </div>
             )
-        })
+        });
+        debugger;
     }
 
     render() {
         return (
-            <React.Fragment>
+            <React.Component>
                 {this.renderOffers()}
-            </React.Fragment>
+            </React.Component>
         );
     }
 }

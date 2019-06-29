@@ -4,6 +4,7 @@ import LoginForm from '../Forms/LoginForms';
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { Redirect } from 'react-router-dom'
+import Spinner from '../shared/Spinner';
 
 class Login extends Component {
 
@@ -24,7 +25,7 @@ class Login extends Component {
             return <Redirect to={{ pathname: '/'}} />
         }
         return (
-            <section className="mx-auto p-5">
+            <section className="p-5">
                 { !isAuth && !(errors === 'undefined' || errors.length === 0) ? <Alert className="danger" errors={[errors]} /> : ''}
                 { successRegister && <Alert className="success" errors={['Vous avez enregistré avec succès']}/>}
                 <div className="row">

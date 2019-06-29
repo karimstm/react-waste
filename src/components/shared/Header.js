@@ -5,10 +5,15 @@ import LogedInLink from './auth/LogedInLink';
 import LogedInInfo from './auth/LogedInInfo';
 import * as actions from '../../actions';
 import offerService from '../../services/offer-service';
+import Spinner from './Spinner';
+import { equal } from 'assert';
 
 class Header extends Component {
 
 
+    state = {
+        shouldRender: false
+    }
     handleLogout = () => {
         this.props.logout();
         this.props.history.push('/');
@@ -21,13 +26,12 @@ class Header extends Component {
             return (
                 <React.Fragment>
                     <a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>
-                    {offerService.isAReseller() && <Link className="dropdown-item" to={{pathname: '/offers/new', state: {auction: true}}}>Publier une enchère</Link> }
-                    
+                    {offerService.isAReseller() && <Link className="dropdown-item" to={{ pathname: '/offers/new', state: { auction: true } }}>Publier une enchère</Link>}
                 </React.Fragment>
             );
         }
 
-        
+
         return (
             <React.Fragment>
                 <Link className="dropdown-item" to="/login">Connexion</Link>
@@ -36,12 +40,12 @@ class Header extends Component {
         );
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const { isAuth } = this.props.auth;
-
-        if (isAuth)
-        {
-            this.props.dispatch(actions.fetchCurrentUserInfo());
+        if (isAuth) {
+            this.props.dispatch(actions.fetchCurrentUserInfo()).then(() => {
+                this.setState({shouldRender: true})
+            });
         }
     }
 
@@ -62,12 +66,12 @@ class Header extends Component {
                     </li>
                     </ul>
                     <ul className="navbar-nav  wast-link ml-auto">
-                    <li className="nav-item">
-                    {
-                        userInfo.firstName && <span>Bonjour : {userInfo.firstName.toUpperCase()} </span>
-                    }
-                        
-                    </li>
+                        <li className="nav-item">
+                            {
+                                userInfo.firstName && <span>Bonjour : {userInfo.firstName.toUpperCase()} </span>
+                            }
+
+                        </li>
                         <li className="nav-item dropdown mx-2">
                             <a className="nav-link dropdown-toggle p-0 top" href="/" id="navbarDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -116,7 +120,7 @@ class Header extends Component {
                                 <LogedInLink />
                             </li>
                         </ul>
-                            <LogedInInfo userInfo={userInfo} />
+                        { this.state.shouldRender && <LogedInInfo userInfo={userInfo} /> }
                         <form className="form-inline">
                             <input className="form-control search-bar" type="search" placeholder="Rechereche" aria-label="Search" />
                             <button className="btn btn-warning text-white my-2 button-search" type="submit"><i className="fas fa-search"></i></button>

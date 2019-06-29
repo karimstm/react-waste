@@ -3,6 +3,9 @@ import OfferListing from './OfferListing';
 import * as actions from '../../../actions';
 import Spinner from '../../shared/Spinner';
 import Alert from '../../shared/Alert';
+import InfiniteScroll from "react-infinite-scroll-component";
+import OfferCard from './OfferCard';
+import SearchFilter from '../../Forms/Filters/SearchFilter';
 
 class OfferList extends Component {
 
@@ -10,40 +13,82 @@ class OfferList extends Component {
         errors: '',
         salesoffer: [],
         isFetched: false,
-        isError: false
+        isError: false,
+        limit: 10,
+        page: 1,
+        hasMore: true
     }
 
     componentWillMount() {
         let { type } = this.props;
+        const { page } = this.state;
         if (!type)
             type = 'sale'
-        actions.fetchOffers(type)
-        .then(response => this.setState({ salesoffer: response, isFetched: true}))
-        .catch(errors => {
-            this.setState({errors: errors, isError: true});
-        })
+        actions.fetchOffers(type, page)
+            .then(response => this.setState({ salesoffer: response, isFetched: true }))
+            .catch(errors => {
+                this.setState({ errors: errors, isError: true });
+            })
+    }
+
+    fetchOffers = () => {
+        let { type } = this.props;
+        if (!type)
+            type = 'sale'
+        this.setState({
+            page: this.state.page + 1
+        }, () => {
+            const { page } = this.state;
+            actions.fetchOffers(type, page)
+            .then(response => {
+                this.setState({ salesoffer: this.state.salesoffer.concat(response), isFetched: true, hasMore: response.length ? true : false })
+            })
+            .catch(errors => {
+                this.setState({ hasMore: false });
+            });
+        });
+        
+
     }
 
     render() {
-        
-        const { salesoffer, isFetched, isError, errors } = this.state;
+
+        const { salesoffer, isFetched, isError, errors, hasMore } = this.state;
 
         if (!isFetched && !isError)
             return <Spinner />
         return (
             <section className="py-5 bg-white">
+            {/* <div className="container-fluid mb-5">
+                    <SearchFilter />
+                </div> */}
                 <div className="container-fluid">
                     {/* Title */}
-                        <h4 className="pb-3 big-title">{this.props.title}</h4>
+                    <h4 className="pb-3 big-title">{this.props.title}</h4>
                     {/* End Title */}
-                    <div className="row">
-                    {
-                        isError && typeof(errors) === 'string' ? <small className="text-danger">{errors}</small> : <OfferListing offers={salesoffer} />
-                    }        
-                    </div>
-                    
+                    <InfiniteScroll
+                        dataLength={salesoffer.length}
+                        next={this.fetchOffers}
+                        hasMore={hasMore}
+                        loader={<h5 className="text-center text-muted"><i className="fas fa-spin fa-spinner"></i>                        </h5>}
+                        >
+                        <div className="row">
+                            {
+                                isError && typeof (errors) === 'string' ? <small className="text-danger">{errors}</small> :
+                                salesoffer.map((offer, index) => {
+                                    return (
+                                        <div key={index} className="col-lg-3 col-md-6 col-sm-12 mb-4">
+                                            <OfferCard offer={offer} />
+                                        </div>
+                                    )
+                                })
+
+                            }
+                        </div>
+                    </InfiniteScroll>
+
                 </div>
-            </section>
+            </section >
         );
     }
 }

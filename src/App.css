@@ -1,11 +1,24 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap');
-
+@import url('https://fonts.googleapis.com/css?family=Lato|Noto+Sans+HK|Roboto|Source+Sans+Pro&display=swap');
 body 
 {
     font-family: 'Poppins', sans-serif;
 }
+
+:root {
+    --Lato-font: "Lato", cursive;
+    --Noto-Sasn-font: "Noto Sans HK", cursive;
+    --Roboto-font: "Roboto", cursive;
+    --Source-Sans-Pro-font: "Source Sans Pro", cursive;
+    --light-black: #2e2c2caf;
+    --bggradient: linear-gradient(to right top, #ff9671, #ffa35f, #ffb34d, #f5c53d, #e2d834);
+    --light-gray: rbga(255, 255, 255, 0.5);
+}
+
 .wrapper
 {
+    display: flex;
+    flex-direction: column;
     margin: 0 auto 30px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0 rgba(0, 0, 0, 0.02);
     background: #FFF;
@@ -289,4 +302,96 @@ li.borderless { border: 0 none; }
     padding: 5px 5px;
     border-bottom-style: dashed !important;
 }
+
+.bidders {
+    font-size: 90%;
+    font-family: 'Poppins' !important;
+}
+
+.bidders-name {
+    box-shadow: 10 10px 10px rgba(0,0,0,0.1);
+    border: 1px double #f3f2ef;
+}
+
+.bidders-name li {
+    padding-bottom: 5px;
+}
+
+.infinite-scroll-component  {
+    overflow: hidden !important;
+}
 /* ========= Biding Card ============ */
+
+/* ======== Filters Form ============= */
+
+.global-forms {
+    background-color: #FFF !important;
+    box-shadow: none !important;
+}
+
+
+/* ========= End filters form ========= */
+
+/* Footer */
+
+footer {
+    margin-top: auto;
+    font-family: var(--Roboto-font);
+    overflow-x: hidden;
+    padding: 5vmin 5vmin;
+}
+
+footer p > span{
+    color: #ff515f;
+}
+
+footer input {
+    border: 1px solid #eee !important;
+    border-right: none !important;
+    box-shadow: none !important;
+}
+
+footer input::placeholder {
+    color: white !important;
+}
+
+footer .input-group .input-group-text {
+    border: none;
+    color: white;
+    background: var(--bggradient);
+}
+
+footer .column i {
+    color: #ffb34d;
+}
+
+footer .column i + i {
+    padding: 0 0.5em;
+}
+
+/* Footer Ending */
+
+/* Buttons */
+
+.btn-success
+{
+    border: 0;
+    background: #2ecc71 !important;
+}
+
+.btn-danger
+{
+    border: 0;
+    background: #e74c3c !important;
+}
+
+.modal-content {
+    box-shadow: 0px -1px 18px 0px rgba(173,173,173,0.12) !important;
+    border: none;
+    border-radius: 0;
+    font-family: var(--Source-Sans-Pro-font);
+    background: whitesmoke !important;
+}
+.modal-body {
+    color: rgba(0, 0, 0, 0.8)
+}

@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import * as moment from 'moment';
 import offerService from '../../../services/offer-service';
+import Modelv2 from '../../shared/Model/Modelv2';
 
 
 class SimpleOfferDetails extends Component {
 
+    state = {
+        show: false
+    }
     numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     }
@@ -28,7 +32,7 @@ class SimpleOfferDetails extends Component {
                 return;
         }
     }
-    
+
     render() {
 
         const { offerDetails } = this.props;
@@ -92,7 +96,7 @@ class SimpleOfferDetails extends Component {
                     </ul>
                     <div className="row mt-5">
                         <div className="col col-6">
-                            <button data-toggle="modal" data-target="#wasteModel" type="button" className="btn btn-block btn-warning text-light rounded-0" disabled={!offerService.isAllowedToAccept(offerDetails.type) && 'disabled'}>Accepter l'offer</button>
+                            <button onClick={() => this.setState({show: true})} type="button" className="btn btn-block btn-warning text-light rounded-0" disabled={(!offerService.isAllowedToAccept(offerDetails.type) || !offerDetails.is_active) && 'disabled'}>Accepter l'offer</button>
                         </div>
                         <div className="col col-6">
                             <button type="button" className="btn btn-block btn-outline-danger rounded-0">Ajouter au Wishlist</button>
@@ -101,6 +105,18 @@ class SimpleOfferDetails extends Component {
                     <div className="mt-3 font-weight-light">Categories:
             <a className="p-2 text-muted" href="/">{offerDetails.category.label}</a>
                     </div>
+                    <Modelv2
+                        show={this.state.show}
+                        onConfirm={() => {
+                            this.props.handleAccept().then((value) => {
+                                this.setState({show: value})
+                            })
+                        }}
+                        handleClose={() => this.setState({ show: false })}
+                        title="Bienvenue, à vous de jouer !"
+                        text="Voulez-vous vraiment continuer ce processus, il est irréversible."
+                        confirmText="Confirmer l'achat"
+                    />
                 </div>
             );
         }

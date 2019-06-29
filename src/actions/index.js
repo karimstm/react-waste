@@ -155,7 +155,7 @@ export const post_sale_offer = (saleData) => {
             (res) => res.data,
             (err) => {
                 debugger ;
-                if (err.response.data.status === 403)
+                if (err.response.status === 403)
                     return Promise.reject(err.response.data.extras)
                 else
                     return Promise.reject(err.response.data.message)
@@ -166,14 +166,16 @@ export const post_sale_offer = (saleData) => {
 
 // Fetch all Offers
 
-export const fetchOffers = (type) => {
+export const fetchOffers = (type, page) => {
 
-    return axios.get(`${DEFALUT_URL}/api/offers/${type}`,
-        { headers: headers })
+    return axios.get(`${DEFALUT_URL}/api/offers/${type}`, 
+        { params: {page: page}, headers: headers })
         .then(res => res.data)
         .catch(err => {
-            if (err.response.data.status === 401)
+            if (err.response.status === 401)
                 return Promise.reject(err.response.data.extras);
+            else if (err.response.status === 404)
+                    return Promise.resolve([]);
             return Promise.reject('Échec de la récupération des données');
         })
 }
@@ -237,8 +239,20 @@ export const fetchCurrentUserInfo = () => {
 
 
 export const acceptAnOffer = (id) => {
-    return axiosInstance.patch(`${DEFALUT_URL}/offers/${id}/accept`, 
+    return axiosInstance.patch(`/offers/${id}/accept`, 
     {headers: headers})
     .then(res => res.data)
     .catch(err => Promise.reject(err.response.data.message));
+}
+
+export const acceptBid = (id, bid_price) => {
+    return axiosInstance.patch(`offers/${id}/accept`,
+    {
+        "bid_price": bid_price
+    })
+    .then(res => res.data)
+    .catch(({response}) => 
+    {
+        return Promise.reject(response.data.message)
+    });
 }

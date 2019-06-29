@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class Model extends Component {
     render() {
         return (
-            <div className="modal fade" id="wasteModel" tabIndex="-1" role="dialog">
+            <div className="modal fade" id={this.props.id} tabIndex="-1" role="dialog">
                 <div className="modal-dialog" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
@@ -16,8 +16,8 @@ class Model extends Component {
                             <p>{this.props.text}</p>
                         </div>
                         <div className="modal-footer">
-                            <button onClick={this.props.handleAccept} type="button" className="btn btn-success">Procéder</button>
-                            <button type="button" className="btn btn-danger" data-dismiss="modal">Annuler</button>
+                            <button onClick={this.props.handleAccept} type="button" className="rounded-0 shadow-sm btn btn-success">{this.props.confirmText}</button>
+                            <button type="button" className="rounded-0 shadow-sm btn btn-danger" data-dismiss="modal">Annuler</button>
                         </div>
                     </div>
                 </div>

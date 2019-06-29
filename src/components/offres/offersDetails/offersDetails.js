@@ -12,7 +12,7 @@ import Alert from '../../shared/Alert';
 import { Redirect } from 'react-router-dom';
 import SimpleOfferDetails from './SimpleOfferDetails';
 import BidingOfferDetails from './BidingOfferDetails';
-import { type } from 'os';
+import { resolve } from 'q';
 
 
 class offersDetails extends Component {
@@ -30,11 +30,16 @@ class offersDetails extends Component {
 
 
     handleAccept = () => {
-        const { id } = this.props.match.params;
-        actions.acceptAnOffer(id)
+        return new Promise((resolve) => {
+            const { id } = this.props.match.params;
+            actions.acceptAnOffer(id)
             .then(() => this.setState({ isAccepted: true }))
             .catch(err => this.setState({ isError: true, errMessage: err }))
+            resolve(false);
+        })
     }
+
+
 
     render() {
 
@@ -42,10 +47,9 @@ class offersDetails extends Component {
         const { errMessage, isError, isAccepted } = this.state;
         const { success } = this.props.location.state || false;
 
-        if ( isAccepted )
-        {
+        if (isAccepted) {
             const { id } = this.props.match.params;
-            this.setState({isAccepted: false});
+            this.setState({ isAccepted: false });
             return <Redirect to={{ pathname: `/offers/${id}`, state: { success: true } }} />
         }
         if (offerDetails && offerDetails.id) {
@@ -56,16 +60,16 @@ class offersDetails extends Component {
                             {
                                 (isError || success) && <Alert
                                     className={isError ? "danger" : "success"}
-                                    errors={ isError ? [errMessage] : ['Vous avez acheté cette offre avec succès']}
+                                    errors={isError ? [errMessage] : ['Vous avez acheté cette offre avec succès']}
                                 />
                             }
-                            <div className="row">
+                            <div className="row justify-content-center">
                                 <div className="col-lg-6 col-md-6 col-sm-10">
                                     <ImageGallery showPlayButton={false} showFullscreenButton={false} items={offerDetails.photos} />
                                 </div>
                                 {
-                                    offerDetails.type === 'auction' ? <BidingOfferDetails offerDetails={offerDetails} /> : <SimpleOfferDetails offerDetails={offerDetails} /> 
-                                }  
+                                    offerDetails.type === 'auction' ? <BidingOfferDetails offerDetails={offerDetails} /> : <SimpleOfferDetails handleAccept={this.handleAccept} offerDetails={offerDetails} />
+                                }
                             </div>
                         </div>
                     </section>
@@ -80,10 +84,10 @@ class offersDetails extends Component {
                             </nav>
                             <div className="tab-content" id="nav-tabContent">
                                 <div className="py-3 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    Bacon ipsum dolor amet pork chop short ribs beef pancetta bresaola bacon. Pork corned beef rump jowl, ball tip landjaeger pancetta spare ribs sausage ground round chicken tail. Cupim shoulder meatloaf pastrami pancetta t-bone frankfurter flank. Capicola ham hock jowl, rump strip steak shankle landjaeger.
+                                    {offerDetails.description}
                         </div>
                                 <div className="py-3 tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    Bacon ipsum dolor amet pork chop short ribs beef pancetta bresaola bacon. Pork corned beef rump jowl, ball tip landjaeger pancetta spare ribs sausage ground round chicken tail. Cupim shoulder meatloaf pastrami pancetta t-bone frankfurter flank. Capicola ham hock jowl, rump strip steak shankle landjaeger.
+                                    
                         </div>
                                 <div className="py-3 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                                     <div className="row mx-2">
@@ -97,11 +101,6 @@ class offersDetails extends Component {
                                 </div>
                             </div>
                         </div>
-                        <Model
-                            title="Alert"
-                            text="Voulez-vous vraiment continuer ce processus, il est irréversible."
-                            handleAccept={this.handleAccept}
-                        />
                     </section>
                 </React.Fragment>
             );
