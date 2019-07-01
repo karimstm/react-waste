@@ -20,7 +20,7 @@ const RenderInput = createRenderer((input, placeholder, readonly, rest) =>
 )
 
 const RenderSelect = createRenderer((input, label, readonly, { children }) =>
-    <select multiple className="form-control font-weight-light" {...input} >
+    <select className="form-control font-weight-light" {...input} >
         {children}
     </select>
 )

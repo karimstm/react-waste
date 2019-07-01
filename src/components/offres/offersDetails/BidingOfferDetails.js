@@ -89,14 +89,14 @@ class BidingOfferDetails extends Component {
                         </div>
                     </div>
                     <div className="row text-black-50 my-2">
-                        <div className="col-lg-6 col-md-6 col-sm-6">
-                            <span className="d-block py-1 font-weight-light">Prix final</span>
-                            <span className="biding-numbers text-dark">{offerDetails.end_price ? offerDetails.end_price : '*'}.00 DH</span>
-                        </div>
-                        <div className="col-lg-6 col-md-6 col-sm-6 text-right">
+                    <div className="col-lg-6 col-md-6 col-sm-6">
                             <span className="d-block py-1 font-weight-light">Offre actuelle</span>
                             <span className="biding-numbers text-dark">{this.getTheCurrentBid()}.00 DH</span>
                         </div>
+                        <div className="col-lg-6 col-md-6 col-sm-6 text-right">
+                            <span className="d-block py-1 font-weight-light">Prix final</span>
+                            <span className="biding-numbers text-dark">{offerDetails.end_price ? offerDetails.end_price : '*'}.00 DH</span>
+                        </div>   
                     </div>
                     
                     <div className="row my-3">
