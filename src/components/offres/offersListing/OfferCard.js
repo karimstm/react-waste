@@ -28,7 +28,7 @@ function OfferCard(props) {
                 <div className="card-text py-1">
                     <div className="row">
                         <small className="col-6 text-left text-warning">{price} MAD</small>
-                        <small className="col-6 text-right text-muted">Posted by {lastName.toUpperCase()}</small>
+                        <small className="col-6 text-right text-muted">Posté par {lastName.toUpperCase()}</small>
                     </div>
                     <div className="text-center my-0">
                             {

@@ -6,7 +6,7 @@ function LogedInLink(props) {
     
     if (authService.isAuthenticated())
     {
-        return <Link className="nav-link wast-link" to="/offers/new">POSTER</Link>
+        return <Link className="nav-link wast-link" to="/offers/new">{props.text}</Link>
     }
     return (<React.Fragment></React.Fragment>)
 }

@@ -17,7 +17,7 @@ class RegisterForm extends Component {
         return (
             <form className="login-form" onSubmit={handleSubmit(submitCb)} >
             <div className="row">
-                <div className="col-6">
+                <div className="col-12 col-md-6">
                     <Field
                         type="text"
                         name="lastName"
@@ -51,7 +51,7 @@ class RegisterForm extends Component {
                         <option value="reseller">Revendeur</option>
                     </Field>
                 </div>
-                <div className="col-md-6">
+                <div className="col-12 col-md-6">
                     <Field
                         type="password"
                         name="password"
@@ -128,6 +128,5 @@ const mapStateToProps = (state) => ({
 
 export default connect(mapStateToProps)(reduxForm({
     form: 'registerForm',
-    enableReinitialize: true,
     validate,
 })(RegisterForm))

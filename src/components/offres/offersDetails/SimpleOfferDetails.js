@@ -24,7 +24,7 @@ class SimpleOfferDetails extends Component {
                 return 'Vente';
             case 'purchase':
                 return 'Achat';
-            case 'purchase_bulk':
+            case 'bulk_purchase':
                 return 'Achat Gros';
             case 'auction':
                 return 'Enchère';

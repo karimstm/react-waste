@@ -15,6 +15,10 @@ body
     --light-gray: rbga(255, 255, 255, 0.5);
 }
 
+a:hover {
+    text-decoration: none;
+}
+
 .wrapper
 {
     display: flex;
@@ -386,7 +390,7 @@ footer .column i + i {
 }
 
 .modal-content {
-    box-shadow: 0px -1px 18px 0px rgba(173,173,173,0.12) !important;
+    box-shadow: 0px 1px 18px 0px rgba(173,173,173,0.12) !important;
     border: none;
     border-radius: 0;
     font-family: var(--Source-Sans-Pro-font);
@@ -394,4 +398,65 @@ footer .column i + i {
 }
 .modal-body {
     color: rgba(0, 0, 0, 0.8)
+}
+
+/*========== Modal End ========= */
+
+/* ========= Dropdown menu ====== */
+
+.dropdown-block {
+    box-sizing: border-box;
+    margin-top: 8px;
+    width: 400px !important;
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+.media-text
+{
+    font-family: var(--Noto-Sasn-font);
+    font-size: 80%;
+    font-weight: 400;
+}
+
+.dropdown-block .dropdown-item
+{
+    white-space: normal !important;
+}
+
+.dropdown-block > .dropdown-item
+{
+    max-height: 200px !important;
+    overflow-y: auto;
+}
+
+.dropdown-block .dropdown-item:hover
+{
+    background: none !important;
+}
+
+.drop-top {
+    background-image: url('https://i.imgur.com/7RrexvG.png') !important;
+    background-size: cover;
+}
+
+.btn-focus
+{
+    color: #fff;
+    background-color: #444054;
+    border-color: #444054;
+}
+
+.btn-focus:hover{
+    color: #fff;
+    background-color: #322f3e;
+    border-color: #2d2a37;
+}
+
+
+/*============ Carousel ==============*/
+
+.carousel-inner > .carousel-item > img, .carousel-inner > .carousel-item > a > img {
+    width: 100% !important;
+    height: 50vmin !important;
 }

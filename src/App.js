@@ -30,6 +30,7 @@ class App extends Component {
   logout = () => {
     store.dispatch(actions.logout());
   }
+
   render() {
     return (
       <Provider store={store}>
@@ -42,10 +43,10 @@ class App extends Component {
                 <Route exact path="/offers" component={OfferList}></Route>
                 <ProtectedRoute exact path="/offers/new" component={PostOffer} />
                 <Route exact path="/offers/:id" component={offersDetails} />
+                <Route exact path="/login" component={Login}></Route>
+                <Route exact path="/plans" component={Plans}></Route>
+                <LogedInRoute exact path="/register" component={Register}></LogedInRoute>
               </Switch>
-              <Route exact path="/login" component={Login}></Route>
-              <Route exact path="/plans" component={Plans}></Route>
-              <LogedInRoute exact path="/register" component={Register}></LogedInRoute>
               <Footer />
             </div>
           </div>

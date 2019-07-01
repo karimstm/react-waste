@@ -154,7 +154,6 @@ export const post_sale_offer = (saleData) => {
         }).then(
             (res) => res.data,
             (err) => {
-                debugger ;
                 if (err.response.status === 403)
                     return Promise.reject(err.response.data.extras)
                 else
@@ -203,6 +202,7 @@ export const fetchOfferById = (id) => {
         ).then(res => res.data)
         .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
         .catch(({ response }) => {
+            debugger ;
             dispatch(fetchOfferFail(response.data.errors))
         })
     }

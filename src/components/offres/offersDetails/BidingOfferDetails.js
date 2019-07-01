@@ -15,6 +15,7 @@ class BidingOfferDetails extends Component {
         isFatal: false,
         msgError: '',
         show: false,
+        biders: this.props.offerDetails.bids
     }
 
     // get the current bid
@@ -50,10 +51,10 @@ class BidingOfferDetails extends Component {
     placeBid = () => {
         actions.acceptBid(this.props.offerDetails.id, this.state.bid_price)
             .then((res) => {
-                debugger ;
                 this.setState({
                     isAccepted: true,
-                    show: false
+                    show: false,
+                    biders: this.state.biders.concat([{"price": this.state.bid_price, bidder: {lastName : "You"}}])
                 })
             })
             .catch((err) => {
@@ -69,8 +70,7 @@ class BidingOfferDetails extends Component {
     render() {
 
         const { offerDetails } = this.props;
-        const {isFatal, msgError } = this.state
-
+        const {isFatal, msgError, biders } = this.state
         const locationLength = offerDetails.locations.length;
         return (   
             <div className="col-lg-6 col-md-6 col-sm-10">
@@ -145,7 +145,7 @@ class BidingOfferDetails extends Component {
                     </div>
                 </div>
                 {/* Bidder's names */}
-                <HistoryCard data={offerDetails} />
+                <HistoryCard data={biders} />
                 <Modelv2 
                 show={this.state.show}
                 onConfirm={this.placeBid}

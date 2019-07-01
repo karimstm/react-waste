@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import ReviewForm from '../../Forms/ReviewForm';
-import ReviewCard from '../../shared/Reviews/ReviewCard';
 import * as actions from '../../../actions/index';
 import { connect } from 'react-redux';
 import ImageGallery from 'react-image-gallery';
@@ -13,6 +11,7 @@ import { Redirect } from 'react-router-dom';
 import SimpleOfferDetails from './SimpleOfferDetails';
 import BidingOfferDetails from './BidingOfferDetails';
 import { resolve } from 'q';
+import OfferDetailsTabs from './OfferDetailsTabs';
 
 
 class offersDetails extends Component {
@@ -22,7 +21,7 @@ class offersDetails extends Component {
         isError: false,
         errMessage: ''
     }
-    componentWillMount() {
+    componentDidMount() {
         const { id } = this.props.match.params;
         this.props.dispatch(actions.fetchOfferById(id));
     }
@@ -43,9 +42,11 @@ class offersDetails extends Component {
 
     render() {
 
+        const tmpImage = [{"original": 'https://i.imgur.com/lBTPbQ9.png', "thumbnail": 'https://i.imgur.com/lBTPbQ9.png?1'}]
         const { offerDetails } = this.props;
         const { errMessage, isError, isAccepted } = this.state;
         const { success } = this.props.location.state || false;
+        
 
         if (isAccepted) {
             const { id } = this.props.match.params;
@@ -53,6 +54,7 @@ class offersDetails extends Component {
             return <Redirect to={{ pathname: `/offers/${id}`, state: { success: true } }} />
         }
         if (offerDetails && offerDetails.id) {
+            const photos = offerDetails.photos.length > 0 ? offerDetails.photos : tmpImage;
             return (
                 <React.Fragment>
                     <section className="pt-5 bg-white">
@@ -65,43 +67,15 @@ class offersDetails extends Component {
                             }
                             <div className="row justify-content-center">
                                 <div className="col-lg-6 col-md-6 col-sm-10">
-                                    <ImageGallery showPlayButton={false} showFullscreenButton={false} items={offerDetails.photos} />
+                                    <ImageGallery showPlayButton={false} showFullscreenButton={false} items={photos} />
+                                    <OfferDetailsTabs data={offerDetails} />
                                 </div>
                                 {
                                     offerDetails.type === 'auction' ? <BidingOfferDetails offerDetails={offerDetails} /> : <SimpleOfferDetails handleAccept={this.handleAccept} offerDetails={offerDetails} />
                                 }
                             </div>
                         </div>
-                    </section>
-                    <section className="info-section">
-                        <div className="container-fluid">
-                            <nav>
-                                <div className="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                    <a className="nav-item text-muted nav-link" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Description</a>
-                                    <a className="nav-item text-muted nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Plus Info</a>
-                                    <a className="nav-item text-muted nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Avis</a>
-                                </div>
-                            </nav>
-                            <div className="tab-content" id="nav-tabContent">
-                                <div className="py-3 tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-                                    {offerDetails.description}
-                        </div>
-                                <div className="py-3 tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                    
-                        </div>
-                                <div className="py-3 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
-                                    <div className="row mx-2">
-                                        <div className="col col-12 col-lg-6 col-md-10 col-sm-10">
-                                            <ReviewCard />
-                                        </div>
-                                        <div className="col col-12 col-lg-6 col-md-10 col-sm-10 py-4">
-                                            <ReviewForm />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
+                    </section>                    
                 </React.Fragment>
             );
         } else {

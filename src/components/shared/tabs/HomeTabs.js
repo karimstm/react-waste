@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import OfferList from '../../offres/offersListing/OfferList';
+import ControlledCarousel from '../carousel/ControlledCarousel';
 
 function HomeTabs(props) {
 
@@ -37,12 +38,14 @@ function HomeTabs(props) {
     }
 
     return (
-        <section className=" container-fluid py-4">
+        <React.Fragment>
+            <ControlledCarousel />
+            <section className=" container-fluid py-4">
             <nav>
                 <div className="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                    <a onClick={showPurchases} className="nav-item text-black-50 nav-link active" id="nav-achat-tab" data-toggle="tab" href="#nav-achat" role="tab" aria-controls="nav-achat" aria-selected="true">Offer d'achat</a>
-                    <a onClick={showSales} className="nav-item text-black-50 nav-link" id="nav-vent-tab" data-toggle="tab" href="#nav-vente" role="tab" aria-controls="nav-vente" aria-selected="false">Offer de vente</a>
-                    <a onClick={showBulkPurchase} className="nav-item text-black-50 nav-link" id="nav-gros-tab" data-toggle="tab" href="#nav-gros" role="tab" aria-controls="nav-gros" aria-selected="false">Offer d'achat Gros</a>
+                    <a onClick={showPurchases} className="nav-item text-black-50 nav-link active" id="nav-achat-tab" data-toggle="tab" href="#nav-achat" role="tab" aria-controls="nav-achat" aria-selected="true">Offre d'achat</a>
+                    <a onClick={showSales} className="nav-item text-black-50 nav-link" id="nav-vent-tab" data-toggle="tab" href="#nav-vente" role="tab" aria-controls="nav-vente" aria-selected="false">Offre de vente</a>
+                    <a onClick={showBulkPurchase} className="nav-item text-black-50 nav-link" id="nav-gros-tab" data-toggle="tab" href="#nav-gros" role="tab" aria-controls="nav-gros" aria-selected="false">Offre d'achat Gros</a>
                     <a onClick={showAuction} className="nav-item text-black-50 nav-link" id="nav-auction-tab" data-toggle="tab" href="#nav-auction" role="tab" aria-controls="nav-auction" aria-selected="false">Enchère</a>
                 </div>
             </nav>
@@ -61,6 +64,7 @@ function HomeTabs(props) {
                 </div>
             </div>
         </section>
+        </React.Fragment>
     );
 }
 export default HomeTabs;
