@@ -67,13 +67,13 @@ class OfferForm extends Component {
             <Field name="description" errors={errors} label="Description" component={RenderTextArea} placeholder="Assurez-vous que la description est bien écrite" id="idDescription" className="form-control font-weight-light" rows="4"></Field>
             <div className="row">
                 <div className="form-group col">
-                    <Field errors={errors} name="price" label="Prix" component={RenderInput} type="number" className="form-control font-weight-light" placeholder="Prix" />
+                    <Field errors={errors} name="price" label="prix de départ par KG" component={RenderInput} type="number" className="form-control font-weight-light" placeholder="Prix" />
                 </div>
                 <div className="form-group col">
                     <Field errors={errors} name="weight" label="Poids en Kg" component={RenderInput} type="number" className="form-control font-weight-light" placeholder="Poids" />
                 </div>
             </div>
-            <Field label="Prix final" name="end_price" component={RenderInput} placeholder="Prix final" type="number" className="form-control font-weight-light" readonly={!auction} />
+            <Field label="Prix d'achat immédiat par KG (Prix final)" name="end_price" component={RenderInput} placeholder="Prix final " type="number" className="form-control font-weight-light" readonly={!auction} />
             <Field label="isAuction" name="isAuction" component="input" placeholder="is Auction" type="hidden" className="form-control font-weight-light" value={auction ? 'auction': 'not auction'}/>
             <div className="form-group form-check">
                 <Field errors={errors} name="withTransport" component="input"  type="checkbox" className="text-muted font-weight-light form-check-input" id="withTransport" />

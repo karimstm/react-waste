@@ -1,9 +1,22 @@
 import React, { useState } from 'react';
 import Modelv2 from './Model/Modelv2';
 
+function getPosition(bidders, username)
+{
+    return new Promise((resolve) => {
+        let result = -1;
+        bidders.find((bidder, index) => {
+        if(bidder.email == username)
+            result = index;
+    });
+     resolve(result);
+    })
+}
+
 function Position(props) {
 
     const [show, setShow] = useState(false);
+    const { bidders } = props;
 
     return (
         <tr>

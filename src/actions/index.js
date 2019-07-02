@@ -253,6 +253,7 @@ export const acceptBid = (id, bid_price) => {
     .then(res => res.data)
     .catch(({response}) => 
     {
+        debugger ;
         return Promise.reject(response.data.message)
     });
 }
