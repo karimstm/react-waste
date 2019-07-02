@@ -23,7 +23,7 @@ class OfferList extends Component {
         let { type } = this.props;
         const { page } = this.state;
         if (!type)
-            type = 'sale'
+            type = ''
         actions.fetchOffers(type, page)
             .then(response => this.setState({ salesoffer: response, isFetched: true }))
             .catch(errors => {
@@ -34,7 +34,7 @@ class OfferList extends Component {
     fetchOffers = () => {
         let { type } = this.props;
         if (!type)
-            type = 'sale'
+            type = ''
         this.setState({
             page: this.state.page + 1
         }, () => {
@@ -58,7 +58,7 @@ class OfferList extends Component {
         if (!isFetched && !isError)
             return <Spinner />
         return (
-            <section className="py-5 bg-white">
+            <section className="py-3 bg-white">
             {/* <div className="container-fluid mb-5">
                     <SearchFilter />
                 </div> */}

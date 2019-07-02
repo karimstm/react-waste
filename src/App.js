@@ -14,6 +14,8 @@ import offersDetails from './components/offres/offersDetails/offersDetails';
 import HomeTabs from './components/shared/tabs/HomeTabs';
 import Plans from './components/auth/Plans';
 import Footer from './components/shared/Footer';
+import AllOffers from './components/offres/AllOffers';
+import Home from './components/shared/tabs/Home';
 
 const store = require('./reducers').init();
 
@@ -39,8 +41,8 @@ class App extends Component {
             <div className="wrapper">
               <Header logout={this.logout} />
               <Switch>
-                <Route exact path="/" component={HomeTabs} ></Route>
-                <Route exact path="/offers" component={OfferList}></Route>
+                <Route exact path="/" component={Home} ></Route>
+                <Route exact path="/offers" component={AllOffers}></Route>
                 <ProtectedRoute exact path="/offers/new" component={PostOffer} />
                 <Route exact path="/offers/:id" component={offersDetails} />
                 <Route exact path="/login" component={Login}></Route>

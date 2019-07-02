@@ -19,10 +19,6 @@ class PostOffer extends Component {
         }
     }
 
-    componentWillMount() {
-        this.props.dispatch(actions.get_categories());
-    }
-
     submitOffre = (saleData) => {
         return new Promise((resolve, reject) => {
             base64Service.displayBase64String(saleData).then(

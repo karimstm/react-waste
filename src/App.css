@@ -424,10 +424,12 @@ footer .column i + i {
     white-space: normal !important;
 }
 
-.dropdown-block > .dropdown-item
+.dropdown-block > .dropdown-item,
+.auction-history
 {
     max-height: 200px !important;
-    overflow-y: auto;
+    overflow-y: scroll;
+    overflow-x: hidden;
 }
 
 .dropdown-block .dropdown-item:hover
@@ -460,3 +462,40 @@ footer .column i + i {
     width: 100% !important;
     height: 50vmin !important;
 }
+
+/* =========== End Carousel =========*/
+
+.btn-centred {
+    position: relative;
+    bottom: 5px;
+}
+
+/* ============== Forms ================*/
+
+.form .form-control {
+    border: 1px solid #eee !important;
+    transition: all 0.2s ease-in-out;
+}
+
+.form .form-control:focus {
+    border-bottom: 2px solid #f1c40fce !important;
+}
+
+.form
+{
+    font-size: 0.8rem;
+}
+.form .form-control::placeholder,
+.form .form-control
+{
+    font-size: 0.8rem;
+}
+
+.filter-form
+{
+    border-radius: 2px;
+    padding: 5px;
+    box-shadow: 0 0 13px 0 rgba(82,63,105,.05);
+}
+
+/* ============== End Forms ============*/

@@ -5,12 +5,10 @@ import ImageGallery from 'react-image-gallery';
 import "react-image-gallery/styles/css/image-gallery.css";
 import Spinner from '../../shared/Spinner';
 import 'moment/locale/fr';
-import Model from '../../shared/Model/Model';
 import Alert from '../../shared/Alert';
 import { Redirect } from 'react-router-dom';
 import SimpleOfferDetails from './SimpleOfferDetails';
 import BidingOfferDetails from './BidingOfferDetails';
-import { resolve } from 'q';
 import OfferDetailsTabs from './OfferDetailsTabs';
 
 

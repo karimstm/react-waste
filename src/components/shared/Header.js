@@ -49,8 +49,13 @@ class Header extends Component {
         }
     }
 
+    fetchCategories = () => {
+        this.props.dispatch(actions.get_categories());
+    }
+
     componentDidMount() {
         this.fetchInfo();
+        this.fetchCategories();
     }
 
     shouldComponentUpdate() {
@@ -66,6 +71,7 @@ class Header extends Component {
 
     render() {
         const { userInfo, shouldRender } = this.state;
+        const { categories } = this.props;
         return (
             <header>
                 <nav className="top navbar navbar-expand-lg bg-dark">
@@ -133,9 +139,9 @@ class Header extends Component {
                                     Catégories
                       </a>
                                 <div className="dropdown-menu dropdown-menu-right dropdwn" aria-labelledby="navbarDropdown">
-                                    <a className="dropdown-item" href="/">Category one</a>
-                                    <a className="dropdown-item" href="/">Category two</a>
-                                    <a className="dropdown-item" href="/">Category three</a>
+                                    { categories.map((category) => {
+                                        return <a key={category.id} className="dropdown-item" href="/">{category.label}</a>
+                                    }) }
                                 </div>
                             </li>
                             <li className="nav-item">
@@ -156,6 +162,7 @@ class Header extends Component {
 
 function mapStateToProps(state) {
     return {
+        categories: state.categories.data,
         auth: state.auth,
         userInfo: state.userInfo.data
     }

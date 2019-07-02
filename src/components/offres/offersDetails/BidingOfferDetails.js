@@ -5,7 +5,10 @@ import Countdown from 'react-countdown-now';
 import HistoryCard from '../../shared/HistoryCard/HistoryCard';
 import * as actions from '../../../actions';
 import Modelv2 from '../../shared/Model/Modelv2';
-import $ from 'jquery';
+import { connect } from 'react-redux';
+import Position from '../../shared/Position';
+
+
 class BidingOfferDetails extends Component {
 
     state = {
@@ -14,6 +17,7 @@ class BidingOfferDetails extends Component {
         isError: false,
         isFatal: false,
         msgError: '',
+        msg: '',
         show: false,
         biders: this.props.offerDetails.bids
     }
@@ -30,18 +34,20 @@ class BidingOfferDetails extends Component {
             bids, price, weight
         } = this.props.offerDetails;
         this.setState({
-                bid_price: event.target.value
-            },
+            bid_price: event.target.value
+        },
             () => {
                 const lastBidPrice = bids.length > 0 ? bids[bids.length - 1].price : price * weight;
                 if (this.state.bid_price <= lastBidPrice)
                     this.setState({
                         isError: true,
+                        isFatal: false,
                         msgError: `Votre mise minimum doit-être supérieure à ${lastBidPrice}`
                     })
                 else
                     this.setState({
-                        isError : false,
+                        isFatal: false,
+                        isError: false,
                         msgError: ''
                     });
             });
@@ -54,7 +60,8 @@ class BidingOfferDetails extends Component {
                 this.setState({
                     isAccepted: true,
                     show: false,
-                    biders: this.state.biders.concat([{"price": this.state.bid_price, bidder: {lastName : "You"}}])
+                    biders: this.state.biders.concat([{ "price": this.state.bid_price, bidder: { lastName: "You" } }]),
+                    msg: 'Vous avez placé une enchère avec succès'
                 })
             })
             .catch((err) => {
@@ -66,15 +73,25 @@ class BidingOfferDetails extends Component {
             });
     }
 
+    componentWillMount()
+    {
+        this.setState({
+            isAccepted: false,
+            isError: false,
+            isFatal: false        
+        })
+    }
 
     render() {
 
         const { offerDetails } = this.props;
-        const {isFatal, msgError, biders } = this.state
+        debugger;
+        const { isFatal, msgError, biders, isAccepted, msg } = this.state
         const locationLength = offerDetails.locations.length;
-        return (   
+        return (
             <div className="col-lg-6 col-md-6 col-sm-10">
-            {isFatal ? <Alert className="danger" errors={[msgError]} /> : ''}
+                {isFatal ? <Alert className="danger" errors={[msgError]} /> : ''}
+                {isAccepted ? <Alert className="success" errors={[msg]} /> : ''}                
                 <div>
                     <div className="row text-black-50">
                         <div className="col-lg-8 col-md-6">
@@ -89,33 +106,34 @@ class BidingOfferDetails extends Component {
                         </div>
                     </div>
                     <div className="row text-black-50 my-2">
-                    <div className="col-lg-6 col-md-6 col-sm-6">
+                        <div className="col-lg-6 col-md-6 col-sm-6">
                             <span className="d-block py-1 font-weight-light">Offre actuelle</span>
                             <span className="biding-numbers text-dark">{this.getTheCurrentBid()}.00 DH</span>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 text-right">
                             <span className="d-block py-1 font-weight-light">Prix final</span>
                             <span className="biding-numbers text-dark">{offerDetails.end_price ? offerDetails.end_price : '*'}.00 DH</span>
-                        </div>   
+                        </div>
                     </div>
-                    
+
                     <div className="row my-3">
                         <div className="col-6">
-                            <input onChange={this.changeBidding} value={this.state.bid_price} name="bid_price" type="number" className={`form-control rounded-0 text-dark-50 font-weight-light ${this.state.isError ? 'is-invalid' : ''}`} placeholder="Votre enchère" />             
+                            <input onChange={this.changeBidding} value={this.state.bid_price} name="bid_price" type="number" className={`form-control rounded-0 text-dark-50 font-weight-light ${this.state.isError ? 'is-invalid' : ''}`} placeholder="Votre enchère" />
                             <div className="invalid-feedback">
-                                { this.state.msgError }
+                                {this.state.msgError}
                             </div>
                         </div>
                         <div className="col-6">
-                        {/* data-toggle="modal" data-target="#bid_model" */}
+                            {/* data-toggle="modal" data-target="#bid_model" */}
                             <button onClick={() => {
-                                this.setState({show: true})
+                                this.setState({ show: true })
                             }} className="btn-block btn btn-warning text-white rounded-0"> J'enchéris !</button>
                         </div>
                     </div>
                     <div>
                         <table className="table table-sm table-borderless biding-table">
                             <tbody>
+                                <Position />
                                 <tr>
                                     <td>Poids</td>
                                     <td className="text-right text-muted">{offerDetails.weight}</td>
@@ -146,17 +164,24 @@ class BidingOfferDetails extends Component {
                 </div>
                 {/* Bidder's names */}
                 <HistoryCard data={biders} />
-                <Modelv2 
-                show={this.state.show}
-                onConfirm={this.placeBid}
-                handleClose={() => this.setState({show: false})}
-                title="Bienvenue, à vous de jouer !"
-                text="Voulez-vous vraiment continuer ce processus, il est irréversible."
-                confirmText="JE CONFIRME MON ENCHÈRE"
-                  />
+                <Modelv2
+                    show={this.state.show}
+                    onConfirm={this.placeBid}
+                    handleClose={() => this.setState({ show: false })}
+                    title="Bienvenue, à vous de jouer !"
+                    text="Voulez-vous vraiment continuer ce processus, il est irréversible."
+                    confirmText="JE CONFIRME MON ENCHÈRE"
+                />
             </div>
         );
     }
 }
 
-export default BidingOfferDetails;
+function mapStateToProps(state) {
+    return {
+        auth: state.auth,
+        userInfo: state.userInfo.data
+    }
+}
+
+export default connect(mapStateToProps)(BidingOfferDetails);

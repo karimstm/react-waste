@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import OfferList from '../../offres/offersListing/OfferList';
 import ControlledCarousel from '../carousel/ControlledCarousel';
+import Filter from '../Filter';
 
 function HomeTabs(props) {
 
@@ -39,8 +40,7 @@ function HomeTabs(props) {
 
     return (
         <React.Fragment>
-            <ControlledCarousel />
-            <section className=" container-fluid py-4">
+            <section className="offers container-fluid py-4">
             <nav>
                 <div className="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
                     <a onClick={showPurchases} className="nav-item text-black-50 nav-link active" id="nav-achat-tab" data-toggle="tab" href="#nav-achat" role="tab" aria-controls="nav-achat" aria-selected="true">Offre d'achat</a>

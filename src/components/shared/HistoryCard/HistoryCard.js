@@ -4,7 +4,7 @@ class HistoryCard extends Component {
     render() {
         const { data } = this.props;
         return (
-            <div className="my-2 py-2 bidders-name">
+            <div className="my-2 py-2 bidders-name auction-history">
                 <ul className="px-2 my-0">
                     {
                         data.reverse().map((value, index) => {
