@@ -7,37 +7,34 @@ import * as actions from '../../../actions';
 import Modelv2 from '../../shared/Model/Modelv2';
 import { connect } from 'react-redux';
 import Position from '../../shared/Position';
+import { DEFALUT_URL } from '../../../actions/types';
 
 
 class BidingOfferDetails extends Component {
 
     state = {
-        bid_price: '',
+        bid_price: this.props.offerDetails.top_price,
+        top_price: this.props.offerDetails.top_price,
         isAccepted: false,
         isError: false,
         isFatal: false,
         msgError: '',
         msg: '',
         show: false,
-        biders: this.props.offerDetails.bids
+        bidders: this.props.offerDetails.bids
     }
 
-    // get the current bid
-    getTheCurrentBid = () => {
-        const { bids } = this.props.offerDetails;
-        return bids.length > 0 ? bids[bids.length - 1].price : 0
-    }
 
     // Chnage the value of the input on every change and set the state
     changeBidding = (event) => {
         const {
-            bids, price, weight
+            top_price
         } = this.props.offerDetails;
         this.setState({
             bid_price: event.target.value
         },
             () => {
-                const lastBidPrice = bids.length > 0 ? bids[bids.length - 1].price : price * weight;
+                const lastBidPrice = top_price;
                 if (this.state.bid_price <= lastBidPrice)
                     this.setState({
                         isError: true,
@@ -60,9 +57,9 @@ class BidingOfferDetails extends Component {
                 this.setState({
                     isAccepted: true,
                     show: false,
-                    biders: this.state.biders.concat([{ "price": this.state.bid_price, bidder: { lastName: "You" } }]),
                     msg: 'Vous avez placé une enchère avec succès'
                 })
+                // this.props.shouldChangeState(true, this.props.offerDetails.id)
             })
             .catch((err) => {
                 this.setState({
@@ -73,8 +70,49 @@ class BidingOfferDetails extends Component {
             });
     }
 
-    componentWillMount()
+    // Leaving the auction
+    leaveAuction = () => 
     {
+        const { id } = this.props.offerDetails;
+        return new Promise((resolve, reject) => {
+            actions.leaveAuction(id)
+            .then((data) => {
+                this.setState({
+                    isAccepted: true,
+                    isError: false,
+                    msg: 'Vous avez quitté cette offre avec succès'});
+                resolve(data);
+                // this.props.shouldChangeState(true, id);
+            })
+            .catch((err) => {
+                this.setState({
+                    isAccepted: false,
+                    isFatal: true,
+                    isError: false,
+                    errMsg: err});
+                reject(err);
+            })
+        })
+        
+    }
+
+    componentDidMount()
+    {
+        const { offerDetails } = this.props;
+        const url = new URL(`${DEFALUT_URL}:3000/hub`)
+        url.searchParams.append('topic', `waste_to_resources/offers/${offerDetails.id}`)
+        const eventSource = new EventSource(url);
+
+        eventSource.onmessage = e => {
+            var result = JSON.parse(e.data);
+            console.log(result);
+            this.setState({
+                bid_price: result.price,
+                top_price: result.price,
+                bidders: [{ "price": result.price, bidder: { lastName: result.last_name, email: result.email }}].concat(this.state.bidders)
+            });
+        };
+
         this.setState({
             isAccepted: false,
             isError: false,
@@ -84,8 +122,8 @@ class BidingOfferDetails extends Component {
 
     render() {
 
-        const { offerDetails } = this.props;
-        const { isFatal, msgError, biders, isAccepted, msg } = this.state
+        const { offerDetails, userInfo, auth } = this.props;
+        const { isFatal, msgError, bidders, isAccepted, msg } = this.state
         const locationLength = offerDetails.locations.length;
         return (
             <div className="col-lg-6 col-md-6 col-sm-10">
@@ -95,7 +133,7 @@ class BidingOfferDetails extends Component {
                     <div className="row text-black-50">
                         <div className="col-lg-8 col-md-6">
                             <h5 className="font-weight-light">{offerDetails.title}</h5>
-                            <small>25 bids</small>
+                            <small>{offerDetails.bids.length} bids</small>
                         </div>
                         <div className="col-lg-4 col-md-6">
                             <Countdown
@@ -107,7 +145,7 @@ class BidingOfferDetails extends Component {
                     <div className="row text-black-50 my-2">
                         <div className="col-lg-6 col-md-6 col-sm-6">
                             <span className="d-block py-1 font-weight-light">Offre actuelle</span>
-                            <span className="biding-numbers text-dark">{offerDetails.top_price}.00 DH</span>
+                            <span className="biding-numbers text-dark">{this.state.top_price}.00 DH</span>
                         </div>
                         <div className="col-lg-6 col-md-6 col-sm-6 text-right">
                             <span className="d-block py-1 font-weight-light">Prix final</span>
@@ -132,7 +170,14 @@ class BidingOfferDetails extends Component {
                     <div>
                         <table className="table table-sm table-borderless biding-table">
                             <tbody>
-                                <Position  bidders={offerDetails.bids} />
+                                {
+                                    <Position
+                                    id = {offerDetails.id}
+                                    leaveAuction = {this.leaveAuction}
+                                    userInfo={userInfo}
+                                    bidders={this.state.bidders}
+                                />
+                                }
                                 <tr>
                                     <td>Poids</td>
                                     <td className="text-right text-muted">{offerDetails.weight}</td>
@@ -162,7 +207,7 @@ class BidingOfferDetails extends Component {
                     </div>
                 </div>
                 {/* Bidder's names */}
-                <HistoryCard data={biders} />
+                <HistoryCard data={bidders} />
                 <Modelv2
                     show={this.state.show}
                     onConfirm={this.placeBid}

@@ -7,7 +7,8 @@ import Modelv2 from '../../shared/Model/Modelv2';
 class SimpleOfferDetails extends Component {
 
     state = {
-        show: false
+        show: false,
+        offerWeight: 1
     }
     numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -30,6 +31,32 @@ class SimpleOfferDetails extends Component {
                 return 'Enchère';
             default:
                 return;
+        }
+    }
+
+    onWeightChange = (e) => 
+    {
+        this.setState({
+            offerWeight: e.target.value
+        })
+    }
+
+    handleAccept = () => {
+        this.props.handleAccept(this.state.offerWeight).then((value) => {
+            this.setState({ show: value })
+        })
+    }
+
+    displayRange = (type) => {
+
+        if (type == 'purchase' || type == 'bulk_purchase') {
+            return <div className="ml-3">
+                <label className="text-dark font-weight-light" htmlFor="weight-range">Votre Poid</label>
+                <input value={this.state.offerWeight} onChange={this.onWeightChange} type="range" className="custom-range" min="1" max={this.props.offerDetails.weight} id="weight-range" />
+                <small id="passwordHelpInline" className="text-muted">
+                    {this.state.offerWeight} KG
+                </small>
+            </div>
         }
     }
 
@@ -94,23 +121,27 @@ class SimpleOfferDetails extends Component {
                             </div>
                         </li>
                     </ul>
-                    <div className="row mt-5">
-                        <div className="col col-6">
-                            <button onClick={() => this.setState({show: true})} type="button" className="btn btn-block btn-warning text-light rounded-0" disabled={(!offerService.isAllowedToAccept(offerDetails.type) || !offerDetails.is_active) && 'disabled'}>Accepter l'offer</button>
+                    {
+                        offerService.isAllowedToAccept(offerDetails.type) && offerDetails.is_active && this.displayRange(offerDetails.type)
+                    }
+                    {
+                        offerService.isAllowedToAccept(offerDetails.type) && offerDetails.is_active && <div className="row mt-5">
+                            <div className="col col-6">
+                                <button onClick={() => this.setState({ show: true })} type="button" className="btn btn-block btn-warning text-light rounded-0">Accepter l'offer</button>
+                            </div>
+                            <div className="col col-6">
+                                <button type="button" className="btn btn-block btn-outline-danger rounded-0">Ajouter au Wishlist</button>
+                            </div>
                         </div>
-                        <div className="col col-6">
-                            <button type="button" className="btn btn-block btn-outline-danger rounded-0">Ajouter au Wishlist</button>
-                        </div>
-                    </div>
+                    }
+
                     <div className="mt-3 font-weight-light">Categories:
-            <a className="p-2 text-muted" href="/">{offerDetails.category.label}</a>
+                        <a className="p-2 text-muted" href="/">{offerDetails.category.label}</a>
                     </div>
                     <Modelv2
                         show={this.state.show}
                         onConfirm={() => {
-                            this.props.handleAccept().then((value) => {
-                                this.setState({show: value})
-                            })
+                            this.handleAccept()
                         }}
                         handleClose={() => this.setState({ show: false })}
                         title="Bienvenue, à vous de jouer !"

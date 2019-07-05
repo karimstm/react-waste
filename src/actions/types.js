@@ -1,4 +1,4 @@
-export const DEFALUT_URL = 'http://wastetoresources-env.5aqp9mu79y.eu-west-3.elasticbeanstalk.com'
+export const DEFALUT_URL = 'http://wtr.oulhafiane.me'
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
@@ -32,3 +32,8 @@ export const IMGE_SIZE = 6;
 
 export const FETCH_USER_INFO_SUCCESS = 'FETCH_USER_INFO_SUCCESS';
 export const FETCH_USER_INFO_FAILURE = 'FETCH_USER_INFO_FAILURE';
+
+// FETCH CURRENT USER NOTIFICATION
+
+export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
+export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';

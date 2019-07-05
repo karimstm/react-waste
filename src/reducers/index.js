@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
 import { authReducer } from './auth-reducer'
-import { userInfoReducer } from './user-reducer';
+import { userInfoReducer, userNotificationsReducer } from './user-reducer';
 import { categoryReducer, offerSalesReducer, offerDetailsReducer } from './offer-reducer'
 import { reducer as formReducer } from 'redux-form'
 import thunk from 'redux-thunk'
@@ -13,7 +13,8 @@ export const init = () => {
         offerDetails: offerDetailsReducer,
         auth: authReducer,
         form: formReducer,
-        userInfo: userInfoReducer
+        userInfo: userInfoReducer,
+        notifications: userNotificationsReducer
     });
 
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

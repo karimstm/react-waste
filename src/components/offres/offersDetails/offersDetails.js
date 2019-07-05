@@ -17,26 +17,31 @@ class offersDetails extends Component {
     state = {
         isAccepted: false,
         isError: false,
-        errMessage: ''
+        errMessage: '',
+        offerDetails: []
     }
+
     componentDidMount() {
         const { id } = this.props.match.params;
         this.props.dispatch(actions.fetchOfferById(id));
     }
 
-
-
-    handleAccept = () => {
+    handleAccept = (offerWeight) => {
         return new Promise((resolve) => {
             const { id } = this.props.match.params;
-            actions.acceptAnOffer(id)
+            actions.acceptAnOffer(id, offerWeight)
             .then(() => this.setState({ isAccepted: true }))
             .catch(err => this.setState({ isError: true, errMessage: err }))
             resolve(false);
         })
     }
 
-
+    //This will be invoked if a child state changed
+    shouldChangeState = (flag, id) =>
+    {
+        if (flag)
+            this.props.dispatch(actions.fetchOfferById(id));
+    }
 
     render() {
 
@@ -44,9 +49,8 @@ class offersDetails extends Component {
         const { offerDetails } = this.props;
         const { errMessage, isError, isAccepted } = this.state;
         const { success } = this.props.location.state || false;
-        
-
         if (isAccepted) {
+            debugger ;
             const { id } = this.props.match.params;
             this.setState({ isAccepted: false });
             return <Redirect to={{ pathname: `/offers/${id}`, state: { success: true } }} />
@@ -69,7 +73,7 @@ class offersDetails extends Component {
                                     <OfferDetailsTabs data={offerDetails} />
                                 </div>
                                 {
-                                    offerDetails.type === 'auction' ? <BidingOfferDetails offerDetails={offerDetails} /> : <SimpleOfferDetails handleAccept={this.handleAccept} offerDetails={offerDetails} />
+                                    offerDetails.type === 'auction' ? <BidingOfferDetails shouldChangeState={this.shouldChangeState} offerDetails={offerDetails} /> : <SimpleOfferDetails handleAccept={this.handleAccept} offerDetails={offerDetails} />
                                 }
                             </div>
                         </div>

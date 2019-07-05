@@ -1,28 +1,35 @@
 import React, { Component } from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
-import LogedInLink from './auth/LogedInLink';
-import LogedInInfo from './auth/LogedInInfo';
-import * as actions from '../../actions';
-import offerService from '../../services/offer-service';
-import Notification from './Notification';
+import LogedInLink from '../auth/LogedInLink';
+import LogedInInfo from '../auth/LogedInInfo';
+import * as actions from '../../../actions';
+import offerService from '../../../services/offer-service';
+import Notification from '../Notification';
 
 class Header extends Component {
 
 
     state = {
         shouldRender: false,
-        userInfo: []
+        userInfo: [],
+        notifications: [],
+        isReady: false,
+        isNew: false,
     }
     handleLogout = () => {
         this.props.logout();
         this.props.history.push('/');
     }
-
+    
+    getLastNotification = () => {
+        
+        if (this.state.isReady)
+            this.state.notifications.length && !this.state.notifications[0].seen ? this.setState({isNew : true}) : this.setState({isNew: false});
+    }
 
     renderAuthLinks() {
         const { isAuth } = this.props.auth;
-
         if (isAuth) {
             return (
                 <React.Fragment>
@@ -53,24 +60,46 @@ class Header extends Component {
         this.props.dispatch(actions.get_categories());
     }
 
+    fetchNotifications = () => {
+        const { isAuth } = this.props.auth;
+        if (isAuth) {
+            this.props.dispatch(actions.getNotifications()).then((nots) => {
+                this.setState({ 
+                    isReady: true,
+                    notifications: nots.notifications,
+                 }, () => this.getLastNotification());
+            })
+        }
+    }
+
     componentDidMount() {
         this.fetchInfo();
+        this.fetchNotifications();
         this.fetchCategories();
     }
 
-    shouldComponentUpdate() {
-        if (!this.state.shouldRender)
+    shouldComponentUpdate(nextProps, nextState) {
+        if (!this.state.shouldRender || !this.state.isReady || nextState.isNew !== this.state.isNew)
             return true;
         return false;
     }
     componentDidUpdate() {
         const { isAuth } = this.props.auth;
-        if (!this.state.shouldRender && isAuth)
+        if ((!this.state.shouldRender || !this.state.isReady) && isAuth) {
             this.fetchInfo();
+            this.fetchNotifications();
+        }
+
+    }
+
+    onNotificationClick = () => {
+        actions.notificationsSeen().then(() => {
+            this.setState({isNew : false})
+        })
     }
 
     render() {
-        const { userInfo, shouldRender } = this.state;
+        const { userInfo, shouldRender, isReady, notifications } = this.state;
         const { categories } = this.props;
         return (
             <header>
@@ -88,11 +117,12 @@ class Header extends Component {
                     </ul>
                     <ul className="navbar-nav dropdown wast-link ml-auto">
                         {
-                            shouldRender && <li className="nav-item dropdown px-3">
+                            isReady && <li  onClick={this.onNotificationClick} className="nav-item dropdown px-3">
                                 <a href="/" className="dropdown-toggle text-light" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="far fa-bell"></i>
+                                    <span className={`badge ${this.state.isNew ? 'notification' : ''}`}></span>
                                 </a>
-                                <Notification notification={userInfo.notifications} />
+                                <Notification notifications={notifications} />
                             </li>
                         }
                         <li className="nav-item">
@@ -139,9 +169,9 @@ class Header extends Component {
                                     Catégories
                       </a>
                                 <div className="dropdown-menu dropdown-menu-right dropdwn" aria-labelledby="navbarDropdown">
-                                    { categories.map((category) => {
+                                    {categories.map((category) => {
                                         return <a key={category.id} className="dropdown-item" href="/">{category.label}</a>
-                                    }) }
+                                    })}
                                 </div>
                             </li>
                             <li className="nav-item">
@@ -162,6 +192,7 @@ class Header extends Component {
 
 function mapStateToProps(state) {
     return {
+        notifications: state.notifications.data,
         categories: state.categories.data,
         auth: state.auth,
         userInfo: state.userInfo.data

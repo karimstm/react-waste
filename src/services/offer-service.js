@@ -4,6 +4,7 @@ import authService from './auth-service';
 // const AUCTION = 'reseller';
 const BULK_PURCHASE = 'bulk_purchase';
 const PURCHASE = 'purchase';
+const SALE = 'sale';
 
 
 class OfferService {
@@ -20,11 +21,19 @@ class OfferService {
         if (authService.isAuthenticated()) {
             switch (authService.getRoles(authService.getToken())) {
                 case authService.isPicker():
+                {
+                    if (type == PURCHASE)
+                        return true;
                     return false;
-                case authService.isBuyer() && (type === BULK_PURCHASE || type === PURCHASE):
-                    return true;
+                }
+                case (authService.isBuyer()):
+                    return false;               
                 case authService.isReseller():
-                    return true;
+                {
+                    if (type === BULK_PURCHASE || type === SALE)
+                        return true;
+                    return false;
+                }
                 default:
                     return false;
 

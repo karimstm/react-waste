@@ -15,6 +15,8 @@ import {
     FETCH_OFFER_SUCCESS,
     FETCH_USER_INFO_SUCCESS,
     FETCH_USER_INFO_FAILURE,
+    FETCH_NOTIFICATION_SUCCESS,
+    FETCH_NOTIFICATION_FAILURE
 
 } from './types'
 
@@ -74,7 +76,9 @@ export const login = (userData) => {
                 dispatch(loginSuccess());
             })
             .catch(err => {
-                dispatch(loginFailure(err.response.data.message));
+                if (err.response === undefined)
+                    return dispatch(loginFailure('Il y a une erreur, vérifiez votre réseau'));
+                return dispatch(loginFailure(err.response.data.message));
             })
     }
 }
@@ -121,7 +125,6 @@ export const post_sale_offer = (saleData) => {
     let link = 'auction';
 
     if (saleData.isAuction === false) {
-        debugger ;
         switch (role) {
             case authService.isPicker():
                 link = 'sale';
@@ -202,7 +205,6 @@ export const fetchOfferById = (id) => {
         ).then(res => res.data)
         .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
         .catch(({ response }) => {
-            debugger ;
             dispatch(fetchOfferFail(response.data.errors))
         })
     }
@@ -238,9 +240,9 @@ export const fetchCurrentUserInfo = () => {
 // Accept an offer
 
 
-export const acceptAnOffer = (id) => {
+export const acceptAnOffer = (id, offerWeight) => {
     return axiosInstance.patch(`/offers/${id}/accept`, 
-    {headers: headers})
+    {"weight": offerWeight})
     .then(res => res.data)
     .catch(err => Promise.reject(err.response.data.message));
 }
@@ -253,7 +255,52 @@ export const acceptBid = (id, bid_price) => {
     .then(res => res.data)
     .catch(({response}) => 
     {
-        debugger ;
         return Promise.reject(response.data.message)
     });
+}
+
+/* ======= Leaving auction methode ======== */
+
+export const leaveAuction = (id) => {
+    return axiosInstance.patch(`auction/${id}/leave`)
+    .then(res => res.data)
+    .catch(err => {
+        return Promise.reject(err.response.data.message);
+    })
+}
+
+/* ======= Get current user notification ========= */
+
+const notifiactionSuccess = (notifications) => 
+{
+    return {
+        type: FETCH_NOTIFICATION_SUCCESS,
+        notifications
+    }
+}
+
+const notificationFailure = (errors) => 
+{
+    return {
+        type: FETCH_NOTIFICATION_FAILURE,
+        errors
+    }
+}
+
+export const getNotifications = () => {
+    return dispatch => {
+        return axiosInstance.get(`current/notifications`
+        ).then(res => res.data)
+        .then(notifications => dispatch(notifiactionSuccess(notifications)))
+        .catch(err => dispatch(notificationFailure(err.response.data.message)))
+    }
+}
+
+
+/* ========= Notification is seen ========== */
+
+export const notificationsSeen = () => {
+    return axiosInstance.patch(`current/notifications/seen`)
+    .then(res => res.data)
+    .catch(err =>  Promise.reject(err.response.data.message));
 }
