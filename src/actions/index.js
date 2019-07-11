@@ -1,6 +1,7 @@
 import axios from 'axios'
 import authService from '../services/auth-service'
 import axiosService from '../services/axios-service'
+import Cookies from 'js-cookie';
 
 import {
     DEFALUT_URL,
@@ -16,9 +17,13 @@ import {
     FETCH_USER_INFO_SUCCESS,
     FETCH_USER_INFO_FAILURE,
     FETCH_NOTIFICATION_SUCCESS,
-    FETCH_NOTIFICATION_FAILURE
+    FETCH_NOTIFICATION_FAILURE,
+    DEFALUT_URL_HUB,
+    FETCH_MESSAGES_SUCCESS,
+    FETCH_MESSAGES_FAILURE
 
 } from './types'
+import { awaitExpression } from '@babel/types';
 
 const headers = { 'Content-Type': 'application/json' }
 
@@ -113,7 +118,14 @@ export const get_categories = () => {
             { headers: headers })
             .then(res => { return res.data })
             .then(categories => dispatch(fetchCategoriesSucces(categories)))
-            .catch(({ response }) => dispatch(fetchCategoriesFail(response.data.extras)))
+            .catch(({ response }) => {
+                try {
+                    return dispatch(fetchCategoriesFail(response.data.extras));
+                } catch
+                {
+                    return Promise.reject('');
+                }
+            })
     }
 }
 
@@ -170,14 +182,14 @@ export const post_sale_offer = (saleData) => {
 
 export const fetchOffers = (type, page) => {
 
-    return axios.get(`${DEFALUT_URL}/api/offers/${type}`, 
-        { params: {page: page}, headers: headers })
+    return axios.get(`${DEFALUT_URL}/api/offers/${type}`,
+        { params: { page: page }, headers: headers })
         .then(res => res.data)
         .catch(err => {
             if (err.response.status === 401)
                 return Promise.reject(err.response.data.extras);
             else if (err.response.status === 404)
-                    return Promise.resolve([]);
+                return Promise.resolve([]);
             return Promise.reject('Échec de la récupération des données');
         })
 }
@@ -201,12 +213,16 @@ const fetchOfferFail = (errors) => {
 export const fetchOfferById = (id) => {
     return dispatch => {
         return axios.get(`${DEFALUT_URL}/api/offers/${id}`,
-        { headers: headers }
+            { headers: headers }
         ).then(res => res.data)
-        .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
-        .catch(({ response }) => {
-            dispatch(fetchOfferFail(response.data.errors))
-        })
+            .then(offerDetails => dispatch(fetchOfferSucces(offerDetails)))
+            .catch(({ response }) => {
+                try{
+                    return dispatch(fetchOfferFail(response.data.errors))
+                } catch {
+                    return Promise.reject('');
+                }
+            })
     }
 }
 
@@ -232,8 +248,18 @@ export const fetchCurrentUserInfo = () => {
         return axiosInstance.get(`current/infos`,
             { headers: headers }
         ).then(res => res.data)
-            .then(userInfo => dispatch(fetchUserSuccess(userInfo)))
-            .catch(({ response }) => dispatch(fetchUserFail(response.data.message)))
+            .then(userInfo => {
+                authService.saveToken(userInfo.mercure_token, 'mercure_token');
+                return dispatch(fetchUserSuccess(userInfo))
+            })
+            .catch(err => {
+                debugger ;
+                try {
+                    return dispatch(fetchUserFail(err.response.data.message));
+                } catch {
+                    return Promise.reject('');
+                }
+            })
     }
 }
 
@@ -241,46 +267,50 @@ export const fetchCurrentUserInfo = () => {
 
 
 export const acceptAnOffer = (id, offerWeight) => {
-    return axiosInstance.patch(`/offers/${id}/accept`, 
-    {"weight": offerWeight})
-    .then(res => res.data)
-    .catch(err => Promise.reject(err.response.data.message));
+    return axiosInstance.patch(`/offers/${id}/accept`,
+        { "weight": offerWeight })
+        .then(res => res.data)
+        .catch(err => {
+            try {
+                return Promise.reject(err.response.data.message);
+            } catch
+            {
+                return Promise.reject('');
+            }
+        });
 }
 
 export const acceptBid = (id, bid_price) => {
     return axiosInstance.patch(`offers/${id}/accept`,
-    {
-        "bid_price": bid_price
-    })
-    .then(res => res.data)
-    .catch(({response}) => 
-    {
-        return Promise.reject(response.data.message)
-    });
+        {
+            "bid_price": bid_price
+        })
+        .then(res => res.data)
+        .catch(({ response }) => {
+            return Promise.reject(response.data.message)
+        });
 }
 
 /* ======= Leaving auction methode ======== */
 
 export const leaveAuction = (id) => {
     return axiosInstance.patch(`auction/${id}/leave`)
-    .then(res => res.data)
-    .catch(err => {
-        return Promise.reject(err.response.data.message);
-    })
+        .then(res => res.data)
+        .catch(err => {
+            return Promise.reject(err.response.data.message);
+        })
 }
 
 /* ======= Get current user notification ========= */
 
-const notifiactionSuccess = (notifications) => 
-{
+const notifiactionSuccess = (notifications) => {
     return {
         type: FETCH_NOTIFICATION_SUCCESS,
         notifications
     }
 }
 
-const notificationFailure = (errors) => 
-{
+const notificationFailure = (errors) => {
     return {
         type: FETCH_NOTIFICATION_FAILURE,
         errors
@@ -291,8 +321,8 @@ export const getNotifications = () => {
     return dispatch => {
         return axiosInstance.get(`current/notifications`
         ).then(res => res.data)
-        .then(notifications => dispatch(notifiactionSuccess(notifications)))
-        .catch(err => dispatch(notificationFailure(err.response.data.message)))
+            .then(notifications => dispatch(notifiactionSuccess(notifications)))
+            .catch(err => dispatch(notificationFailure(err.response.data.message)))
     }
 }
 
@@ -301,6 +331,107 @@ export const getNotifications = () => {
 
 export const notificationsSeen = () => {
     return axiosInstance.patch(`current/notifications/seen`)
+        .then(res => res.data)
+        .catch(err => Promise.reject(err.response.data.message));
+}
+
+/* ======= Fetch Message of the current user ========= */
+
+const messagesSuccess = (messages) => 
+{
+    return {
+        type: FETCH_MESSAGES_SUCCESS,
+        messages,
+    }
+}
+
+const messagesFailure = (errors) => {
+    return {
+        type: FETCH_MESSAGES_FAILURE,
+        errors
+    }
+}
+
+export const fetchUserMessages = () => {
+    return dispatch => {
+        return axiosInstance.get(`current/messages`)
+        .then(res => res.data)
+        .then(messages => dispatch(messagesSuccess(messages)))
+        .catch(err => {
+            try{
+                return dispatch(messagesFailure(err.response.data.message));
+            }
+            catch {
+                return Promise.reject('');
+            }
+        })
+    }
+}
+
+/* ============ Post a feedback ========== */
+
+export const postFeedback = (toReciever, message, rate) => {
+    return axiosInstance.post(`profiles/${toReciever}/feedback`,
+    {
+        "message": message,
+        "rate": rate
+    })
+    .then(res => res.data.message)
+    .catch(() => {
+        return Promise.reject('Vous ne pouvez pas poster vos commentaires, assurez-vous d\'être connecté');
+    })
+}
+
+/* ========== Retrieve Feedbacks =========== */
+
+export const fetchFeedbacks = (userEmail) => {
+    return axios.get(`/api/profiles/${userEmail}/feedbacks`)
     .then(res => res.data)
-    .catch(err =>  Promise.reject(err.response.data.message));
+    .catch(() => {
+        return Promise.reject('No Feedback recieved');
+    })
+}
+
+/* ========= Message Seen post request ========== */
+
+
+export const messagesSeen = () => {
+    return axiosInstance.patch(`current/messages/seen`)
+    .then(res => res.data)
+    .catch(() => Promise.reject('Could not set messages as seen'));
+}
+
+/* ========= Retrieve Transaction List from the database ======== */
+
+export const fetchTransactions = (page, limit) => {
+    return axiosInstance.get(`current/transactions?page=${page}&limit=${limit}`)
+    .then(res => res.data)
+    .catch((err) => Promise.reject(err.response.data.message))
+}
+
+/* ========== Fetch Transaction count =========== */
+
+export const fetchTransactionsCount = () => {
+    return axiosInstance.get('current/transactions/count')
+    .then(res => res.data.extras.count)
+    .catch(() => Promise.reject('Failed to retrieve transactions count'))
+}
+
+
+/* ======== Fetch Transaction details =========== */
+
+export const fetchTransactionDetails = (id) => {
+    return axiosInstance.get(`current/transactions/${id}`)
+    .then(res => res.data)
+    .catch((err) => Promise.reject(err.response.data.message))
+    .catch(() => Promise.reject('Quelque chose se passe mal!'))
+}
+
+/* ========= Pay an offer =============== */
+
+export const payOffer = (id) => {
+    return axiosInstance.patch(`current/transactions/${id}/pay`)
+    .then(res => res.data)
+    .catch(err => Promise.reject(err.response.data.message))
+    .catch(() => Promise.reject('Erreur lors du traitement de ce paiement')); // If this happend we're in no good
 }

@@ -28,12 +28,10 @@ class Login extends Component {
             <section className="p-5">
                 { !isAuth && !(errors === 'undefined' || errors.length === 0) ? <Alert className="danger" errors={[errors]} /> : ''}
                 { successRegister && <Alert className="success" errors={['Vous avez enregistré avec succès']}/>}
-                <div className="row">
-                    <div className="col-3"></div>
-                    <div className="col-6">
+                <div className="row justify-content-center">
+                    <div className="col-lg-6 col-sm-12 col-md-6">
                         <LoginForm submitCb={this.loginUser} />
                     </div>
-                    <div className="col-3"></div>
                 </div>
             </section>
 

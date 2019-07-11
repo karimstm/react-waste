@@ -3,7 +3,9 @@ import
 FETCH_USER_INFO_FAILURE,
 FETCH_USER_INFO_SUCCESS,
 FETCH_NOTIFICATION_FAILURE,
-FETCH_NOTIFICATION_SUCCESS
+FETCH_NOTIFICATION_SUCCESS,
+FETCH_MESSAGES_FAILURE,
+FETCH_MESSAGES_SUCCESS
 }
  from '../actions/types';
 
@@ -43,6 +45,20 @@ export const userNotificationsReducer = (state = INITIAL_STATE_NOTIFICATION.noti
         case FETCH_NOTIFICATION_FAILURE:
             return Object.assign({}, state, {errors: action.errors, data: []});
         default:
-            return state
+            return state;
     }
+}
+
+export const userMessagesReducer = (state = { messages: {data: [], errors: []} }.messages, action) => {
+
+    switch(action.type)
+    {
+        case FETCH_MESSAGES_SUCCESS:
+            return {...state, data: action.messages}
+        case FETCH_MESSAGES_FAILURE:
+            return Object.assign({}, state, {errors: action.errors, data: []});
+        default:
+            return state;
+    }
+
 }

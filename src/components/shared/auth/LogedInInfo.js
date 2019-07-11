@@ -2,9 +2,25 @@ import React, { Component } from 'react';
 
 class LogedInInfo extends Component {
 
+    constructor(props) {
+        super(props);
+        
+        this.state = {
+            userInfo: this.props.userInfo
+        }
+    }
+    
+
+    componentWillReceiveProps(nextProps)
+    {
+        debugger ;
+        if (nextProps.userInfo.balance != this.state.userInfo.balance)
+            this.setState({ userInfo: nextProps.userInfo })
+    }
+
     render() {
-        const { userInfo } = this.props;
-        if (userInfo && this.props.userInfo.email) {
+        const { userInfo } = this.state;
+        if (userInfo && this.state.userInfo.email) {
             return (
                 <div className="navbar-text text-lowercase">
                     <span className="text-black-50 pr-4">Solde : <span className="text-danger">{userInfo.balance} DH</span></span>

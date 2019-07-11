@@ -2,11 +2,12 @@ import React, { Component } from 'react';
 
 class PersonalInfo extends Component {
     render() {
+        const { infos } = this.props;
         return (
             <div className="profile-tables card rounded-0 border-0 mt-2">
                 <div className="card-header bg-white">
                     <h5 className="d-inline">À propos de moi</h5>
-                    <button className="btn btn-success btn-sm float-right"><i class="far fa-edit"></i></button>
+                    <button className="btn btn-success btn-sm float-right"><i className="far fa-edit"></i></button>
                 </div>
                 <div className="card-body">
                     <div className="row">
@@ -20,10 +21,6 @@ class PersonalInfo extends Component {
                                     <tr>
                                         <th scope="row">Nom</th>
                                         <td>MOUTIK</td>
-                                    </tr>
-                                    <tr>
-                                        <th scope="row">Date de naissance</th>
-                                        <td>27 - 10 - 1994</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Emplacement</th>

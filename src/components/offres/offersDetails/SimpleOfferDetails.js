@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import * as moment from 'moment';
+import dateService from '../../../services/date-service';
 import offerService from '../../../services/offer-service';
 import Modelv2 from '../../shared/Model/Modelv2';
 
@@ -12,11 +12,6 @@ class SimpleOfferDetails extends Component {
     }
     numberWithCommas = (x) => {
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-
-    getLocalDate = (date) => {
-        moment.locale('fr');
-        return moment(date).format('LL');
     }
 
     getRealType = (type) => {
@@ -116,7 +111,7 @@ class SimpleOfferDetails extends Component {
                             <div className="row">
                                 <div className="col col-6 d-flex">Date Fin</div>
                                 <div className="col col-6 d-flex justify-content-end">
-                                    <small className="text-black-50">{this.getLocalDate(offerDetails.end_date)}</small>
+                                    <small className="text-black-50">{dateService.getLocalDate(offerDetails.end_date)}</small>
                                 </div>
                             </div>
                         </li>

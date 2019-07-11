@@ -6,6 +6,8 @@ import LogedInInfo from '../auth/LogedInInfo';
 import * as actions from '../../../actions';
 import offerService from '../../../services/offer-service';
 import Notification from '../Notification';
+import Message from '../Message';
+import mercureService from '../../../services/mercure_service';
 
 class Header extends Component {
 
@@ -14,18 +16,27 @@ class Header extends Component {
         shouldRender: false,
         userInfo: [],
         notifications: [],
+        messages: [],
         isReady: false,
         isNew: false,
+        isNewMsg: false,
+        isMsgReady: false
     }
     handleLogout = () => {
         this.props.logout();
         this.props.history.push('/');
     }
-    
+
     getLastNotification = () => {
-        
+
         if (this.state.isReady)
-            this.state.notifications.length && !this.state.notifications[0].seen ? this.setState({isNew : true}) : this.setState({isNew: false});
+            this.state.notifications.length && !this.state.notifications[0].seen ? this.setState({ isNew: true }) : this.setState({ isNew: false });
+    }
+
+    getLastMessages = () => {
+
+        if (this.state.isMsgReady)
+            this.state.messages.length && !this.state.messages[0].seen ? this.setState({ isNewMsg: true }) : this.setState({ isNewMsg: false });
     }
 
     renderAuthLinks() {
@@ -33,8 +44,9 @@ class Header extends Component {
         if (isAuth) {
             return (
                 <React.Fragment>
-                    <a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>
+                    <Link className="dropdown-item" to={{ pathname: '/app/dashboard'}} >Tableau de bord</Link>
                     {offerService.isAReseller() && <Link className="dropdown-item" to={{ pathname: '/offers/new', state: { auction: true } }}>Publier une enchère</Link>}
+                    <a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>
                 </React.Fragment>
             );
         }
@@ -47,11 +59,31 @@ class Header extends Component {
         );
     }
 
+
+    fetchUserMessages = () => {
+        const { isAuth } = this.props.auth;
+        if (isAuth)
+            this.props.dispatch(actions.fetchUserMessages())
+                .then((data) => {
+                    this.setState({isMsgReady: true, messages: data.messages })
+                }, () => this.getLastMessages());
+    }
+
     fetchInfo = () => {
         const { isAuth } = this.props.auth;
-        if (isAuth) {
+        if (isAuth && !this.state.isReady) {
             this.props.dispatch(actions.fetchCurrentUserInfo()).then((userData) => {
-                this.setState({ shouldRender: true, userInfo: userData.userInfo })
+                mercureService.launchMercure('waste_to_resources/notifications')
+                .then((notification) => {
+                    return this.setState({
+                        notifications: [notification].concat(this.state.notifications),
+                        isReady: true,
+                        isNew: true
+                    }, () => {
+                        return this.fetchInfo()
+                    })
+                })
+                return this.setState({ shouldRender: true, userInfo: userData.userInfo })
             });
         }
     }
@@ -64,10 +96,10 @@ class Header extends Component {
         const { isAuth } = this.props.auth;
         if (isAuth) {
             this.props.dispatch(actions.getNotifications()).then((nots) => {
-                this.setState({ 
+                this.setState({
                     isReady: true,
                     notifications: nots.notifications,
-                 }, () => this.getLastNotification());
+                }, () => this.getLastNotification());
             })
         }
     }
@@ -76,30 +108,55 @@ class Header extends Component {
         this.fetchInfo();
         this.fetchNotifications();
         this.fetchCategories();
+        this.fetchUserMessages();
     }
 
     shouldComponentUpdate(nextProps, nextState) {
-        if (!this.state.shouldRender || !this.state.isReady || nextState.isNew !== this.state.isNew)
+        if (this.props.auth.isAuth && (!this.state.shouldRender || !this.state.isReady
+             || nextState.isNew !== this.state.isNew
+             || nextState.notifications.length !== this.state.notifications.length
+             || nextState.isNewMsg !== this.state.isNewMsg
+             || (this.state.isReady && (nextState.userInfo.balance !== this.state.userInfo.balance))))
             return true;
         return false;
     }
-    componentDidUpdate() {
-        const { isAuth } = this.props.auth;
-        if ((!this.state.shouldRender || !this.state.isReady) && isAuth) {
-            this.fetchInfo();
-            this.fetchNotifications();
-        }
 
+    componentWillReceiveProps(nextProps)
+    {
+        if (nextProps.userInfo.length != this.state.userInfo.length)
+            this.setState({
+                userInfo: nextProps.userInfo,
+                shouldRender: true,
+                isReady: true
+            })
     }
+
+    // componentDidUpdate() {
+    //     const { isAuth } = this.props.auth;
+    //     if ((!this.state.shouldRender && !this.state.isReady) && isAuth) {
+    //         this.fetchInfo();
+    //         this.fetchNotifications();
+    //     }
+
+    // }
 
     onNotificationClick = () => {
         actions.notificationsSeen().then(() => {
-            this.setState({isNew : false})
+            this.setState({ isNew: false })
+        })
+    }
+
+
+    // On Message click: set message as seen
+    onMessageClick = () => {
+        actions.messagesSeen().then((res) => {
+            console.log(res);
+            this.setState({isNewMsg: false});
         })
     }
 
     render() {
-        const { userInfo, shouldRender, isReady, notifications } = this.state;
+        const { isMsgReady, userInfo, shouldRender, isReady, messages } = this.state;
         const { categories } = this.props;
         return (
             <header>
@@ -117,12 +174,21 @@ class Header extends Component {
                     </ul>
                     <ul className="navbar-nav dropdown wast-link ml-auto">
                         {
-                            isReady && <li  onClick={this.onNotificationClick} className="nav-item dropdown px-3">
+                            isMsgReady && <li onClick={this.onMessageClick} className="nav-item dropdown" id="messageDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a href="/" className="dropdown-toggle text-light">
+                                    <i className="far fa-comments"></i>
+                                    <span className={`badge ${this.state.isNewMsg ? 'notification' : ''}`}></span>
+                                </a>
+                                <Message messages={messages} />
+                            </li>
+                        }
+                        {
+                            isReady && <li onClick={this.onNotificationClick} className="nav-item dropdown px-3">
                                 <a href="/" className="dropdown-toggle text-light" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <i className="far fa-bell"></i>
                                     <span className={`badge ${this.state.isNew ? 'notification' : ''}`}></span>
                                 </a>
-                                <Notification notifications={notifications} />
+                                <Notification notifications={this.state.notifications} />
                             </li>
                         }
                         <li className="nav-item">
@@ -193,6 +259,7 @@ class Header extends Component {
 function mapStateToProps(state) {
     return {
         notifications: state.notifications.data,
+        messages: state.messages.data,
         categories: state.categories.data,
         auth: state.auth,
         userInfo: state.userInfo.data

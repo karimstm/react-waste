@@ -20,7 +20,7 @@ class Notification extends Component {
 
     componentWillReceiveProps(nextProps)
     {
-        if (nextProps.notifications.length != this.state.notifications.length)
+        if (nextProps.notifications.length !== this.state.notifications.length)
             this.setState({notifications: nextProps.notifications})
     }
 
@@ -34,8 +34,8 @@ class Notification extends Component {
                 <div className="dropdown-item" href="#">
                     <ul className="list-unstyled">
                         {
-                            this.state.notifications.map((value) => {
-                                return <li key={value.id} className="media py-2">
+                            this.state.notifications.map((value, index) => {
+                                return <li key={index} className="media py-2">
                                     <div className="media-body media-text">
                                         <a className="text-dark" href={this.whereToRedirect(value.type, value.reference)}>{value.message}</a>
                                     </div>

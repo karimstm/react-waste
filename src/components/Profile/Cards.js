@@ -15,11 +15,11 @@ class Cards extends Component {
                                             <span>tous les revenus</span>
                                         </div>
                                         <div className="col-4 text-right">
-                                            <i class="far fa-3x fa-money-bill-alt"></i>
+                                            <i className="far fa-3x fa-money-bill-alt"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div className="card-footer">
                                     2 days ago
                                 </div>
                             </div>
@@ -33,11 +33,11 @@ class Cards extends Component {
                                             <span>tous les Achat</span>
                                         </div>
                                         <div className="col-4 text-right">
-                                            <i class="fas fa-3x fa-shopping-basket"></i>
+                                            <i className="fas fa-3x fa-shopping-basket"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div className="card-footer">
                                     2 days ago
                                 </div>
                             </div>
@@ -51,11 +51,11 @@ class Cards extends Component {
                                             <span>En attente </span>
                                         </div>
                                         <div className="col-4 text-right">
-                                            <i class="fas fa-3x fa-shopping-basket"></i>
+                                            <i className="fas fa-3x fa-shopping-basket"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div className="card-footer">
                                     2 days ago
                                 </div>
                             </div>
@@ -69,11 +69,11 @@ class Cards extends Component {
                                             <span>Mon solde </span>
                                         </div>
                                         <div className="col-4 text-right">
-                                            <i class="fas fa-3x fa-shopping-basket"></i>
+                                            <i className="fas fa-3x fa-shopping-basket"></i>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="card-footer">
+                                <div className="card-footer">
                                     2 days ago
                                 </div>
                             </div>

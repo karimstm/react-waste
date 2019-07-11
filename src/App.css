@@ -22,6 +22,85 @@ body
     --light-gray: rbga(255, 255, 255, 0.5);
 }
 
+/*panel*/
+
+.panel {
+    border: none;
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.2), 0 0px 0 rgba(0, 0, 0, 0.02);
+}
+
+.panel-heading {
+    border-color:#eff2f7 ;
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.panel-title {
+    color: #2A3542;
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 0;
+    margin-top: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+
+
+/* Label styling */
+.label {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+}
+
+.panel-heading {
+    background-color: #FFFFFF;
+    border-color: #DDDDDD;
+    color: #797979;
+}
+
+.label-default {
+    background-color: #a1a1a1;
+}
+
+.label-primary {
+    background-color: #59ace2;
+}
+
+.label-success {
+    background-color: #A9D86E;
+}
+
+.label-info {
+    background-color: #8175c7;
+}
+
+.label-warning {
+    background-color: #FCB322;
+}
+
+.label-danger {
+    background-color: #FF6C60;
+}
+
+.label-inverse {
+    background-color: #344860;
+}
+
+/* End Label styling */
+
+/* Text styling */
+
+.btext-primary {
+    color: #59ace2;
+}
+
 a:hover {
     text-decoration: none;
 }
@@ -709,4 +788,364 @@ footer .column i + i {
     width: 10px;
     border-radius: 50%;
     background:#ff6a5a;
+}
+
+/* chat box */
+
+.rcw-conversation-container .rcw-header
+{
+    background-color: #ffbf00 !important;
+    border-radius: 10px 10px 0 0 !important;
+    padding: 0 !important;
+}
+
+.rcw-conversation-container .rcw-title
+{
+    font-size: 90% !important;
+}
+
+.rcw-client {
+    background-color: #ffbf00af !important;
+}
+
+.rcw-launcher {
+    background-color: #e8c102 !important;
+}
+
+/* Message Box */
+
+.chat-box .messages{
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+    padding-bottom: 50px;
+}
+.messageBox
+{
+    font-size: 80%;
+    height: 600px;
+    border: 1px solid #eee;
+}
+
+.messageBox .list-group .list-group-item
+{
+    border-radius: 0 !important;
+    border-left: 0;
+    border-right: 0;
+    border-color: #eee;
+}
+
+.messageBox .form-control
+{
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    border-top: 1px;
+    border-left: 1px;
+    border-right: 1px;
+    border-bottom: 0;
+    border-style: solid;
+    border-color: #eee;
+}
+
+.messageBox .form-control:focus
+{
+    border-color: #FBBC34;
+}
+
+.messageBox .form-control::placeholder
+{
+    font-size: 80%;
+}
+
+.list-names 
+{
+    height: 600px;
+    overflow: auto;
+    border-right: 1px solid #eee;
+}
+
+.message-input
+{
+    position: absolute;
+    bottom: 0;
+    right: 4px;
+    width: 100%;
+    z-index: 1;
+}
+
+.message-input {
+    border-top: 1px solid #eee;
+}
+.message-input textarea{
+    resize: none;
+    border: none !important;
+}
+
+.messages ul {
+    list-style: none;
+}
+.messages ul li {
+    display: inline-block;
+    clear: both;
+    float: left;
+    margin: 15px 15px 5px 15px;
+    width: calc(100% - 25px);
+    font-size: 0.9em;
+}
+
+.messages ul li p {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: 20px;
+    line-height: 130%;
+    max-width: 300px;
+}
+.messages ul li.sent p {
+    background: #435f7a;
+    color: #f5f5f5;
+}
+
+.messages ul li.replies p {
+    background: #f5f5f5;
+    float: right;
+}
+
+.messages ul li span {
+    display: inline-block;
+    background: #01a9ac;
+    text-align: center;
+    padding-top: 2px;
+    color: #FFF;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    float: left;
+}
+
+.messages ul li.replies span
+{
+    float: right;
+    height: 30px;
+    width: 30px;
+    padding-top: 6px;
+    vertical-align: middle;
+    text-align: center;
+    background: #f05b4b;
+}
+
+table {
+    font-family: var(--Source-Sans-Pro-font);
+    color: #797979 !important;
+    font-size: 80%;
+}
+
+table a {
+    color: #667fa0;
+}
+.page-item.active .page-link
+{
+    background: #59ace2;
+    border-color: #59ace2;
+}
+
+/* Credit card form */
+
+.input-group-text
+{
+    background: #FFF;
+}
+
+.paymentModal {
+    padding-left: 270px !important;
+}
+
+.paymentModal .modal-content
+{
+    background: #FFF !important;
+    max-width: 600px !important;
+}
+
+.paymentModal .modal-body
+{
+    padding: 0px !important;
+}
+
+.paymentModal .card-header .btn
+{
+    box-shadow: none !important;
+    border: none;
+}
+
+.paymentModal .input-group-text,
+.paymentModal .form-control
+{
+    border-radius: 0 !important;
+}
+.paymentModal input
+{
+    box-shadow: none !important;
+}
+
+.paymentModal input:focus
+{
+    border-color: #01a9ac;
+}
+
+
+
+.payment-list li {
+    border-bottom: 1px solid #eee;
+}
+
+.payment-list img {
+    width: 100px;
+    height: 100px;
+}
+
+.paidModal {
+    position: relative !important;
+    left: 10%;
+    bottom: 10%;
+}
+
+.paidModal .modal-body {
+    background: #FFF;
+}
+
+/* .progressbar-container
+{
+    width: 100%;
+    position: relative;
+    z-index: 1;
+}
+
+.progressbar
+{
+    counter-reset: step;
+}
+
+.progressbar li
+{
+    list-style: none;
+    float: left;
+    width: 33.3%;
+    position: relative;
+    text-align: center;
+}
+
+.progressbar li:before {
+    content: counter(step);
+    counter-increment: step;
+    width: 30px;
+    height: 30px;
+    border: 2px solid #bebebe;
+    display: block;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    line-height: 27px;
+    background: white;
+    color: #bebebe;
+    text-align: center;
+    font-weight: bold;
+}
+
+.progressbar li:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 3px;
+    background: #979797;
+    top: 15px;
+    left: -50%;
+    z-index: -1;
+}
+
+.progressbar li:first-child:after {
+    content: none;
+}
+
+.progressbar li.active + li:after{
+    background: #3aac5d;
+}
+
+.progressbar li.active + li:before {
+
+    border-color: #3aac5d;
+    background: #3aac5d;
+    color: white
+} */
+
+.progressbar-container {
+    text-align: center;
+    color: #20bec6;
+    width: 100%;
+}
+
+.progressbar {
+    counter-reset: step;
+}
+
+.progressbar-container .progressbar {
+    display: flex;
+    padding: 0;
+}
+
+.progressbar-container .progressbar li {
+    list-style-type: none;
+    position: relative;
+    text-align: center;
+    color: black;
+    width: 100%;
+}
+  
+.progressbar-container .progressbar li::before {
+    content: counter(step);
+    counter-increment: step;
+    width: 50px;
+    height: 50px;
+    line-height: 40px;
+    border: 5px solid #ddd;
+    display: block;
+    text-align: center;
+    margin: 0 auto 10px auto;
+    border-radius: 50%;
+    background-color: white;
+}
+  
+.progressbar-container .progressbar li::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 5px;
+    background-color: #ddd;
+    top: 25px;
+    left: -50%;
+    z-index: -1;
+}
+.progressbar-container .progressbar li:first-child::after {
+    content: none;
+}
+.progressbar-container .progressbar li.active {
+    color: #FCB322;
+}
+.progressbar-container .progressbar li.active::before {
+    border-color: #FCB322;
+}
+
+.progressbar-container .progressbar li.active + li::after {
+    background-color: #FCB322;
+}
+
+.progressbar-container .progressbar li.canceled
+{
+    color: #FF6C60;
+}
+
+.progressbar-container .progressbar li.canceled::before {
+    border-color: #FF6C60;  
+}
+
+.progressbar-container .progressbar li.canceled + li::after
+{
+    background-color: #FF6C60;
 }

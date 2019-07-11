@@ -6,16 +6,21 @@ class AuthService {
     
     tokenKey = 'auth_token';
 
-    getToken() {
-        return localStorage.getItem(this.tokenKey)
+    getToken(tokenKey = null) {
+        if (tokenKey == null)
+            return localStorage.getItem(this.tokenKey)
+        return localStorage.getItem(tokenKey);
     }
 
     invalidateUser() {
         localStorage.removeItem(this.tokenKey);
     }
 
-    saveToken(token) {
-        localStorage.setItem(this.tokenKey, token);
+    saveToken(token, tokenKey = null) {
+        if (tokenKey == null)
+            localStorage.setItem(this.tokenKey, token);
+        else
+            localStorage.setItem(tokenKey, token);
     }
 
     decode(token) {

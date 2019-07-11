@@ -7,13 +7,13 @@ import * as actions from '../../../actions';
 import Modelv2 from '../../shared/Model/Modelv2';
 import { connect } from 'react-redux';
 import Position from '../../shared/Position';
-import { DEFALUT_URL } from '../../../actions/types';
+import { DEFALUT_URL_HUB } from '../../../actions/types';
 
 
 class BidingOfferDetails extends Component {
 
     state = {
-        bid_price: this.props.offerDetails.top_price,
+        bid_price: this.props.offerDetails.next_bid,
         top_price: this.props.offerDetails.top_price,
         isAccepted: false,
         isError: false,
@@ -99,18 +99,21 @@ class BidingOfferDetails extends Component {
     componentDidMount()
     {
         const { offerDetails } = this.props;
-        const url = new URL(`${DEFALUT_URL}:3000/hub`)
+        const url = new URL(`${DEFALUT_URL_HUB}/hub`)
         url.searchParams.append('topic', `waste_to_resources/offers/${offerDetails.id}`)
         const eventSource = new EventSource(url);
 
         eventSource.onmessage = e => {
             var result = JSON.parse(e.data);
-            console.log(result);
             this.setState({
-                bid_price: result.price,
+                bid_price: result.next_bid,
                 top_price: result.price,
                 bidders: [{ "price": result.price, bidder: { lastName: result.last_name, email: result.email }}].concat(this.state.bidders)
             });
+        };
+
+        eventSource.onerror = () => {
+            console.log('EventSource Failed');
         };
 
         this.setState({

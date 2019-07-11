@@ -2,6 +2,8 @@ import React from 'react';
 import ReviewForm from '../../Forms/ReviewForm';
 import ReviewCard from '../../shared/Reviews/ReviewCard';
 
+
+
 function OfferDetailsTabs(props) {
     const { data } = props;
     return (
@@ -24,10 +26,10 @@ function OfferDetailsTabs(props) {
                     <div className="py-3 tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
                         <div className="row mx-2">
                             <div className="col col-12">
-                                <ReviewCard />
+                                <ReviewCard email={data.owner.email} />
                             </div>
                             <div className="col col-12 py-4">
-                                <ReviewForm />
+                                <ReviewForm reciever={data.owner.email} />
                             </div>
                         </div>
                     </div>
@@ -36,4 +38,5 @@ function OfferDetailsTabs(props) {
         </section>
     );
 }
+
 export default OfferDetailsTabs;

@@ -16,10 +16,10 @@ class UserProfile extends Component {
                             </div>
                         </div>
                         <div className="col-lg-4">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item" aria-current="page"><i class="fas fa-home"></i></li>
-                                <li class="breadcrumb-item" aria-current="page">Profil de l'utilisateur</li>
-                                <li class="breadcrumb-item active" aria-current="page">Profil de l'utilisateur</li>
+                            <ol className="breadcrumb">
+                                <li className="breadcrumb-item" aria-current="page"><i className="fas fa-home"></i></li>
+                                <li className="breadcrumb-item" aria-current="page">Profil de l'utilisateur</li>
+                                <li className="breadcrumb-item active" aria-current="page">Profil de l'utilisateur</li>
                             </ol>
                         </div>
                     </div>
@@ -30,12 +30,12 @@ class UserProfile extends Component {
                             <div className="profile-bg-img">
                                 <img className="shadow-sm img-fluid" alt="" src="https://i.imgur.com/hEjohDr.jpg" />
                                 <div className="card-block user-info">
-                                    <div class="media">
-                                        <img src="https://colorlib.com/polygon/adminty/files/assets/images/avatar-4.jpg" class="user-img mr-3" alt="..." />
-                                        <div class="media-body">
+                                    <div className="media">
+                                        <img src="https://colorlib.com/polygon/adminty/files/assets/images/avatar-4.jpg" className="user-img mr-3" alt="..." />
+                                        <div className="media-body">
                                             <div className="row">
                                                 <div className="col-6">
-                                                    <h5 class="mt-0">John Doe</h5>
+                                                    <h5 className="mt-0">John Doe</h5>
                                                     REVENDEUR
                                                 </div>
                                             </div>

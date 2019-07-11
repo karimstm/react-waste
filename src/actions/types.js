@@ -1,4 +1,6 @@
+// export const DEFALUT_URL = 'http://10.11.11.1:8000';
 export const DEFALUT_URL = 'http://wtr.oulhafiane.me'
+export const DEFALUT_URL_HUB = 'http://wtr.oulhafiane.me:3000';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 export const LOGOUT = 'LOGOUT';
@@ -37,3 +39,9 @@ export const FETCH_USER_INFO_FAILURE = 'FETCH_USER_INFO_FAILURE';
 
 export const FETCH_NOTIFICATION_SUCCESS = 'FETCH_NOTIFICATION_SUCCESS';
 export const FETCH_NOTIFICATION_FAILURE = 'FETCH_NOTIFICATION_FAILURE';
+
+
+// FETCH CURRENT USER MESSAGES
+
+export const FETCH_MESSAGES_SUCCESS = 'FETCH_MESSAGES_SUCCESS';
+export const FETCH_MESSAGES_FAILURE = 'FETCH_MESSAGES_FAILURE';
