@@ -4,7 +4,6 @@ import LoginForm from '../Forms/LoginForms';
 import { connect } from 'react-redux'
 import * as actions from '../../actions'
 import { Redirect } from 'react-router-dom'
-import Spinner from '../shared/Spinner';
 
 class Login extends Component {
 
@@ -34,7 +33,6 @@ class Login extends Component {
                     </div>
                 </div>
             </section>
-
         );
     }
 }
