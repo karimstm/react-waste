@@ -13,6 +13,8 @@
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.5.1",
     "jspdf": "^1.5.3",
+    "jsqr": "^1.2.0",
+    "lodash": "^4.17.15",
     "moment": "^2.24.0",
     "qr-scanner": "^1.1.1",
     "qrcode.react": "^0.9.3",

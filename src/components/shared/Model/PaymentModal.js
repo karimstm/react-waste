@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
-import { Field, reduxForm } from 'redux-form'
+import { Modal } from 'react-bootstrap';
 import CreditCardForm from '../../Forms/CreditCardForm';
 
 class PaymentModal extends Component {

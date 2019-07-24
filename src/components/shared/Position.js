@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modelv2 from './Model/Modelv2';
 import libService from '../../services/lib-service';
 
@@ -22,6 +22,7 @@ class Position extends React.Component {
                 counter++;
             if (!libService.isEmpty(bidder) && bidder.bidder.email === username)
                 return flag = 1;
+            return 0;
         });
         if (flag)
             this.setState({index : counter});
@@ -45,14 +46,14 @@ class Position extends React.Component {
 
     componentWillReceiveProps(nextProps)
     {
-        if (this.props.bidders.length != nextProps.bidders.length)
+        if (this.props.bidders.length !== nextProps.bidders.length)
             this.getPosition(nextProps.bidders, nextProps.userInfo.email);
     }
     
     render()
     {
         const { index, show } = this.state;
-        if (index === 0)
+        if (index === 0 || !this.props.userInfo)
             return <React.Fragment></React.Fragment>
         return (
             <tr>

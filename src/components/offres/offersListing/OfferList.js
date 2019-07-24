@@ -1,11 +1,8 @@
 import React, { Component } from 'react';
-import OfferListing from './OfferListing';
 import * as actions from '../../../actions';
 import Spinner from '../../shared/Spinner';
-import Alert from '../../shared/Alert';
 import InfiniteScroll from "react-infinite-scroll-component";
 import OfferCard from './OfferCard';
-import SearchFilter from '../../Forms/Filters/SearchFilter';
 
 class OfferList extends Component {
 
@@ -70,6 +67,7 @@ class OfferList extends Component {
                         dataLength={salesoffer.length}
                         next={this.fetchOffers}
                         hasMore={hasMore}
+                        scrollThreshold={0.7}
                         loader={<h5 className="text-center text-muted"><i className="fas fa-spin fa-spinner"></i>                        </h5>}
                         >
                         <div className="row">

@@ -9,7 +9,7 @@ class HistoryCard extends Component {
 
     componentWillReceiveProps(nextProps)
     {
-        if (this.props.data.length != nextProps.data.length)
+        if (this.props.data.length !== nextProps.data.length)
             this.setState({ data : nextProps.data});
     }
     
@@ -27,6 +27,7 @@ class HistoryCard extends Component {
                                         {value.bidder.lastName.toUpperCase()}
                                     </span>
                                 </li>
+                            return null;
                         })
                     }
                 </ul>

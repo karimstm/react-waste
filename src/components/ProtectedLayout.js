@@ -4,12 +4,13 @@ import Sidebar from './Profile/Sidebar';
 import Cards from './Profile/Cards'
 import UserProfile from './Profile/UserProfile';
 import ChatPage from './chat/ChatPage';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import ProtectedRoute from './shared/auth/ProtectedRoute';
 import TransactionBoard from './transactions/TransactionBoard';
 import BillingBoard from './Billing/BillingBoard';
 import GetPaidBoard from './Billing/GetPaidBoard';
 import ValidateTransaction from './transactions/ValidateTransaction';
+import MyOffers from './dashboard/MyOffers';
 
 function ProtectedLayout(props) {
 
@@ -25,6 +26,7 @@ function ProtectedLayout(props) {
                             <ProtectedRoute exact path='/app/dashboard' component={Cards} />    
                             <ProtectedRoute exact path='/app/dashboard/messages' component={ChatPage} />
                             <ProtectedRoute exact path='/app/dashboard/profile' component={UserProfile} />
+                            <ProtectedRoute exact path='/app/dashboard/my-offers' component={MyOffers} />
                             <ProtectedRoute exact path='/app/dashboard/transactions' component={TransactionBoard} />
                             <ProtectedRoute exact path='/app/dashboard/transactions/:id' component={TransactionBoard} />
                             <ProtectedRoute exact path='/app/dashboard/payments/deposit-methods' component={BillingBoard} />

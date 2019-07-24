@@ -1,11 +1,10 @@
 import React from 'react';
 import { Field, reduxForm } from 'redux-form'
-import { renderField } from '../shared/Forms/input';
 import { InputGroup } from '../shared/Forms/inputGroup';
 
 function CreditCardForm(props) {
 
-    const { handleSubmit, pristine, reset, submitting, submitCb, valid } = props
+    const { handleSubmit, pristine, submitting, submitCb, valid } = props
     return (
         <form onSubmit={handleSubmit(submitCb)} >
             <Field

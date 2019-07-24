@@ -1,12 +1,19 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+
+import {  fetchCurrentUserInfo } from '../../actions';
 import PersonalInfo from './PersonalInfo';
 
 class ProfileTabs extends Component {
 
+    componentDidMount() {
+        this.props.fetchCurrentUserInfo();
+    }
+    
     render() {
         const { userInfo } = this.props;
-
+        if (!userInfo)
+            return null;
         return (
             <React.Fragment>
                 <nav>
@@ -35,4 +42,4 @@ function mapStateToProps(state)
     }
 }
 
-export default connect(mapStateToProps)(ProfileTabs);
+export default connect(mapStateToProps, { fetchCurrentUserInfo })(ProfileTabs);

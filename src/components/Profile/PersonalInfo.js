@@ -16,15 +16,15 @@ class PersonalInfo extends Component {
                                 <tbody>
                                     <tr>
                                         <th scope="row">Prénom</th>
-                                        <td>ABDELKARIM</td>
+                                        <td>{ infos.firstName.toUpperCase() }</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Nom</th>
-                                        <td>MOUTIK</td>
+                                        <td>{ infos.lastName.toUpperCase() }</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Emplacement</th>
-                                        <td>KHOURIBGA, MA</td>
+                                        <td>{ `${infos.city.toUpperCase()}, ${infos.country.toUpperCase()}` }</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -34,15 +34,15 @@ class PersonalInfo extends Component {
                                 <tbody>
                                     <tr>
                                         <th scope="row">Email</th>
-                                        <td>amoutik@student.1337.ma</td>
+                                        <td>{ infos.email }</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Numéro de portable</th>
-                                        <td>(0123) - 4567891</td>
+                                        <td>{ infos.phone }</td>
                                     </tr>
                                     <tr>
                                         <th scope="row">Type</th>
-                                        <td>REVENDEUR</td>
+                                        <td> { infos.roles[0] } </td>
                                     </tr>
                                 </tbody>
                             </table>

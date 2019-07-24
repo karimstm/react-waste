@@ -8,8 +8,8 @@ class AuthService {
 
     getToken(tokenKey = null) {
         if (tokenKey == null)
-            return localStorage.getItem(this.tokenKey)
-        return localStorage.getItem(tokenKey);
+            return localStorage.getItem(this.tokenKey); // this to retrieve login token key
+        return localStorage.getItem(tokenKey); // this to ket mercure token key
     }
 
     invalidateUser() {
@@ -30,6 +30,12 @@ class AuthService {
     getExpiration(token) {
         const exp = this.decode(token).exp;
         return moment.unix(exp);
+    }
+
+    getUsername()
+    {
+        const token = this.decode(this.getToken());
+        return token.username;
     }
 
     getRoles(token) {

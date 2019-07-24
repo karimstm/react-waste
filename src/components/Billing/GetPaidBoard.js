@@ -53,11 +53,11 @@ class GetPaidBoard extends Component {
                             <table className="table table-borderless">
                                 <tbody>
                                     <tr>
-                                        <td scope="col"><h6>Votre solde est de</h6></td>
+                                        <th scope="col"><h6>Votre solde est de</h6></th>
                                         <td><h6>{infos.balance} MAD</h6></td>
                                     </tr>
                                     <tr>
-                                        <td scope="col"><h6>Votre solde en suspend</h6></td>
+                                        <th scope="col"><h6>Votre solde en suspend</h6></th>
                                         <td><h6>{infos.onhold} MAD</h6></td>
                                     </tr>
                                 </tbody>

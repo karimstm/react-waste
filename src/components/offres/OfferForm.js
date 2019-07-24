@@ -9,7 +9,7 @@ const createRenderer = render => ({ input, meta, label, placeholder, message, re
         <label className="text-muted">{label}</label>
         {render(input, placeholder,readonly, rest)}
         <small className="form-text text-muted">{message}</small>
-        {((meta.touched && (err = meta.error)) || (errors && (err = eval(`errors.${input.name}`)))) && <small className="form-text text-danger">{err}</small>}
+        {((meta.touched && (err = meta.error)) || (errors && (err = errors[input.name]))) && <small className="form-text text-danger">{err}</small>}
     </div>)
 }
 

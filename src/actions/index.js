@@ -1,7 +1,7 @@
-import axios from 'axios'
-import authService from '../services/auth-service'
-import axiosService from '../services/axios-service'
-import Cookies from 'js-cookie';
+import axios from 'axios';
+import authService from '../services/auth-service';
+import axiosService from '../services/axios-service';
+import axiosDefault from '../services/axios-default';
 
 import {
     DEFALUT_URL,
@@ -10,20 +10,25 @@ import {
     LOGOUT,
     FETCH_CATEGORIES_FAIL,
     FETCH_CATEGORIES_SUCCESS,
-    FETCH_SALES_FAILURE,
-    FETCH_SALES_SUCCESS,
     FETCH_OFFER_FAILURE,
     FETCH_OFFER_SUCCESS,
     FETCH_USER_INFO_SUCCESS,
     FETCH_USER_INFO_FAILURE,
     FETCH_NOTIFICATION_SUCCESS,
     FETCH_NOTIFICATION_FAILURE,
-    DEFALUT_URL_HUB,
     FETCH_MESSAGES_SUCCESS,
-    FETCH_MESSAGES_FAILURE
-
+    FETCH_MESSAGES_FAILURE,
+    EDIT_MESSAGES_SUCCESS,
+    EDIT_NOTIFICATION_SUCCESS,
+    FETCH_USER_SUCCESS,
+    TERMINATE_TRANS_SUCCESS,
+    TERMINATE_TRANS_FAILURE,
+    FETCH_CURRENT_USER_OFFER,
+    FETCH_CURRENT_USER_AUCTIONS,
+    MESSAGE_SENT_SUCCESS,
+    MESSAGE_SENT_FAILURE,
+    MESSAGES_FETCH_SUCCESS
 } from './types'
-import { awaitExpression } from '@babel/types';
 
 const headers = { 'Content-Type': 'application/json' }
 
@@ -50,9 +55,10 @@ export const register = (userData) => {
             (err) => Promise.reject(err.response.data.extras));
 }
 
-const loginSuccess = () => {
+const loginSuccess = (payload) => {
     return {
-        type: LOGIN_SUCCESS
+        type: LOGIN_SUCCESS,
+        payload: payload
     }
 }
 
@@ -66,7 +72,7 @@ const loginFailure = (errors) => {
 export const checkAuthState = () => {
     return dispatch => {
         if (authService.isAuthenticated()) {
-            dispatch(loginSuccess());
+            dispatch(loginSuccess({role: authService.getRoles(authService.getToken()), email: authService.getUsername()}));
         }
     }
 }
@@ -78,7 +84,7 @@ export const login = (userData) => {
             .then(res => res.data)
             .then(token => {
                 authService.saveToken(token.token);
-                dispatch(loginSuccess());
+                dispatch(loginSuccess({role: authService.getRoles(authService.getToken()), email: authService.getUsername()}));
             })
             .catch(err => {
                 if (err.response === undefined)
@@ -253,7 +259,6 @@ export const fetchCurrentUserInfo = () => {
                 return dispatch(fetchUserSuccess(userInfo))
             })
             .catch(err => {
-                debugger ;
                 try {
                     return dispatch(fetchUserFail(err.response.data.message));
                 } catch {
@@ -317,7 +322,7 @@ const notificationFailure = (errors) => {
     }
 }
 
-export const getNotifications = () => {
+export const fechNotifications = () => {
     return dispatch => {
         return axiosInstance.get(`current/notifications`
         ).then(res => res.data)
@@ -329,10 +334,9 @@ export const getNotifications = () => {
 
 /* ========= Notification is seen ========== */
 
-export const notificationsSeen = () => {
+export const notificationsSeen = () => dispatch => {
     return axiosInstance.patch(`current/notifications/seen`)
-        .then(res => res.data)
-        .catch(err => Promise.reject(err.response.data.message));
+        .then(() => dispatch({ type: EDIT_NOTIFICATION_SUCCESS }))
 }
 
 /* ======= Fetch Message of the current user ========= */
@@ -356,13 +360,15 @@ export const fetchUserMessages = () => {
     return dispatch => {
         return axiosInstance.get(`current/messages`)
         .then(res => res.data)
-        .then(messages => dispatch(messagesSuccess(messages)))
+        .then(messages => {
+            return dispatch(messagesSuccess(messages))
+        })
         .catch(err => {
             try{
                 return dispatch(messagesFailure(err.response.data.message));
             }
             catch {
-                return Promise.reject('');
+                return dispatch(messagesFailure(''));
             }
         })
     }
@@ -385,7 +391,7 @@ export const postFeedback = (toReciever, message, rate) => {
 /* ========== Retrieve Feedbacks =========== */
 
 export const fetchFeedbacks = (userEmail) => {
-    return axios.get(`/api/profiles/${userEmail}/feedbacks`)
+    return axios.get(`${DEFALUT_URL}/api/profiles/${userEmail}/feedbacks`)
     .then(res => res.data)
     .catch(() => {
         return Promise.reject('No Feedback recieved');
@@ -395,9 +401,9 @@ export const fetchFeedbacks = (userEmail) => {
 /* ========= Message Seen post request ========== */
 
 
-export const messagesSeen = () => {
+export const messagesSeen = () => dispatch => {
     return axiosInstance.patch(`current/messages/seen`)
-    .then(res => res.data)
+    .then(() => dispatch({ type: EDIT_MESSAGES_SUCCESS }))
     .catch(() => Promise.reject('Could not set messages as seen'));
 }
 
@@ -434,4 +440,73 @@ export const payOffer = (id) => {
     .then(res => res.data)
     .catch(err => Promise.reject(err.response.data.message))
     .catch(() => Promise.reject('Erreur lors du traitement de ce paiement')); // If this happend we're in no good
+}
+
+// Set messages as seen and fetch users data again
+
+export const setMessageAndFetchMessages = () => async dispatch => {
+    await dispatch(messagesSeen());
+    await Promise.all([dispatch(fetchUserMessages())]);
+}
+
+// Set Notifications as seen and fetch users notifications again
+
+export const setNotificationsAndFetchMessages = () => async dispatch => {
+    await dispatch(notificationsSeen());
+    await Promise.all([dispatch(fechNotifications())]);
+}
+
+export const mercureNotificationUpdate = (payload) => async dispatch => {
+    dispatch({type: 'MERCURE_NOTIFICATION_UPDATE', payload: payload});
+}
+
+// Fetch User Info
+
+export const fetchUserInfo = (email) => async dispatch => {
+    const response = await axiosDefault.get(`/api/profiles/${email}`);
+    dispatch({type: FETCH_USER_SUCCESS, payload: response.data});
+}
+
+// Terminate Transaction
+
+export const terminateTransaction = (id, data) => async dispatch => {
+    const response = await axiosInstance.patch(`/current/transactions/${id}/terminate`,
+    JSON.parse(data))
+    .catch(err => dispatch({type: TERMINATE_TRANS_FAILURE, error: err.response.data.message}));
+    dispatch({ type: TERMINATE_TRANS_SUCCESS, payload: response.data})
+}
+
+// Fetch all offer of the current user
+
+export const fetchCurrentUserOffers = (page, limit, type) => async dispatch => {
+    const response = await axiosInstance.get(`/current/offers?type=${type}&page=${page}&limit=${limit}`);
+    if (type === 'auction')
+        dispatch({ type: FETCH_CURRENT_USER_AUCTIONS, payload: response.data});
+    else
+        dispatch({ type: FETCH_CURRENT_USER_OFFER, payload: response.data});
+}
+
+/* ========== Fetch Transaction count =========== */
+
+export const fetchOffersCount = (type) => {
+    return axiosInstance.get(`current/offers/count?type=${type}`)
+    .then(res => res.data.extras.count)
+    .catch(() => Promise.reject('Failed to retrieve transactions count'))
+}
+
+
+/* ======== Sending Messages to another user =========== */
+
+export const sendMessage = (userEmail, message) => async dispatch =>  {
+    const response = await axiosInstance.post(`profiles/${userEmail}/message`,
+    message)
+    .catch((err) => dispatch({type: MESSAGE_SENT_FAILURE, payload: err.response.data.message}));
+    dispatch({ type: MESSAGE_SENT_SUCCESS, payload: response.data});
+}
+
+/* Fetch messages of a certain user with current logged in user */
+
+export const fetchMessages = (userEmail) => async dispatch => {
+    const response = await axiosInstance.get(`current/messages/${userEmail}`)
+    dispatch({type: MESSAGES_FETCH_SUCCESS, payload: response.data});
 }

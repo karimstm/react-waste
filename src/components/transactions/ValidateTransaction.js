@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import QrReader from 'react-qr-reader'
+import { connect } from 'react-redux';
+import { terminateTransaction } from '../../actions';
+// import jsQR from 'jsqr';
 
 class ValidateTransaction extends Component {
 
@@ -7,10 +10,14 @@ class ValidateTransaction extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            result: 'No Result'
+            result: null
         }
-
+        this.fileRef = React.createRef();
     }
+
+    onfileChnage = (e) => {
+        console.log(e);
+    };
 
 
     handleScan = data => {
@@ -20,8 +27,17 @@ class ValidateTransaction extends Component {
             })
         }
     }
+
     handleError = err => {
         console.error(err)
+    }
+
+    validateTransaction = () => {
+        if (this.state.result && typeof(JSON.parse(this.state.result)) === 'object') {
+            this.props.terminateTransaction(this.props.match.params.id, this.state.result)
+                .then(() => alert('success'))
+                .catch(error => console.log(error));
+        }
     }
 
     render() {
@@ -35,7 +51,8 @@ class ValidateTransaction extends Component {
                             onScan={this.handleScan}
                             style={{ width: '100%' }}
                         />
-                        <p>{this.state.result}</p>
+                        <p className="border p-4 mt-2 bg-light">{this.state.result}</p>
+                        <button type="btn" className="btn btn-block text-white rounded-0 label-danger" onClick={this.validateTransaction}>Valider</button>
                     </div>
                 </div>
             </div>
@@ -43,4 +60,10 @@ class ValidateTransaction extends Component {
     }
 }
 
-export default ValidateTransaction;
+const mapStateToProps = (state) => {
+    return {
+        trans: state.terminate
+    }
+}
+
+export default connect(mapStateToProps, { terminateTransaction })(ValidateTransaction);

@@ -5,15 +5,16 @@ FETCH_USER_INFO_SUCCESS,
 FETCH_NOTIFICATION_FAILURE,
 FETCH_NOTIFICATION_SUCCESS,
 FETCH_MESSAGES_FAILURE,
-FETCH_MESSAGES_SUCCESS
+FETCH_MESSAGES_SUCCESS, 
+EDIT_MESSAGES_SUCCESS,
+EDIT_NOTIFICATION_SUCCESS,
+MERCURE_NOTIFICATION_UPDATE,
+FETCH_USER_SUCCESS
 }
  from '../actions/types';
 
  const INITIAL_STATE = {
-    userInfo: {
-        data: [],
-        errors: []
-    } 
+    userInfo: {} 
 }
 
 export const userInfoReducer = (state = INITIAL_STATE.userInfo, action) => {
@@ -31,8 +32,6 @@ export const userInfoReducer = (state = INITIAL_STATE.userInfo, action) => {
 
 const INITIAL_STATE_NOTIFICATION = {
     notifications: {
-        data: [],
-        errors: []
     }
 }
 
@@ -43,22 +42,38 @@ export const userNotificationsReducer = (state = INITIAL_STATE_NOTIFICATION.noti
         case FETCH_NOTIFICATION_SUCCESS:
             return {...state, data: action.notifications}
         case FETCH_NOTIFICATION_FAILURE:
-            return Object.assign({}, state, {errors: action.errors, data: []});
+            return {...state, errors: action.errors};
+        case EDIT_NOTIFICATION_SUCCESS:
+            return { ...state }
+        case MERCURE_NOTIFICATION_UPDATE:
+            return { ...state, data: [action.payload, ...state.data] };
         default:
             return state;
     }
 }
 
-export const userMessagesReducer = (state = { messages: {data: [], errors: []} }.messages, action) => {
+export const userMessagesReducer = (state = { messages: { } }.messages, action) => {
 
     switch(action.type)
     {
         case FETCH_MESSAGES_SUCCESS:
-            return {...state, data: action.messages}
+            return {...state, data: action.messages};
         case FETCH_MESSAGES_FAILURE:
-            return Object.assign({}, state, {errors: action.errors, data: []});
+            return {...state, errors: action.errors};
+        case EDIT_MESSAGES_SUCCESS:
+            return { ...state }
         default:
             return state;
     }
 
+}
+
+export const fetchUserDataReducer = (state = {}, action) => {
+    switch(action.type)
+    {
+        case FETCH_USER_SUCCESS:
+            return { ...state, data: action.payload }
+        default:
+            return state;
+    }
 }

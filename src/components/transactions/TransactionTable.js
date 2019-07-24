@@ -98,7 +98,6 @@ class TransactionTable extends Component {
 
     // Triggered once the component Mount
     componentDidMount() {
-        console.log('something');
         this.fetchTransactionCount().then(() => this.fetchTransactions())
 
     }

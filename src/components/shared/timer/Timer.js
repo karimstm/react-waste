@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 
 class Timer extends Component {
     render() {
-        const { days, hours, minutes, seconds, completed } = this.props;
+        const { days, hours, minutes, seconds } = this.props;
         return (
             <ul className="time-counter">
                 <li>

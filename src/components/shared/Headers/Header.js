@@ -3,7 +3,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LogedInLink from '../auth/LogedInLink';
 import LogedInInfo from '../auth/LogedInInfo';
-import * as actions from '../../../actions';
+import { mercureNotificationUpdate, get_categories, fetchCurrentUserInfo } from '../../../actions';
 import offerService from '../../../services/offer-service';
 import Notification from '../Notification';
 import Message from '../Message';
@@ -11,17 +11,10 @@ import mercureService from '../../../services/mercure_service';
 
 class Header extends Component {
 
-
     state = {
-        shouldRender: false,
-        userInfo: [],
-        notifications: [],
-        messages: [],
-        isReady: false,
-        isNew: false,
-        isNewMsg: false,
-        isMsgReady: false
+        isMercureSet: false
     }
+
     handleLogout = () => {
         this.props.logout();
         this.props.history.push('/');
@@ -46,7 +39,7 @@ class Header extends Component {
                 <React.Fragment>
                     <Link className="dropdown-item" to={{ pathname: '/app/dashboard'}} >Tableau de bord</Link>
                     {offerService.isAReseller() && <Link className="dropdown-item" to={{ pathname: '/offers/new', state: { auction: true } }}>Publier une enchère</Link>}
-                    <a href="/login" className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</a>
+                    <button className="dropdown-item clickable" onClick={this.handleLogout}>Se déconnecter</button>
                 </React.Fragment>
             );
         }
@@ -60,104 +53,40 @@ class Header extends Component {
     }
 
 
-    fetchUserMessages = () => {
-        const { isAuth } = this.props.auth;
-        if (isAuth)
-            this.props.dispatch(actions.fetchUserMessages())
-                .then((data) => {
-                    this.setState({isMsgReady: true, messages: data.messages })
-                }, () => this.getLastMessages());
-    }
-
     fetchInfo = () => {
         const { isAuth } = this.props.auth;
-        if (isAuth && !this.state.isReady) {
-            this.props.dispatch(actions.fetchCurrentUserInfo()).then((userData) => {
-                mercureService.launchMercure('waste_to_resources/notifications')
-                .then((notification) => {
-                    return this.setState({
-                        notifications: [notification].concat(this.state.notifications),
-                        isReady: true,
-                        isNew: true
-                    }, () => {
-                        return this.fetchInfo()
+        if (isAuth) {
+            this.props.fetchCurrentUserInfo().then(() => {
+                if (!this.state.isMercureSet)
+                    mercureService.launchMercure('waste_to_resources/notifications', (data) => {
+                        this.props.mercureNotificationUpdate({...data, seen: false});
                     })
-                })
-                return this.setState({ shouldRender: true, userInfo: userData.userInfo })
+                    .then(() => this.setState({isMercureSet: true}));
+                    mercureService.launchMercure('waste_to_resources/messages', (data) => {
+                        console.log(data); // total_not_seen = "1"
+                    });
             });
         }
     }
 
     fetchCategories = () => {
-        this.props.dispatch(actions.get_categories());
+        this.props.get_categories();
     }
 
-    fetchNotifications = () => {
-        const { isAuth } = this.props.auth;
-        if (isAuth) {
-            this.props.dispatch(actions.getNotifications()).then((nots) => {
-                this.setState({
-                    isReady: true,
-                    notifications: nots.notifications,
-                }, () => this.getLastNotification());
-            })
-        }
+    renderName() {
+        if (this.props.auth.isAuth && this.props.userInfo)
+            return <span>Bonjour : { this.props.userInfo.firstName ? this.props.userInfo.firstName.toUpperCase() : ''} </span>
+        return null;
     }
+
 
     componentDidMount() {
         this.fetchInfo();
-        this.fetchNotifications();
         this.fetchCategories();
-        this.fetchUserMessages();
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-        if (this.props.auth.isAuth && (!this.state.shouldRender || !this.state.isReady
-             || nextState.isNew !== this.state.isNew
-             || nextState.notifications.length !== this.state.notifications.length
-             || nextState.isNewMsg !== this.state.isNewMsg
-             || (this.state.isReady && (nextState.userInfo.balance !== this.state.userInfo.balance))))
-            return true;
-        return false;
-    }
-
-    componentWillReceiveProps(nextProps)
-    {
-        if (nextProps.userInfo.length != this.state.userInfo.length)
-            this.setState({
-                userInfo: nextProps.userInfo,
-                shouldRender: true,
-                isReady: true
-            })
-    }
-
-    // componentDidUpdate() {
-    //     const { isAuth } = this.props.auth;
-    //     if ((!this.state.shouldRender && !this.state.isReady) && isAuth) {
-    //         this.fetchInfo();
-    //         this.fetchNotifications();
-    //     }
-
-    // }
-
-    onNotificationClick = () => {
-        actions.notificationsSeen().then(() => {
-            this.setState({ isNew: false })
-        })
-    }
-
-
-    // On Message click: set message as seen
-    onMessageClick = () => {
-        actions.messagesSeen().then((res) => {
-            console.log(res);
-            this.setState({isNewMsg: false});
-        })
     }
 
     render() {
-        const { isMsgReady, userInfo, shouldRender, isReady, messages } = this.state;
-        const { categories } = this.props;
+        const { userInfo, categories, auth: { isAuth } } = this.props;
         return (
             <header>
                 <nav className="top navbar navbar-expand-lg bg-dark">
@@ -173,28 +102,10 @@ class Header extends Component {
                     </li>
                     </ul>
                     <ul className="navbar-nav dropdown wast-link ml-auto">
-                        {
-                            isMsgReady && <li onClick={this.onMessageClick} className="nav-item dropdown" id="messageDropDown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <a href="/" className="dropdown-toggle text-light">
-                                    <i className="far fa-comments"></i>
-                                    <span className={`badge ${this.state.isNewMsg ? 'notification' : ''}`}></span>
-                                </a>
-                                <Message messages={messages} />
-                            </li>
-                        }
-                        {
-                            isReady && <li onClick={this.onNotificationClick} className="nav-item dropdown px-3">
-                                <a href="/" className="dropdown-toggle text-light" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <i className="far fa-bell"></i>
-                                    <span className={`badge ${this.state.isNew ? 'notification' : ''}`}></span>
-                                </a>
-                                <Notification notifications={this.state.notifications} />
-                            </li>
-                        }
+                        { <Message />}
+                        { <Notification /> }
                         <li className="nav-item">
-                            {
-                                shouldRender && <span>Bonjour : {userInfo.firstName.toUpperCase()} </span>
-                            }
+                        { this.renderName() }
                         </li>
                         <li className="nav-item dropdown mx-2">
                             <a className="nav-link dropdown-toggle p-0 top" href="/" id="navbarDropdown" role="button"
@@ -244,7 +155,7 @@ class Header extends Component {
                                 <LogedInLink text="POSTER" />
                             </li>
                         </ul>
-                        {shouldRender && <LogedInInfo userInfo={userInfo} />}
+                        { isAuth && <LogedInInfo userInfo={userInfo} />}
                         <form className="form-inline">
                             <input className="form-control search-bar" type="search" placeholder="Rechereche" aria-label="Search" />
                             <button className="btn btn-warning text-white my-2 button-search" type="submit"><i className="fas fa-search"></i></button>
@@ -259,11 +170,15 @@ class Header extends Component {
 function mapStateToProps(state) {
     return {
         notifications: state.notifications.data,
-        messages: state.messages.data,
         categories: state.categories.data,
         auth: state.auth,
         userInfo: state.userInfo.data
     }
 }
 
-export default withRouter(connect(mapStateToProps)(Header));
+export default withRouter(connect(mapStateToProps, 
+    {
+        fetchCurrentUserInfo,
+        get_categories,
+        mercureNotificationUpdate
+})(Header));

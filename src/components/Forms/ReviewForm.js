@@ -4,8 +4,6 @@ import * as actions from '../../actions';
 
 function ReviewForm(props) {
     const [feedbackValue, setFeedbackValue] = useState('');
-    const [message, setMessage] = useState('');
-    const [isError, setIsError] = useState(false);
 
     function feedbackChange(e) {
         setFeedbackValue(e.target.value);
@@ -18,15 +16,11 @@ function ReviewForm(props) {
         debugger ;
         e.preventDefault();
         actions.postFeedback(props.reciever, feedbackValue, 5)
-        .then((message) => {
-            setIsError(false);
-            setMessage(message);
+        .then(() => {
             setFeedbackValue('');
             alert('Vous avez posté avec succès vos commentaires');
         })
         .catch((err) => {
-            setIsError(true);
-            setMessage(err);
             alert('Probleme d\'effectuer cette opération')
         })
     }

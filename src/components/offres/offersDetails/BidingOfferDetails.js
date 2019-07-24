@@ -4,6 +4,7 @@ import Alert from '../../shared/Alert';
 import Countdown from 'react-countdown-now';
 import HistoryCard from '../../shared/HistoryCard/HistoryCard';
 import * as actions from '../../../actions';
+import { fetchCurrentUserInfo } from '../../../actions';
 import Modelv2 from '../../shared/Model/Modelv2';
 import { connect } from 'react-redux';
 import Position from '../../shared/Position';
@@ -96,8 +97,7 @@ class BidingOfferDetails extends Component {
         
     }
 
-    componentDidMount()
-    {
+    setUpMercure = () => {
         const { offerDetails } = this.props;
         const url = new URL(`${DEFALUT_URL_HUB}/hub`)
         url.searchParams.append('topic', `waste_to_resources/offers/${offerDetails.id}`)
@@ -105,6 +105,7 @@ class BidingOfferDetails extends Component {
 
         eventSource.onmessage = e => {
             var result = JSON.parse(e.data);
+
             this.setState({
                 bid_price: result.next_bid,
                 top_price: result.price,
@@ -115,7 +116,12 @@ class BidingOfferDetails extends Component {
         eventSource.onerror = () => {
             console.log('EventSource Failed');
         };
+    };
 
+    componentDidMount()
+    {
+        this.props.fetchCurrentUserInfo();
+        this.setUpMercure();
         this.setState({
             isAccepted: false,
             isError: false,
@@ -125,7 +131,7 @@ class BidingOfferDetails extends Component {
 
     render() {
 
-        const { offerDetails, userInfo, auth } = this.props;
+        const { offerDetails, userInfo } = this.props;
         const { isFatal, msgError, bidders, isAccepted, msg } = this.state
         const locationLength = offerDetails.locations.length;
         return (
@@ -174,7 +180,7 @@ class BidingOfferDetails extends Component {
                         <table className="table table-sm table-borderless biding-table">
                             <tbody>
                                 {
-                                    <Position
+                                    userInfo && <Position
                                     id = {offerDetails.id}
                                     leaveAuction = {this.leaveAuction}
                                     userInfo={userInfo}
@@ -231,4 +237,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(BidingOfferDetails);
+export default connect(mapStateToProps, { fetchCurrentUserInfo })(BidingOfferDetails);

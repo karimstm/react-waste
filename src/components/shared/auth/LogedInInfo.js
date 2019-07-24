@@ -9,17 +9,17 @@ class LogedInInfo extends Component {
             userInfo: this.props.userInfo
         }
     }
-    
 
     componentWillReceiveProps(nextProps)
     {
-        debugger ;
-        if (nextProps.userInfo.balance != this.state.userInfo.balance)
-            this.setState({ userInfo: nextProps.userInfo })
+        if (nextProps.userInfo !== this.state.userInfo)
+            this.setState({ userInfo: nextProps.userInfo });
     }
 
     render() {
         const { userInfo } = this.state;
+        if (!userInfo)
+            return null;
         if (userInfo && this.state.userInfo.email) {
             return (
                 <div className="navbar-text text-lowercase">

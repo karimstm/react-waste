@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 import OfferList from '../../offres/offersListing/OfferList';
-import ControlledCarousel from '../carousel/ControlledCarousel';
-import Filter from '../Filter';
 
 function HomeTabs(props) {
 

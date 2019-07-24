@@ -22,7 +22,7 @@ class OfferService {
             switch (authService.getRoles(authService.getToken())) {
                 case authService.isPicker():
                 {
-                    if (type == PURCHASE)
+                    if (type === PURCHASE)
                         return true;
                     return false;
                 }

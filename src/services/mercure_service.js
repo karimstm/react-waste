@@ -4,7 +4,7 @@ import authService from './auth-service';
 
 class MercureService {
 
-    launchMercure(topic) {
+    launchMercure(topic, callback) {
         return new Promise ((resolve, reject) => {
             const authorizationToken = authService.getToken('mercure_token');
             const url = new URL(`${DEFALUT_URL_HUB}/hub`);
@@ -16,6 +16,10 @@ class MercureService {
                 }
             });
 
+            eventSource.onopne = () => {
+                resolve(true);
+            }
+
             eventSource.onerror = () => {
                 console.log('EventSource Failed: Notification');
                 reject('EventSource Failed: Notification');
@@ -23,8 +27,7 @@ class MercureService {
 
             eventSource.onmessage = e => {
                 var result = JSON.parse(e.data);
-                resolve(result);
-                console.log(result);
+                callback(result);
             }
         }
         )};

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import authServie from './auth-service'
 import { DEFALUT_URL } from '../actions/types'
+
 class AxiosService {
     axiosInstance = {};
 

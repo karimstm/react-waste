@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import OfferList from './offersListing/OfferList';
-import { connect } from 'react-redux';
 import HomeTabs from '../shared/tabs/HomeTabs';
 import Filter from '../shared/Filter';
 

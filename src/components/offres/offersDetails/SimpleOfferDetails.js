@@ -44,7 +44,7 @@ class SimpleOfferDetails extends Component {
 
     displayRange = (type) => {
 
-        if (type == 'purchase' || type == 'bulk_purchase') {
+        if (type === 'purchase' || type === 'bulk_purchase') {
             return <div className="ml-3">
                 <label className="text-dark font-weight-light" htmlFor="weight-range">Votre Poid</label>
                 <input value={this.state.offerWeight} onChange={this.onWeightChange} type="range" className="custom-range" min="1" max={this.props.offerDetails.weight} id="weight-range" />
@@ -58,8 +58,6 @@ class SimpleOfferDetails extends Component {
     render() {
 
         const { offerDetails } = this.props;
-        const locationLength = offerDetails.locations.length;
-
         if (offerDetails && offerDetails.id) {
             const locationLength = offerDetails.locations.length;
             return (
