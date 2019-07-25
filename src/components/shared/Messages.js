@@ -3,7 +3,7 @@ import { fetchUserMessages, setMessageAndFetchMessages } from '../../actions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-class Message extends Component {
+class Messages extends Component {
 
 
     // On Message click: set message as seen
@@ -78,4 +78,4 @@ const mapStateToProps = (state) => {
     }
 }
 
-export default connect(mapStateToProps, { fetchUserMessages, setMessageAndFetchMessages })(Message);
+export default connect(mapStateToProps, { fetchUserMessages, setMessageAndFetchMessages })(Messages);

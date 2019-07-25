@@ -1,0 +1,198 @@
+
+:root {
+    --gray: #eee;
+    --blue: #74b9ff;
+}
+
+* {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+.my-container {
+    margin: 60px auto;
+    background: #fff;
+    padding: 0;
+    border-radius: 7px;
+    height: 600px;
+}
+
+.profile-image {
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    background: #e74c3c;
+    color: #FFF;
+    vertical-align: middle;
+    line-height: 50px;
+}
+
+.settings-tray {
+    background: var(--gray);
+    padding: 10px 15px;
+    border-radius: 7px;
+}
+
+.settings-tray i {
+    margin-top: 10px;
+    font-size: 20px;
+    color: grey;
+    margin-left: 14px;
+    transition: .3s;
+}
+
+.settings-tray i:hover {
+    color: var(--blue);
+    cursor: pointer;
+}
+
+.search-box {
+    background: #fafafa;
+    padding: 10px 13px;
+}
+
+.search-box .input-wrapper {
+    background: #fff;
+    border-radius: 40px;
+}
+
+.search-box .input-wrapper i {
+    color: grey;
+    vertical-align: middle;
+    margin-left: 7px;
+}
+
+.search-box input,
+.chat-box-tray input {
+    border: none;
+    border-radius: 30px;
+    width: 80%;
+    padding-left: 10px;
+}
+
+.search-box input::placeholder {
+    color: #e3e3e3;
+    font-weight: 300;
+    margin-left: 20px;
+}
+
+.search-box input:focus {
+    outline: none;
+}
+
+.friend-drawer {
+    padding: 10px 15px;
+    display: flex;
+    vertical-align: baseline;
+    background: #fff;
+    transition: .3s ease;
+}
+
+.friend-drawer--grey{
+    background: #eee;
+}
+
+.friend-drawer .text {
+    margin-left: 12px;
+    width: 70%;
+}
+
+.friend-drawer .text h6 {
+    margin-top: 6px;
+    margin-bottom: 0;
+}
+
+.friend-drawer .text p {
+    margin: 0;
+}
+
+.friend-drawer .text .time {
+    color: grey;
+}
+
+hr {
+    margin: 5px auto;
+    width: 60%;
+}
+
+.friend-drawer--onhover:hover
+{
+    background: var(--blue);
+    cursor: pointer;
+}
+
+.friend-drawer--onhover:hover p,
+.friend-drawer--onhover:hover .time,
+.friend-drawer--onhover:hover h6 {
+    color: #fff;
+}
+
+.chat-bubble {
+    padding: 10px 14px ;
+    background: #eee;
+    margin: 10px 30px;
+    border-radius: 9px;
+    position: relative;
+    animation: fadeIn 1s ease-in;
+}
+
+.chat-bubble::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 0;
+    height: 0;
+    border: 20px solid transparent;
+    border-bottom: 0;
+    margin-top: -10px;
+}
+
+.chat-bubble--left::after {
+    left: 0;
+    border-right-color: #eee;
+    border-left: 0;
+    margin-left: -20px;
+}
+
+.chat-bubble--right::after {
+    right: 0;
+    border-left-color: var(--blue);
+    border-right: 0;
+    margin-right: -20px;
+}
+
+.chat-bubble--blue {
+    background: var(--blue);
+    color: #fff;
+}
+
+.chat-box-tray {
+    background: #eee;
+    display: flex;
+    align-items: center;
+    padding: 10px 15px;
+    margin-top: 19px;
+}
+
+.chat-box-tray input {
+    margin: 0 10px;
+    padding: 6px 2px;
+    outline: none;
+    padding-left: 10px;
+}
+
+.chat-box-tray i {
+    color: gray;
+    font-size: 30px;
+    vertical-align: middle;
+}
+
+.chat-box-tray i:last-of-type {
+    margin-left: 25px;
+}
+
+.chat-panel {
+    height: 500px;
+    overflow-y: scroll;
+}

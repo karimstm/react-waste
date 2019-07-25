@@ -6,7 +6,7 @@ import LogedInInfo from '../auth/LogedInInfo';
 import { mercureNotificationUpdate, get_categories, fetchCurrentUserInfo } from '../../../actions';
 import offerService from '../../../services/offer-service';
 import Notification from '../Notification';
-import Message from '../Message';
+import Messages from '../Messages';
 import mercureService from '../../../services/mercure_service';
 
 class Header extends Component {
@@ -102,7 +102,7 @@ class Header extends Component {
                     </li>
                     </ul>
                     <ul className="navbar-nav dropdown wast-link ml-auto">
-                        { <Message />}
+                        { <Messages />}
                         { <Notification /> }
                         <li className="nav-item">
                         { this.renderName() }

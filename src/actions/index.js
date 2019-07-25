@@ -506,7 +506,7 @@ export const sendMessage = (userEmail, message) => async dispatch =>  {
 
 /* Fetch messages of a certain user with current logged in user */
 
-export const fetchMessages = (userEmail) => async dispatch => {
-    const response = await axiosInstance.get(`current/messages/${userEmail}`)
+export const fetchMessages = (userEmail, page) => async dispatch => {
+    const response = await axiosInstance.get(`current/messages/${userEmail}/?page=${page}`)
     dispatch({type: MESSAGES_FETCH_SUCCESS, payload: response.data});
 }

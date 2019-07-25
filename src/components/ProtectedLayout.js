@@ -3,7 +3,6 @@ import PrivateHeader from './shared/Headers/PrivateHeader';
 import Sidebar from './Profile/Sidebar';
 import Cards from './Profile/Cards'
 import UserProfile from './Profile/UserProfile';
-import ChatPage from './chat/ChatPage';
 import { Switch } from 'react-router-dom';
 import ProtectedRoute from './shared/auth/ProtectedRoute';
 import TransactionBoard from './transactions/TransactionBoard';
@@ -11,6 +10,7 @@ import BillingBoard from './Billing/BillingBoard';
 import GetPaidBoard from './Billing/GetPaidBoard';
 import ValidateTransaction from './transactions/ValidateTransaction';
 import MyOffers from './dashboard/MyOffers';
+import Chat from './chat/Chat';
 
 function ProtectedLayout(props) {
 
@@ -24,7 +24,7 @@ function ProtectedLayout(props) {
                     <div className="right-sidebar">
                         <Switch>
                             <ProtectedRoute exact path='/app/dashboard' component={Cards} />    
-                            <ProtectedRoute exact path='/app/dashboard/messages' component={ChatPage} />
+                            <ProtectedRoute exact path='/app/dashboard/messages' component={Chat} />
                             <ProtectedRoute exact path='/app/dashboard/profile' component={UserProfile} />
                             <ProtectedRoute exact path='/app/dashboard/my-offers' component={MyOffers} />
                             <ProtectedRoute exact path='/app/dashboard/transactions' component={TransactionBoard} />
