@@ -36,4 +36,4 @@ class LogedInInfo extends Component {
 }
 
 
-export default (LogedInInfo);
+export default LogedInInfo;

@@ -11,7 +11,7 @@ class Notification extends Component {
         if (type === OFFERS)
             return `/offers/${id}`
         if (type === TRANSACTION)
-            return `app/dashboard/transactions/${id}`
+            return `/app/dashboard/transactions/${id}`
     }
 
     renderNotificationBullet = () => {

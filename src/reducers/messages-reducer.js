@@ -6,7 +6,7 @@ export const messagesReducer = (state = {data: []}, action) => {
         case MESSAGE_SENT_SUCCESS:
             return { ...state };
         case MESSAGES_FETCH_SUCCESS:
-            return { ...state, data: action.payload.reverse()};
+            return { ...state, data: action.payload};
         default:
             return state;
     }

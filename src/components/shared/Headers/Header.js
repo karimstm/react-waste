@@ -3,7 +3,13 @@ import { Link, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux';
 import LogedInLink from '../auth/LogedInLink';
 import LogedInInfo from '../auth/LogedInInfo';
-import { mercureNotificationUpdate, get_categories, fetchCurrentUserInfo } from '../../../actions';
+import {
+    mercureNotificationUpdate,
+    get_categories,
+    fetchCurrentUserInfo,
+    mercureMessageUpdate
+} from '../../../actions';
+
 import offerService from '../../../services/offer-service';
 import Notification from '../Notification';
 import Messages from '../Messages';
@@ -12,7 +18,8 @@ import mercureService from '../../../services/mercure_service';
 class Header extends Component {
 
     state = {
-        isMercureSet: false
+        isMercureSet: false,
+        isDataFetched: false
     }
 
     handleLogout = () => {
@@ -59,11 +66,11 @@ class Header extends Component {
             this.props.fetchCurrentUserInfo().then(() => {
                 if (!this.state.isMercureSet)
                     mercureService.launchMercure('waste_to_resources/notifications', (data) => {
-                        this.props.mercureNotificationUpdate({...data, seen: false});
+                        return this.props.mercureNotificationUpdate({...data, seen: false});
                     })
                     .then(() => this.setState({isMercureSet: true}));
                     mercureService.launchMercure('waste_to_resources/messages', (data) => {
-                        console.log(data); // total_not_seen = "1"
+                        this.props.mercureMessageUpdate({last_message: data.message, sender: data.sender});
                     });
             });
         }
@@ -78,7 +85,6 @@ class Header extends Component {
             return <span>Bonjour : { this.props.userInfo.firstName ? this.props.userInfo.firstName.toUpperCase() : ''} </span>
         return null;
     }
-
 
     componentDidMount() {
         this.fetchInfo();
@@ -180,5 +186,6 @@ export default withRouter(connect(mapStateToProps,
     {
         fetchCurrentUserInfo,
         get_categories,
-        mercureNotificationUpdate
+        mercureNotificationUpdate,
+        mercureMessageUpdate
 })(Header));

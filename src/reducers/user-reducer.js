@@ -9,7 +9,8 @@ FETCH_MESSAGES_SUCCESS,
 EDIT_MESSAGES_SUCCESS,
 EDIT_NOTIFICATION_SUCCESS,
 MERCURE_NOTIFICATION_UPDATE,
-FETCH_USER_SUCCESS
+FETCH_USER_SUCCESS,
+MERCURE_MESSAGE_UPDATE
 }
  from '../actions/types';
 
@@ -62,6 +63,8 @@ export const userMessagesReducer = (state = { messages: { } }.messages, action) 
             return {...state, errors: action.errors};
         case EDIT_MESSAGES_SUCCESS:
             return { ...state }
+        case MERCURE_MESSAGE_UPDATE:
+                return {total_not_seen: "1", messages: [...state.data.messages, action.payload]};
         default:
             return state;
     }

@@ -27,7 +27,8 @@ import {
     FETCH_CURRENT_USER_AUCTIONS,
     MESSAGE_SENT_SUCCESS,
     MESSAGE_SENT_FAILURE,
-    MESSAGES_FETCH_SUCCESS
+    MESSAGES_FETCH_SUCCESS,
+    MERCURE_MESSAGE_UPDATE
 } from './types'
 
 const headers = { 'Content-Type': 'application/json' }
@@ -510,3 +511,10 @@ export const fetchMessages = (userEmail, page) => async dispatch => {
     const response = await axiosInstance.get(`current/messages/${userEmail}/?page=${page}`)
     dispatch({type: MESSAGES_FETCH_SUCCESS, payload: response.data});
 }
+
+/* Get a new messages form the mercure api */
+export const mercureMessageUpdate = (payload) => async dispatch => {
+    dispatch({type: MERCURE_MESSAGE_UPDATE, payload: payload});
+}
+
+

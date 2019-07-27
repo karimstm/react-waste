@@ -16,17 +16,18 @@ class MercureService {
                 }
             });
 
-            eventSource.onopne = () => {
+            eventSource.onopen = () => {
                 resolve(true);
             }
 
-            eventSource.onerror = () => {
-                console.log('EventSource Failed: Notification');
+            eventSource.onerror = (err) => {
+                console.log(err);
                 reject('EventSource Failed: Notification');
             };
 
             eventSource.onmessage = e => {
                 var result = JSON.parse(e.data);
+                console.log(result);
                 callback(result);
             }
         }

@@ -6,7 +6,7 @@ class ReplayMessage extends Component {
             <div className="row no-gutters">
                 <div className="col-md-6 offset-md-6">
                     <div className="chat-bubble chat-bubble--right chat-bubble--blue">
-                        Hello dude I wont say a thing!
+                        {this.props.text}
                     </div>
                 </div>
             </div>
