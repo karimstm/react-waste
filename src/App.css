@@ -887,7 +887,6 @@ footer .column i + i {
 .messages ul li {
     display: inline-block;
     clear: both;
-    float: left;
     margin: 15px 15px 5px 15px;
     width: calc(100% - 25px);
     font-size: 0.9em;
@@ -919,7 +918,6 @@ footer .column i + i {
     width: 22px;
     height: 22px;
     border-radius: 50%;
-    float: left;
 }
 
 .messages ul li.replies span
@@ -1086,4 +1084,50 @@ table a {
 .progressbar-container .progressbar li.canceled + li::after
 {
     background-color: #FF6C60;
+}
+
+/* Group button styling */
+
+.donate-now {
+    list-style-type: none;
+    margin: 25px 0 0 0;
+    padding: 0;
+}
+
+.donate-now li {
+    float: left;
+    margin: 0 5px 0 0;
+    width: 100px;
+    height: 40px;
+    position: relative;
+}
+
+.donate-now label, .donate-now input {
+    display:block;
+    text-align: center;
+    position:absolute;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+}
+
+.donate-now input[type='radio'] {
+    opacity:0;
+    z-index:100;
+}
+
+.donate-now input[type='radio']:checked + label,
+.donate-now label:hover
+{
+    border: 2px solid #f1c40f;
+    box-shadow: none;
+}
+
+.donate-now label {
+    border: 2px solid rgba(214, 214, 214, 0.712);
+    padding:5px;
+    border-radius: 10px;
+    cursor:pointer;
+    z-index:90;
 }

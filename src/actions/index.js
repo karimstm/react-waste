@@ -171,12 +171,13 @@ export const post_sale_offer = (saleData) => {
             keywords: saleData.keywords.split(','),
             photos: saleData.photos,
             type: link,
-            end_price: saleData.end_price
+            end_price: saleData.end_price,
+            period: saleData.period
 
         }).then(
             (res) => res.data,
             (err) => {
-                if (err.response.status === 403)
+                if (err.response.data.extras)
                     return Promise.reject(err.response.data.extras)
                 else
                     return Promise.reject(err.response.data.message)

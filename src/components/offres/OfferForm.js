@@ -1,6 +1,8 @@
 import React, { Component} from 'react';
 import { Field, reduxForm } from 'redux-form';
 import DropzoneField from '../dropzone/DropzoneField';
+import $ from 'jquery';
+
 
 
 const createRenderer = render => ({ input, meta, label, placeholder, message, readonly, errors, ...rest }) => {
@@ -38,6 +40,7 @@ class OfferForm extends Component {
         this.state = {
             imageFile: [],
         }
+        this.optionRef = React.createRef();
     }
 
     handleOnDrop = newImageFile => {
@@ -48,6 +51,8 @@ class OfferForm extends Component {
     
     componentDidMount() {
         this.props.initialize({isAuction: this.props.auction ? true : false});
+        console.log(window);
+        console.log($(this.optionRef.current));
     }
  
     render() {
@@ -83,6 +88,26 @@ class OfferForm extends Component {
             <Field errors={errors} component={RenderInput} name="keywords" type="text" id="title" placeholder="Mot clé séparé par une virgule ,"
                 label="Mot cle"
                 message="Assurez-vous que le titre est descriptif" />
+            {/* <Field ref={this.optionRef} errors={errors} className="form-control font-weight-light mb-4" component="select" name="time">
+                <option>karim</option>
+                <option>karim</option>
+                <option>karim</option>
+            </Field> */}
+            <ul className="donate-now clearfix mb-2">
+                <li>
+                    <Field id="a50" name="period" component="input" type="radio" value="0"/>
+                    <label htmlFor="a50" >2 Jours</label>
+                </li>
+                <li>
+                    <Field id="a51" name="period" component="input" type="radio" value="1"/>
+                    <label htmlFor="a51">5 Jours</label>
+                </li>
+                <li>
+                    <Field id="a52" name="period" component="input" type="radio" value="2"/>
+                    <label htmlFor="a52">7 Jours </label>
+                </li>
+            </ul>
+
             <div className="form-group">
                 <Field
                         name="photos"

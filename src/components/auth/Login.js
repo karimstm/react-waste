@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Alert from '../shared/Alert';
 import LoginForm from '../Forms/LoginForms';
 import { connect } from 'react-redux'
-import * as actions from '../../actions'
+import {login, fetchCurrentUserInfo} from '../../actions'
 import { Redirect } from 'react-router-dom'
 
 class Login extends Component {
@@ -13,7 +13,8 @@ class Login extends Component {
     }
     
     loginUser(userData) {
-        this.props.dispatch(actions.login(userData));
+        this.props.login(userData)
+        .then(() => this.props.fetchCurrentUserInfo());
     }
 
     render() {
@@ -43,4 +44,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps)(Login)
+export default connect(mapStateToProps, {fetchCurrentUserInfo, login})(Login)
