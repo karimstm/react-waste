@@ -1,8 +1,18 @@
 import React, { Component } from 'react';
 import ProfileTabs from './ProfileTabs';
+import { connect } from 'react-redux';
+import {  fetchCurrentUserInfo } from '../../actions';
+import HeaderInfo from './HeaderInfo';
 
 class UserProfile extends Component {
+
+    componentDidMount() {
+        this.props.fetchCurrentUserInfo();
+    }
+
     render() {
+
+        const { userInfo } = this.props;
         return (
             <div className="m-4">
                 <div className="top-profile">
@@ -27,25 +37,10 @@ class UserProfile extends Component {
                 <div className="page-body">
                     <div className="row">
                         <div className="col-lg-12">
-                            <div className="profile-bg-img">
-                                <img className="shadow-sm img-fluid" alt="" src="https://i.imgur.com/hEjohDr.jpg" />
-                                <div className="card-block user-info">
-                                    <div className="media">
-                                        <img src="https://colorlib.com/polygon/adminty/files/assets/images/avatar-4.jpg" className="user-img mr-3" alt="..." />
-                                        <div className="media-body">
-                                            <div className="row">
-                                                <div className="col-6">
-                                                    <h5 className="mt-0">John Doe</h5>
-                                                    REVENDEUR
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            <HeaderInfo userInfo={userInfo}/>
                         </div>
                         <div className="col-lg-12">
-                            <ProfileTabs />
+                            <ProfileTabs userInfo={userInfo} />
                         </div>
                     </div>
                 </div>
@@ -54,4 +49,11 @@ class UserProfile extends Component {
     }
 }
 
-export default UserProfile;
+function mapStateToProps(state)
+{
+    return {
+        userInfo: state.userInfo.data
+    }
+}
+
+export default connect(mapStateToProps, { fetchCurrentUserInfo })(UserProfile);

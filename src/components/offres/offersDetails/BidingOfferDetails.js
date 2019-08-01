@@ -9,6 +9,7 @@ import Modelv2 from '../../shared/Model/Modelv2';
 import { connect } from 'react-redux';
 import Position from '../../shared/Position';
 import { DEFALUT_URL_HUB } from '../../../actions/types';
+import { withRouter } from 'react-router-dom';
 
 
 class BidingOfferDetails extends Component {
@@ -49,6 +50,14 @@ class BidingOfferDetails extends Component {
                         msgError: ''
                     });
             });
+    }
+
+    //Show the modal if the user is authenticated
+
+    showModal = () => {
+        if (this.props.auth.isAuth)
+            return this.setState({ show: true });
+        return this.props.history.push('/login');
     }
 
     // Send data to the server once we click on Place Bid button
@@ -120,13 +129,16 @@ class BidingOfferDetails extends Component {
 
     componentDidMount()
     {
-        this.props.fetchCurrentUserInfo();
-        this.setUpMercure();
-        this.setState({
-            isAccepted: false,
-            isError: false,
-            isFatal: false        
-        })
+        if (this.props.auth.isAuth)
+        {
+            this.props.fetchCurrentUserInfo();
+            this.setUpMercure();
+            this.setState({
+                isAccepted: false,
+                isError: false,
+                isFatal: false        
+            })
+        }
     }
 
     render() {
@@ -171,9 +183,8 @@ class BidingOfferDetails extends Component {
                         </div>
                         <div className="col-6">
                             {/* data-toggle="modal" data-target="#bid_model" */}
-                            <button onClick={() => {
-                                this.setState({ show: true })
-                            }} className="btn-block btn btn-warning text-white rounded-0"> J'enchéris !</button>
+                            <button onClick={this.showModal}
+                            className="btn-block btn btn-warning text-white rounded-0"> J'enchéris !</button>
                         </div>
                     </div>
                     <div>
@@ -237,4 +248,4 @@ function mapStateToProps(state) {
     }
 }
 
-export default connect(mapStateToProps, { fetchCurrentUserInfo })(BidingOfferDetails);
+export default withRouter(connect(mapStateToProps, { fetchCurrentUserInfo })(BidingOfferDetails));

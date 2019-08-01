@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap');
 @import url('https://fonts.googleapis.com/css?family=Lato|Noto+Sans+HK|Roboto|Source+Sans+Pro&display=swap');
 
-*{
+* {
     box-sizing: border-box;
 }
 
@@ -277,6 +277,7 @@ a:hover {
 
 .dropzone {
     border: 2px dashed #eee;
+    cursor: pointer;
 }
 
 .card-img-top {
@@ -1120,14 +1121,15 @@ table a {
 .donate-now input[type='radio']:checked + label,
 .donate-now label:hover
 {
-    border: 2px solid #f1c40f;
+    border: 1px solid #f1c40f;
     box-shadow: none;
 }
 
 .donate-now label {
-    border: 2px solid rgba(214, 214, 214, 0.712);
+    border: 1px solid rgba(214, 214, 214, 0.712);
     padding:5px;
     border-radius: 10px;
     cursor:pointer;
     z-index:90;
+    background: #FFF;
 }

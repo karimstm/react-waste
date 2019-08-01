@@ -50,7 +50,7 @@ class PaymentModal extends Component {
                                         data-target="#card-one"
                                         aria-expanded="true"
                                         aria-controls="card-one"
-                                    ><input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked />Carte de crédit</label>
+                                    ><input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" defaultChecked={true} />Carte de crédit</label>
                                 </h1>
                             </div>
                             <div id="card-one" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">

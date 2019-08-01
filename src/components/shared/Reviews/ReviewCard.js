@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import * as actions from '../../../actions';
 import Spinner from '../../shared/Spinner';
 import dateService from '../../../services/date-service';
+import PropTypes from 'prop-types';
+
 
 class ReviewCard extends Component {
 
@@ -62,5 +64,9 @@ class ReviewCard extends Component {
         );
     }
 }
+
+ReviewCard.propTypes = {
+    email: PropTypes.string.isRequired
+};
 
 export default ReviewCard;

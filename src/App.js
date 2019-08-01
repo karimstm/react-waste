@@ -7,6 +7,7 @@ import PublicLayout from './components/PublicLayout';
 import ProtectedLayout from './components/ProtectedLayout';
 import { Widget } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
+import { LastLocationProvider } from "react-router-last-location";
 
 const store = require('./reducers').init();
 
@@ -34,16 +35,18 @@ class App extends Component {
     return (
       <Provider store={store}>
         <Router basename="/">
-          <div className="App">
-            <Switch>
-              <Route path="/app" render={() => <ProtectedLayout logout={this.logout} />} />
-              <Route path="/" render={() => <PublicLayout logout={this.logout} />} />
-            </Switch>
-            <Widget
-            subtitle=""
-            handleNewUserMessage={this.handleNewUserMessage}
-            />
-          </div>
+          <LastLocationProvider>
+            <div className="App">
+              <Switch>
+                <Route path="/app" render={() => <ProtectedLayout logout={this.logout} />} />
+                <Route path="/" render={() => <PublicLayout logout={this.logout} />} />
+              </Switch>
+              <Widget
+                subtitle=""
+                handleNewUserMessage={this.handleNewUserMessage}
+              />
+            </div>
+          </LastLocationProvider>
         </Router>
       </Provider>
     );

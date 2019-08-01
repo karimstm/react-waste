@@ -30,6 +30,7 @@
     "react-qr-reader": "^2.2.1",
     "react-redux": "^5.0.7",
     "react-router-dom": "^5.0.1",
+    "react-router-last-location": "^2.0.1",
     "react-scripts": "3.0.1",
     "react-spinners": "^0.5.4",
     "redux": "^3.7.2",

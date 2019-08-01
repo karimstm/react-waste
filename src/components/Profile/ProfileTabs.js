@@ -1,15 +1,9 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
-
-import {  fetchCurrentUserInfo } from '../../actions';
 import PersonalInfo from './PersonalInfo';
+import ReviewCard from '../shared/Reviews/ReviewCard';
 
 class ProfileTabs extends Component {
 
-    componentDidMount() {
-        this.props.fetchCurrentUserInfo();
-    }
-    
     render() {
         const { userInfo } = this.props;
         if (!userInfo)
@@ -27,7 +21,7 @@ class ProfileTabs extends Component {
                         <PersonalInfo infos={userInfo} />
                     </div>
                     <div className="tab-pane text-black-50 fade" id="nav-review" role="tabpanel" aria-labelledby="nav-review-tab">
-
+                        <ReviewCard email={userInfo.email} />
                     </div>
                 </div>
             </React.Fragment>
@@ -35,11 +29,6 @@ class ProfileTabs extends Component {
     }
 }
 
-function mapStateToProps(state)
-{
-    return {
-        userInfo: state.userInfo.data
-    }
-}
 
-export default connect(mapStateToProps, { fetchCurrentUserInfo })(ProfileTabs);
+
+export default ProfileTabs;
