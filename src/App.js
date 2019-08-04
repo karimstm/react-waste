@@ -9,6 +9,7 @@ import { Widget } from 'react-chat-widget';
 import 'react-chat-widget/lib/styles.css';
 import { LastLocationProvider } from "react-router-last-location";
 
+
 const store = require('./reducers').init();
 
 class App extends Component {

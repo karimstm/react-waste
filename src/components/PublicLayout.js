@@ -11,6 +11,7 @@ import Footer from './shared/Footer';
 import AllOffers from './offres/AllOffers';
 import Home from './shared/tabs/Home';
 import Header from './shared/Headers/Header';
+import Error404 from './shared/errors/Error404';
 
 function PublicLayout(props) {
     return (
@@ -24,6 +25,7 @@ function PublicLayout(props) {
                     <Route exact path="/login" component={Login}></Route>
                     <Route exact path="/plans" component={Plans}></Route>
                     <LogedInRoute exact path="/register" component={Register}></LogedInRoute>
+                    <Route component={Error404} />
                 </Switch>
             <Footer />
         </div>
