@@ -54,7 +54,7 @@ class SimpleOfferDetails extends Component {
             </div>
         }
     }
-
+    
     render() {
 
         const { offerDetails } = this.props;
@@ -63,7 +63,8 @@ class SimpleOfferDetails extends Component {
             return (
                 <div className="col-lg-6 col-md-6 col-sm-10">
                     <h3 className="text-dark">{offerDetails.title}</h3>
-                    <h5 className="py-3 text-danger">MAD {this.numberWithCommas(offerDetails.price * offerDetails.weight)}.00</h5>
+                    <h5 className="pt-3 text-secondary">MAD {this.numberWithCommas(offerDetails.price * offerDetails.weight)}.00</h5>
+                    <small className="pb-3 text-danger d-block"> +{offerDetails.fees} DH de frais </small>
                     <ul className="list-group">
                         <li className="py-1 list-group-item font-weight-lighter text-dark rounded-0 d-flex justify-content-between dashed-border align-items-center">
                             Poids

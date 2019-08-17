@@ -172,7 +172,8 @@ export const post_sale_offer = (saleData) => {
             photos: saleData.photos,
             type: link,
             end_price: saleData.end_price,
-            period: saleData.period
+            period: saleData.period,
+            warranty: saleData.warranty
 
         }).then(
             (res) => res.data,

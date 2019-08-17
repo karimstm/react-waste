@@ -155,6 +155,7 @@ class BidingOfferDetails extends Component {
                         <div className="col-lg-8 col-md-6">
                             <h5 className="font-weight-light">{offerDetails.title}</h5>
                             <small>{offerDetails.bids.length} bids</small>
+                            <small className="text-danger d-block"> +{offerDetails.fees} DH de frais </small>
                         </div>
                         <div className="col-lg-4 col-md-6">
                             <Countdown

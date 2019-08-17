@@ -59,7 +59,6 @@ class Header extends Component {
         );
     }
 
-
     fetchInfo = () => {
         const { isAuth } = this.props.auth;
         if (isAuth) {
