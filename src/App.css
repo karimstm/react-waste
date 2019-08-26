@@ -282,7 +282,7 @@ a:hover {
 
 .card-img-top {
     width: 100%;
-    height: 15vh;
+    height: 15%;
     object-fit: cover;
 }
 
@@ -644,7 +644,7 @@ footer .column i + i {
     background: #404E67;
     font-size: .8rem;
     width: 270px;
-    height: 100vh !important;
+    min-height: 100vh !important;
     float: left;
 }
 
