@@ -129,6 +129,7 @@ class BidingOfferDetails extends Component {
 
     componentDidMount()
     {
+        console.log(this.props.offerDetails);
         if (this.props.auth.isAuth)
         {
             this.props.fetchCurrentUserInfo();
